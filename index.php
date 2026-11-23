@@ -39,9 +39,22 @@ $scrollHint = trim((string)($experienceSettings['scrollHint'] ?? '')) ?: 'Stay a
 $submitLabel = trim((string)($experienceSettings['submitLabel'] ?? '')) ?: 'Send your wish';
 $metaDescription = trim((string)($experienceSettings['metaDescription'] ?? '')) ?: "Celebrate {$name}'s special day. Share a personal wish and a favourite memory.";
 $publicBaseUrl = $protocol . $host . rtrim($current_directory, '/');
-$shareImage = !empty($birthdayMedia[0]['file'])
-    ? $publicBaseUrl . '/birthday-media/' . rawurlencode(basename((string)$birthdayMedia[0]['file']))
-    : $publicBaseUrl . '/favicon.ico';
+$configuredOgImage = trim((string)($experienceSettings['ogImage'] ?? ''));
+$shareImage = $publicBaseUrl . '/favicon.ico';
+if ($configuredOgImage !== '') {
+    $ogParts = parse_url($configuredOgImage);
+    if (filter_var($configuredOgImage, FILTER_VALIDATE_URL) && strtolower((string)($ogParts['scheme'] ?? '')) === 'https') {
+        $shareImage = $configuredOgImage;
+    } elseif (preg_match('#^birthday-media/[a-f0-9]{32}\\.(?:jpg|jpeg|png|webp|gif)$#i', $configuredOgImage) && is_file(__DIR__ . '/' . $configuredOgImage)) {
+        $shareImage = $publicBaseUrl . '/' . $configuredOgImage;
+    }
+}
+if ($shareImage === $publicBaseUrl . '/favicon.ico' && !empty($birthdayMedia[0]['file'])) {
+    $firstMemory = 'birthday-media/' . basename((string)$birthdayMedia[0]['file']);
+    if (preg_match('#^birthday-media/[a-f0-9]{32}\\.(?:jpg|jpeg|png|webp|gif)$#i', $firstMemory) && is_file(__DIR__ . '/' . $firstMemory)) {
+        $shareImage = $publicBaseUrl . '/' . $firstMemory;
+    }
+}
 $shareUrl = trim((string)($experienceSettings['shareUrl'] ?? '')) ?: 'https://www.docsansar.com/birthday';
 $heroTitle = trim((string)($experienceSettings['title'] ?? '')) ?: "Happy Birthday {$displayName}!";
 $heroSubtitle = trim((string)($experienceSettings['subtitle'] ?? '')) ?: 'May your year ahead be full of success, peace, and unforgettable moments.';
@@ -85,7 +98,7 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
 <meta property="og:url" content="<?= $escapeHtml($shareUrl); ?>">
 <meta property="og:title" content="Happy Birthday <?= $escapeHtml($name); ?> 🎉 | Send Your Wishes!">
 <meta property="og:description" content="<?= $escapeHtml($metaDescription); ?>">
-<meta property="og:image" content="<?= $escapeHtml($shareImage); ?>">
+<meta property="og:image" content="<?= $escapeHtml($shareImage); ?>">\n<meta property="og:image:alt" content="<?= $escapeHtml($name); ?> birthday celebration">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
@@ -140,12 +153,12 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
 body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e8,#fffdf8 45%,#fff4e8)!important;color:var(--kid-ink)!important;font-family:system-ui,-apple-system,'Segoe UI',sans-serif!important;overflow-x:hidden}
 .birthday-hero{text-align:center;padding:clamp(30px,7vw,72px) 18px 42px;background:linear-gradient(145deg,#ffe5a9,#fff0d6 48%,#dff4fb);border-radius:0 0 38px 38px;position:relative;overflow:hidden}.birthday-hero__top{font-size:clamp(13px,2.4vw,17px);font-weight:800;color:#98672e}.birthday-hero__toys{font-size:clamp(25px,5vw,42px);letter-spacing:8px;margin:16px 0 8px}
 .birthday-hero h1{font-size:clamp(36px,8vw,72px)!important;line-height:1.12;font-weight:900;color:#e66d55!important;margin:8px auto 12px;max-width:900px;text-shadow:0 3px #fff}.birthday-hero p{font-size:clamp(16px,3vw,21px);line-height:1.6;color:#66574b;max-width:660px;margin:0 auto}.birthday-age{display:inline-flex;margin:18px auto 0;padding:10px 18px;border-radius:999px;background:#fff;color:#a65e37;font-weight:800;box-shadow:0 5px 16px #b7793420}.birthday-hero__button{display:table;margin:22px auto 0;padding:15px 24px;border-radius:999px;background:#ff806f;color:#fff!important;text-decoration:none;font-size:17px;font-weight:850;box-shadow:0 7px #e56d5f;min-height:52px}.birthday-hero__bottom{font-size:24px;letter-spacing:9px;margin-top:24px}
-.birthday-gallery{padding:30px 16px 18px}.birthday-section-heading{text-align:center;margin:0 auto 20px}.birthday-section-heading>span{font-size:30px}.birthday-section-heading h2{font-size:clamp(25px,5vw,34px);font-weight:850;color:#80543f;margin:5px 0}.birthday-section-heading p{margin:0;color:#81736a}.birthday-gallery__frame{max-width:560px;height:min(68vh,620px);min-height:280px;margin:0 auto;border-radius:28px;overflow:hidden;background:#f7e8d3;box-shadow:0 12px 35px #76533318}.birthday-gallery__frame .swiper-slide{height:100%;position:relative}.birthday-gallery__frame img,.birthday-gallery__frame video{width:100%;height:100%;object-fit:cover}.birthday-gallery__empty{max-width:560px;margin:auto;padding:40px 18px;border:2px dashed #f0d5ae;border-radius:26px;text-align:center;background:#fffdf8}.birthday-gallery__empty span{display:block;font-size:60px}.birthday-gallery__empty strong,.birthday-gallery__empty small{display:block}.birthday-gallery__empty strong{font-size:17px;color:#76563e}.birthday-gallery__empty small{margin-top:7px;color:#998777}
+.birthday-gallery{padding:30px 16px 18px}.birthday-section-heading{text-align:center;margin:0 auto 20px}.birthday-section-heading>span{font-size:30px}.birthday-section-heading h2{font-size:clamp(25px,5vw,34px);font-weight:850;color:#80543f;margin:5px 0}.birthday-section-heading p{margin:0;color:#81736a}.birthday-gallery__frame{width:100%;max-width:560px;height:clamp(300px,68svh,620px);min-height:280px;margin:0 auto;border-radius:28px;overflow:hidden;background:#f7e8d3;box-shadow:0 12px 35px #76533318;contain:layout paint}.birthday-gallery__frame .swiper-wrapper,.birthday-gallery__frame .swiper-slide{height:100%}.birthday-gallery__frame .swiper-slide{position:relative;display:flex;align-items:center;justify-content:center;background:#f7e8d3}.birthday-gallery__frame img,.birthday-gallery__frame video{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center;background:#f7e8d3}.birthday-gallery__empty{max-width:560px;margin:auto;padding:40px 18px;border:2px dashed #f0d5ae;border-radius:26px;text-align:center;background:#fffdf8}.birthday-gallery__empty span{display:block;font-size:60px}.birthday-gallery__empty strong,.birthday-gallery__empty small{display:block}.birthday-gallery__empty strong{font-size:17px;color:#76563e}.birthday-gallery__empty small{margin-top:7px;color:#998777}
 .birthday-surprise-section{padding:22px 15px}.surprise-card{max-width:650px;margin:auto;padding:28px 20px;border:1px solid #f1dfc7;border-radius:26px;background:#fffdf8;color:#51433c;box-shadow:0 10px 28px #8b643012;text-align:center}.surprise-card h2{font-size:clamp(24px,5vw,34px);font-weight:850;color:#80543f}.surprise-card p{color:#76685d;line-height:1.7}.surprise-kicker{color:#d47b53;font-size:12px;font-weight:850}.surprise-button{background:#ffb84d;color:#5d3d20;border-radius:999px;padding:14px 20px;min-height:48px;font-weight:850}.cake-illustration{font-size:72px}
 .wish-invite-section{padding:30px 15px 44px;background:linear-gradient(180deg,#fff5e7,#fffdf8)}.wish-invite-card{max-width:620px;margin:auto;padding:clamp(20px,5vw,36px);border-radius:30px;background:#fff;border:2px solid #f3dfc4;box-shadow:0 16px 42px #9a704014}.wish-invite-kicker{text-align:center;color:#d17a4f;font-weight:850}.wish-invite-card h2{text-align:center;font-size:clamp(26px,5vw,38px);font-weight:900;color:#82543d;margin:8px 0}.wish-invite-description{text-align:center;color:#83756b;line-height:1.6;margin:0 auto 24px;max-width:480px}.wish-field-label{display:block;color:#655348;font-weight:850;font-size:15px;margin:18px 0 9px}.wish-field-label span{font-size:12px;color:#9a8c81;font-weight:500}.wish-input{display:block;width:100%;min-height:54px;padding:15px 17px;border:2px solid #f0dfca;border-radius:16px;background:#fffdf9;color:#4e4038;font-size:17px;outline:none;box-shadow:none}.wish-input:focus{border-color:#ffb84d;box-shadow:0 0 0 4px #ffb84d2b}.wish-message-input{min-height:116px;resize:vertical;line-height:1.55}
 .wish-relationship-choices,.wish-suggestions{display:flex;flex-wrap:wrap;gap:9px}.wish-choice,.wish-suggestion{min-height:44px;padding:10px 14px;border:1.5px solid #f0dfca;border-radius:999px;background:#fffaf1;color:#765c48;font-size:14px;font-weight:750}.wish-choice.selected,.wish-suggestion.selected{background:#ffedc8;border-color:#e6a844;color:#69451e;box-shadow:0 0 0 2px #ffe4ad}.wish-suggestions{display:grid;grid-template-columns:1fr 1fr}.wish-suggestion{text-align:left;border-radius:15px;min-height:58px;line-height:1.35}.wish-privacy-note{text-align:center;color:#95867b;font-size:13px;line-height:1.5;margin:14px 0}.wish-send-button{display:block;width:100%;min-height:58px;padding:14px 20px;border-radius:17px;background:#ff806f;color:#fff;font-size:18px;font-weight:900;box-shadow:0 5px #e56d5f}.wish-send-button:disabled{opacity:.65;box-shadow:none}.wish-feedback{text-align:center;min-height:22px;margin:14px 0 0;color:#8a5b32;font-weight:750}
 .birthday-public #wishBoard{gap:14px}.birthday-public #wishBoard article{background:#fffdf8!important;border:1px solid #f1dfc7;box-shadow:0 8px 22px #805b3010!important;border-radius:20px!important}.birthday-public #wishBoard article p{color:#64554a!important}.birthday-public footer{background:#fff3df!important;color:#806d5d!important;border-color:#f1dfc7!important}.birthday-public .btn{min-height:44px}.birthday-public .swiper-pagination-bullet-active{background:#ff806f!important}
-@media(max-width:520px){.birthday-hero{padding-top:34px}.birthday-gallery__frame{height:58vh;min-height:260px}.wish-suggestions{grid-template-columns:1fr}.wish-invite-card{border-radius:23px}.birthday-hero__toys{letter-spacing:3px}.birthday-public .mt-6.flex{padding:0 12px 18px}.birthday-public .btn{flex:1 1 42%;font-size:13px}}
+@media(max-width:520px){.birthday-hero{padding-top:34px}.birthday-gallery__frame{height:clamp(260px,64svh,560px);min-height:260px}.wish-suggestions{grid-template-columns:1fr}.wish-invite-card{border-radius:23px}.birthday-hero__toys{letter-spacing:3px}.birthday-public .mt-6.flex{padding:0 12px 18px}.birthday-public .btn{flex:1 1 42%;font-size:13px}}
 </style>
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
@@ -251,7 +264,7 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
 
   <!-- 🎵 Background Music -->
   <?php if ($musicEnabled): ?>
-  <audio id="bgMusic" loop><source src="<?= $escapeHtml($musicSource); ?>" type="audio/mpeg"></audio>
+  <audio id="bgMusic" loop preload="none" volume="0.12"><source src="<?= $escapeHtml($musicSource); ?>" type="audio/mpeg"></audio>
   <?php endif; ?>
 <!-- Share Buttons Section -->
 <div class="mt-6 flex flex-wrap gap-3 justify-center items-center">
@@ -321,29 +334,17 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
     text-decoration: none;
     font-weight: bold;
   }
-  #musicControlBtn {
-    width: 42px;
-    height: 42px;
-    font-size: 18px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
+  .birthday-sound-control{position:fixed;right:12px;bottom:12px;z-index:60;display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid #ead9c4;border-radius:999px;background:#fffdf2f2;box-shadow:0 8px 24px #674b2a24;backdrop-filter:blur(10px);color:#654c36}
+  #musicControlBtn{min-height:42px;padding:0 14px;border:0;border-radius:999px;background:#ffb84d;color:#573b1d;font-size:14px;font-weight:850;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+  .birthday-sound-control label{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:750;white-space:nowrap}
+  #musicVolume{width:76px;accent-color:#e99542;cursor:pointer}
+  @media(max-width:480px){.birthday-sound-control{right:9px;bottom:9px;gap:7px;padding:7px 9px}#musicControlBtn{min-height:40px;padding:0 11px;font-size:12px}#musicVolume{width:62px}}
 </style>
 
-<!-- 🎵 Floating Music Control -->
 <?php if ($musicEnabled): ?>
-<div class="fixed bottom-4 right-3 z-50">
-  <button id="musicControlBtn"
-    class="w-10 h-10 rounded-full border border-gray-300 bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition relative group"
-    aria-label="Music Control">
-    🎵
-    <!-- Tooltip -->
-    <span
-      class="absolute right-full mr-2 bottom-1/2 translate-y-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-      Tap to play/pause 🎶
-    </span>
-  </button>
+<div class="birthday-sound-control" role="group" aria-label="Sound controls">
+  <button id="musicControlBtn" type="button" aria-label="Turn birthday music on" aria-pressed="false">🔇 Sound off</button>
+  <label for="musicVolume">Volume <input id="musicVolume" type="range" min="0" max="30" value="12" step="1"></label>
 </div>
 <?php endif; ?>
 
@@ -381,38 +382,6 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
       img.on('load', () => img.addClass('loaded')).attr('src', img.attr('src'));
     });
 
-    // Play music only on first user click
-function playMusicOnce() {
-  const music = document.getElementById("bgMusic");
-  if (music && music.paused) {
-    music.play().catch(() => {});
-    document.removeEventListener("click", playMusicOnce);
-  }
-}
-document.addEventListener("click", playMusicOnce, { once: true });
-
-// Toggle on TRIPLE click
-let clickTimes = [];
-document.addEventListener("click", function () {
-  const now = Date.now();
-  clickTimes.push(now);
-
-  // Keep only last 3 clicks
-  if (clickTimes.length > 3) clickTimes.shift();
-
-  // Check if 3 clicks occurred within 600ms
-  if (clickTimes.length === 3 && (clickTimes[2] - clickTimes[0] <= 600)) {
-    toggleMusic();
-    clickTimes = []; // reset
-  }
-});
-
-function toggleMusic() {
-  const music = document.getElementById("bgMusic");
-  if (!music) return;
-  if (music.paused) music.play();
-  else music.pause();
-}
 function loadWishes() {
   $.getJSON("wishes.json?ts=" + new Date().getTime(), function (data) {
     $("#wishBoard").html("");
@@ -489,17 +458,43 @@ function loadWishes() {
   });
   const music = document.getElementById("bgMusic");
   const musicBtn = document.getElementById("musicControlBtn");
-
-  if (music && musicBtn) {
+  const musicVolume = document.getElementById("musicVolume");
+  if (music && musicBtn && musicVolume) {
+    music.volume = 0.12;
+    const syncSoundControl = () => {
+      const isPlaying = !music.paused && !music.muted && music.volume > 0;
+      musicBtn.textContent = isPlaying ? "🔊 Sound on" : "🔇 Sound off";
+      musicBtn.setAttribute("aria-pressed", isPlaying ? "true" : "false");
+      musicBtn.setAttribute("aria-label", isPlaying ? "Turn birthday music off" : "Turn birthday music on");
+      musicVolume.value = String(Math.round(music.volume * 100));
+    };
     musicBtn.addEventListener("click", () => {
-      if (music.paused) {
-        music.play().catch(() => {});
-        musicBtn.classList.replace("bg-white", "bg-green-100");
+      if (music.paused || music.muted || music.volume === 0) {
+        music.muted = false;
+        if (music.volume === 0) music.volume = 0.12;
+        musicVolume.value = String(Math.round(music.volume * 100));
+        music.play().then(syncSoundControl).catch(() => {
+          musicBtn.textContent = "▶ Tap to play";
+          musicBtn.setAttribute("aria-label", "Tap to play birthday music");
+        });
       } else {
         music.pause();
-        musicBtn.classList.replace("bg-green-100", "bg-white");
+        syncSoundControl();
       }
     });
+    musicVolume.addEventListener("input", () => {
+      const nextVolume = Math.min(0.3, Math.max(0, Number(musicVolume.value) / 100));
+      music.volume = nextVolume;
+      if (nextVolume === 0) {
+        music.pause();
+      } else if (!music.paused) {
+        music.muted = false;
+      }
+      syncSoundControl();
+    });
+    music.addEventListener("play", syncSoundControl);
+    music.addEventListener("pause", syncSoundControl);
+    syncSoundControl();
   }
   </script>
 
