@@ -482,6 +482,33 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
  .birthday-hero .birthday-gallery__empty{padding:20px 12px}
 }
 </style>
+
+<style id="vaibhav-hero-memory-blend">
+/* Memories are part of the hero composition, not a separate content panel. */
+.birthday-hero .birthday-gallery{width:min(100%,820px);margin:0 auto 14px!important;padding:0!important;flex:0 1 auto;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.birthday-hero .birthday-section-heading{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 auto 12px!important;padding:0;background:transparent!important;border:0!important;box-shadow:none!important}
+.birthday-hero .birthday-section-heading>span{display:none!important}
+.birthday-hero .birthday-section-heading h2{margin:0!important;font-family:system-ui,-apple-system,'Segoe UI',sans-serif!important;font-size:clamp(15px,2.4vw,19px)!important;font-weight:800!important;letter-spacing:.01em!important;color:#8a674c!important}
+.birthday-hero .birthday-section-heading p{display:none!important}
+.birthday-hero .birthday-gallery__frame{width:min(100%,680px)!important;height:clamp(190px,29vw,300px)!important;min-height:190px!important;margin:0 auto!important;padding:0!important;border:0!important;border-radius:24px!important;background:transparent!important;box-shadow:none!important;overflow:hidden}
+.birthday-hero .birthday-gallery__frame .swiper-slide{padding:0!important;background:transparent!important}
+.birthday-hero .birthday-gallery__frame img,.birthday-hero .birthday-gallery__frame video{border-radius:22px!important;object-fit:contain!important;box-shadow:none!important}
+.birthday-hero .birthday-gallery__frame .swiper-pagination{bottom:8px!important}
+.birthday-hero .birthday-gallery__frame .swiper-pagination-bullet{background:#fff!important;box-shadow:0 1px 5px #59452b55}
+.birthday-hero .birthday-gallery__empty{width:min(100%,520px)!important;margin:0 auto!important;padding:18px!important;border:1px dashed #d9bd91!important;border-radius:20px!important;background:rgba(255,250,238,.28)!important;box-shadow:none!important}
+.birthday-hero .birthday-gallery__empty span{font-size:30px!important}
+.birthday-hero .birthday-gallery__empty strong{font-size:14px!important}
+.birthday-hero .birthday-gallery__empty small{font-size:11px!important}
+.birthday-hero h1{margin-top:12px!important}
+@media(max-width:640px){
+ .birthday-hero .birthday-gallery{margin-bottom:10px!important}
+ .birthday-hero .birthday-section-heading{margin-bottom:8px!important}
+ .birthday-hero .birthday-section-heading h2{font-size:14px!important}
+ .birthday-hero .birthday-gallery__frame{height:clamp(170px,30svh,235px)!important;min-height:170px!important;border-radius:18px!important}
+ .birthday-hero .birthday-gallery__frame img,.birthday-hero .birthday-gallery__frame video{border-radius:16px!important}
+ .birthday-hero h1{margin-top:9px!important}
+}
+</style>
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" data-decor-enabled="<?= $floatingDecorEnabled ? 'true' : 'false' ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -490,8 +517,6 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <header class="birthday-hero" data-aos="zoom-in">
     <div class="birthday-hero__top"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> &nbsp; Aaj ka din hai hamare Kittu ke naam! &nbsp; <i class="fa-solid fa-cake-candles" aria-hidden="true"></i></div>
     <div class="birthday-hero__toys" aria-hidden="true"><i class="fa-solid fa-child" aria-hidden="true"></i> <i class="fa-solid fa-paw" aria-hidden="true"></i> <i class="fa-solid fa-car" aria-hidden="true"></i> <i class="fa-solid fa-star" aria-hidden="true"></i></div>
-    <h1><?= $escapeHtml($heroTitle); ?></h1><p><?= $escapeHtml($heroSubtitle); ?></p>
-    <div class="birthday-age"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> <?= $escapeHtml($birthdayLabel); ?> <i class="fa-solid fa-gift" aria-hidden="true"></i></div>
         <section class="birthday-gallery" id="birthdayMemories" data-aos="fade-up" aria-label="Vaibhav ki yaadein">
       <div class="birthday-section-heading"><span><i class="fa-solid fa-images" aria-hidden="true"></i></span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
       <?php if ($featuredImages || $birthdayMedia): ?>
@@ -513,6 +538,9 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
       </div><div class="swiper-pagination"></div></div>
       <?php else: ?><div class="birthday-gallery__empty"><span><i class="fa-solid fa-images"></i></span><strong>Vaibhav ki photos jald hi yahan aayengi!</strong><small>Birthday Studio se photos, videos aur audio memories add kar sakte hain.</small></div><?php endif; ?>
     </section>
+        <h1><?= $escapeHtml($heroTitle); ?></h1><p><?= $escapeHtml($heroSubtitle); ?></p>
+    <div class="birthday-age"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> <?= $escapeHtml($birthdayLabel); ?> <i class="fa-solid fa-gift" aria-hidden="true"></i></div>
+
     <a class="birthday-hero__button" href="#wishSection"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Vaibhav ko wish bhejein</a>
     <div class="birthday-hero__bottom" aria-hidden="true"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-gift"></i> <i class="fa-solid fa-face-grin-stars"></i> <i class="fa-solid fa-gift"></i> <i class="fa-solid fa-star"></i></div>
   </header>
