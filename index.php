@@ -171,6 +171,7 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
 body.birthday-public{background:radial-gradient(ellipse at 8% 4%,#fff0d8 0,transparent 34%),radial-gradient(ellipse at 92% 24%,#e5f5f0 0,transparent 32%),linear-gradient(180deg,#fffaf2 0%,#fffdf9 48%,#fff3e8 100%)!important;color:var(--lux-ink)!important}
 body.birthday-public:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.2;background-image:radial-gradient(#d9a77d 1px,transparent 1px);background-size:26px 26px;mask-image:linear-gradient(to bottom,black,transparent 70%)}
 .birthday-public>*{position:relative}
+.birthday-public>#confetti-canvas{position:fixed!important;inset:0!important;pointer-events:none!important;z-index:9999!important}
 .birthday-hero{isolation:isolate;min-height:590px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(65px,10vw,118px) 20px 76px!important;border-radius:0 0 58px 58px!important;background:linear-gradient(135deg,#ffe9bd 0%,#fff0d9 42%,#dff3ee 100%)!important;box-shadow:0 28px 80px rgba(129,91,51,.10);overflow:hidden}
 .birthday-hero:before,.birthday-hero:after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(1px);pointer-events:none}
 .birthday-hero:before{width:320px;height:320px;left:-110px;top:-100px;background:radial-gradient(circle,#fff9df 0 38%,transparent 70%);animation:luxFloat 9s ease-in-out infinite}
