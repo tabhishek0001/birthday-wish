@@ -173,6 +173,20 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
   .birthday-swal-popup{border-radius:26px!important;font-family:system-ui,-apple-system,'Segoe UI',sans-serif!important;padding:1.5rem!important}.birthday-swal-popup .swal2-title{color:#80543f;font-weight:900}.birthday-swal-popup .swal2-html-container{color:#76685d;line-height:1.65}.birthday-swal-popup .swal2-confirm,.birthday-swal-popup .swal2-cancel{border-radius:14px!important;font-weight:800!important;padding:12px 20px!important}
 </style>
 
+<style id="vaibhav-memory-viewer">
+.memory-viewer[hidden]{display:none!important}
+.memory-viewer{position:fixed;inset:0;z-index:20000;display:flex;align-items:center;justify-content:center;padding:58px 58px 76px;background:rgba(18,15,14,.96);backdrop-filter:blur(10px);touch-action:pan-y}
+.memory-viewer__image{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:8px;box-shadow:0 18px 70px #0008}
+.memory-viewer__close,.memory-viewer__nav{position:absolute;display:grid;place-items:center;border:1px solid #ffffff55;background:#ffffff20;color:#fff;border-radius:50%;cursor:pointer;z-index:2;backdrop-filter:blur(8px)}
+.memory-viewer__close{top:16px;right:16px;width:46px;height:46px;font-size:30px;line-height:1}
+.memory-viewer__nav{top:50%;width:46px;height:46px;font-size:35px;line-height:1;transform:translateY(-50%)}
+.memory-viewer__prev{left:12px}.memory-viewer__next{right:12px}
+.memory-viewer__caption{position:absolute;bottom:34px;left:70px;right:70px;text-align:center;color:#fff;font-size:13px;text-shadow:0 2px 8px #000}
+.memory-viewer__count{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#ffffffb8;font-size:11px}
+body.memory-viewer-open{overflow:hidden}
+@media(max-width:600px){.memory-viewer{padding:66px 12px 82px}.memory-viewer__image{max-width:100%;max-height:100%}.memory-viewer__nav{top:auto;bottom:12px;width:42px;height:42px;transform:none}.memory-viewer__prev{left:calc(50% - 54px)}.memory-viewer__next{right:calc(50% - 54px)}.memory-viewer__caption{bottom:64px;left:12px;right:12px}.memory-viewer__count{bottom:23px}}
+@media(prefers-reduced-motion:reduce){.memory-viewer *{scroll-behavior:auto!important}}
+</style>
 <style id="vaibhav-memory-lightbox">
 .birthday-gallery__frame .memory-lightbox-link{display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-width:0;min-height:0;cursor:zoom-in}
 .birthday-gallery__frame .memory-lightbox-link img{width:100%;height:100%;object-fit:contain}
@@ -570,20 +584,73 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
       video.addEventListener("ended", () => video.pause());
     });
 
-    const lightbox = GLightbox({
-      selector: "#birthdayMemories .glightbox",
-      touchNavigation: true,
-      loop: true,
-      zoomable: true,
-      onOpen: () => {
-        if (memorySwiper.autoplay) memorySwiper.autoplay.stop();
-        stopMemoryMedia();
-      },
-      onClose: () => {
-        stopMemoryMedia();
-        if (memorySwiper.autoplay) memorySwiper.autoplay.start();
-      }
+    // Use a native, controlled memory viewer instead of GLightbox. This avoids
+    // blank black overlays on mobile when a CDN/library fails to initialize.
+    const memoryLinks = Array.from(document.querySelectorAll("#birthdayMemories a.memory-lightbox-link"));
+    const memoryViewer = document.createElement("div");
+    memoryViewer.className = "memory-viewer";
+    memoryViewer.hidden = true;
+    memoryViewer.setAttribute("role", "dialog");
+    memoryViewer.setAttribute("aria-modal", "true");
+    memoryViewer.setAttribute("aria-label", "Birthday memory photo viewer");
+    memoryViewer.innerHTML = '<button type="button" class="memory-viewer__close" aria-label="Close photo">×</button><button type="button" class="memory-viewer__nav memory-viewer__prev" aria-label="Previous photo">‹</button><img class="memory-viewer__image" alt=""><button type="button" class="memory-viewer__nav memory-viewer__next" aria-label="Next photo">›</button><div class="memory-viewer__caption" aria-live="polite"></div><div class="memory-viewer__count"></div>';
+    document.body.appendChild(memoryViewer);
+    const viewerImage = memoryViewer.querySelector(".memory-viewer__image");
+    const viewerCaption = memoryViewer.querySelector(".memory-viewer__caption");
+    const viewerCount = memoryViewer.querySelector(".memory-viewer__count");
+    let activeMemoryIndex = 0;
+    let viewerTouchStartX = null;
+    const showMemory = index => {
+      if (!memoryLinks.length) return;
+      activeMemoryIndex = (index + memoryLinks.length) % memoryLinks.length;
+      const link = memoryLinks[activeMemoryIndex];
+      const thumb = link.querySelector("img");
+      viewerImage.src = link.href;
+      viewerImage.alt = thumb ? thumb.alt : "Birthday memory";
+      viewerCaption.textContent = thumb ? thumb.alt : "";
+      viewerCount.textContent = (activeMemoryIndex + 1) + " / " + memoryLinks.length;
+    };
+    const closeMemoryViewer = () => {
+      memoryViewer.hidden = true;
+      viewerImage.removeAttribute("src");
+      document.body.classList.remove("memory-viewer-open");
+      if (memorySwiper.autoplay) memorySwiper.autoplay.start();
+    };
+    const openMemoryViewer = index => {
+      stopMemoryMedia();
+      if (memorySwiper.autoplay) memorySwiper.autoplay.stop();
+      memoryViewer.hidden = false;
+      document.body.classList.add("memory-viewer-open");
+      showMemory(index);
+      memoryViewer.querySelector(".memory-viewer__close").focus();
+    };
+    memoryLinks.forEach((link, index) => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        openMemoryViewer(index);
+      });
     });
+    memoryViewer.querySelector(".memory-viewer__close").addEventListener("click", closeMemoryViewer);
+    memoryViewer.querySelector(".memory-viewer__prev").addEventListener("click", () => showMemory(activeMemoryIndex - 1));
+    memoryViewer.querySelector(".memory-viewer__next").addEventListener("click", () => showMemory(activeMemoryIndex + 1));
+    memoryViewer.addEventListener("click", event => {
+      if (event.target === memoryViewer) closeMemoryViewer();
+    });
+    document.addEventListener("keydown", event => {
+      if (memoryViewer.hidden) return;
+      if (event.key === "Escape") closeMemoryViewer();
+      if (event.key === "ArrowLeft") showMemory(activeMemoryIndex - 1);
+      if (event.key === "ArrowRight") showMemory(activeMemoryIndex + 1);
+    });
+    memoryViewer.addEventListener("touchstart", event => {
+      viewerTouchStartX = event.changedTouches[0].clientX;
+    }, { passive: true });
+    memoryViewer.addEventListener("touchend", event => {
+      if (viewerTouchStartX === null) return;
+      const delta = event.changedTouches[0].clientX - viewerTouchStartX;
+      if (Math.abs(delta) > 45) showMemory(activeMemoryIndex + (delta < 0 ? 1 : -1));
+      viewerTouchStartX = null;
+    }, { passive: true });
 
     $('img.lazy').each(function () {
       const img = $(this);
