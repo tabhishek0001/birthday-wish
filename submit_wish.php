@@ -9,7 +9,7 @@ $clean = static function($value, int $limit): string {
     return mb_substr(trim(str_replace("\0", '', $value)), 0, $limit, 'UTF-8');
 };
 $name=$clean($_POST['name']??'',80); $message=$clean($_POST['message']??'',1200); $pahchan=$clean($_POST['pahchan']??'',100);
-if($name===''||mb_strtolower($name,'UTF-8')==='aapka naam'||$message===''){http_response_code(422);echo json_encode(['success'=>false,'error'=>'Please replace the prefilled name with your own name and add a wish.']);exit;}
+if($name===''||in_array(mb_strtolower($name,'UTF-8'),['aapka naam','guest','your name'],true)||$message===''){http_response_code(422);echo json_encode(['success'=>false,'error'=>'Please replace the sample name with your own name and add a wish.']);exit;}
 if(mb_strlen($message,'UTF-8')<2){http_response_code(422);echo json_encode(['success'=>false,'error'=>'Please write a little more in your wish.']);exit;}
 $now=time();$last=(int)($_SESSION['birthday_last_wish_at']??0);
 if($last>0&&($now-$last)<15){http_response_code(429);echo json_encode(['success'=>false,'error'=>'Please wait a few seconds before sending another wish.']);exit;}
