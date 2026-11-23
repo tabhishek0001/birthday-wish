@@ -172,7 +172,7 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
       <?php if (trim((string)($memory['caption'] ?? '')) !== ''): ?><div class="memory-caption-overlay"><?= $escapeHtml($memory['caption']); ?></div><?php endif; ?></div>
     <?php endforeach; ?>
   </div><div class="swiper-pagination"></div></div>
-  <?php else: ?><div class="birthday-gallery__empty"><span>🧸</span><strong>Vaibhav ki photos jald hi yahan dikhenगी!</strong><small>Birthday Studio se photos aur videos add kar sakte hain.</small></div><?php endif; ?>
+  <?php else: ?><div class="birthday-gallery__empty"><span>🧸</span><strong>Vaibhav ki photos jald hi yahan aayengi!</strong><small>Birthday Studio se photos aur videos add kar sakte hain.</small></div><?php endif; ?>
 </section>
 
 <?php if ($showLetter): ?>
