@@ -1329,16 +1329,15 @@ function loadWishes() {
       }
       syncSoundControl();
     });
-    // Stop background audio whenever this tab or browser window loses focus.
-    // Playback deliberately does not auto-resume: the visitor can resume it explicitly.
-    const pauseForFocusLoss = () => {
-      if (!music.paused) music.pause();
-      syncSoundControl();
-    };
+    // Pause only when this page becomes hidden (tab switched, navigated away,
+    // or browser minimized). Merely focusing another window must not stop audio.
+    // Playback stays paused when the visitor returns and can be resumed manually.
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden) pauseForFocusLoss();
+      if (document.hidden && !music.paused) {
+        music.pause();
+        syncSoundControl();
+      }
     });
-    window.addEventListener("blur", pauseForFocusLoss);
     music.addEventListener("play", syncSoundControl);
     music.addEventListener("pause", syncSoundControl);
     syncSoundControl();
