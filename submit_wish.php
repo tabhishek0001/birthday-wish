@@ -40,7 +40,7 @@ if(isset($_FILES['attachments'])&&is_array($_FILES['attachments']['name'])){
 $wish=['name'=>$name,'message'=>$message,'pahchan'=>$pahchan,'timestamp'=>$now];
 if($uploadedMedia)$wish['media']=$uploadedMedia;
 $file=__DIR__.'/wishes.json';$handle=@fopen($file,'c+');
-if(!$handle||!flock($handle,LOCK_EX)){if(is_resource($handle))fclose($handle);http_response_code(500);echo json_encode(['success'=>false,'error'=>'Your wish could not be saved. Please try again.']);exit;}
+if(!$handle||!flock($handle,LOCK_EX)){if(is_resource($handle))fclose($handle);foreach($savedMediaFiles as $savedFile)@unlink(__DIR__.'/wish-media/'.$savedFile);http_response_code(500);echo json_encode(['success'=>false,'error'=>'Your wish could not be saved. Please try again.']);exit;}
 $contents=stream_get_contents($handle);$wishes=$contents!==false&&trim($contents)!==''?json_decode($contents,true):[];if(!is_array($wishes))$wishes=[];$wishes[]=$wish;if(count($wishes)>5000)$wishes=array_slice($wishes,-5000);
 $encoded=json_encode($wishes,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_INVALID_UTF8_SUBSTITUTE);$written=$encoded!==false;
 if($written){rewind($handle);$written=ftruncate($handle,0)&&fwrite($handle,$encoded)!==false&&fflush($handle);}flock($handle,LOCK_UN);fclose($handle);
