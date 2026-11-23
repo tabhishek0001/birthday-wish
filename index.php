@@ -873,8 +873,23 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     const memorySwiper = memoryCarouselElement ? new Swiper(memoryCarouselElement, {
       // Original image-by-image carousel: one image at a time with a seamless loop.
       effect: "slide",
-      grabCursor: true, centeredSlides: true, slidesPerView: 1, loop: true,
-      speed: 500, preventInteractionOnTransition: true, resistanceRatio: 0.85,
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 1,
+      loop: true,
+      // Never reject a finger gesture because an autoplay transition was in progress.
+      allowTouchMove: true,
+      simulateTouch: true,
+      followFinger: true,
+      touchRatio: 1,
+      threshold: 4,
+      longSwipes: true,
+      longSwipesRatio: 0.25,
+      shortSwipes: true,
+      preventInteractionOnTransition: false,
+      resistance: true,
+      resistanceRatio: 0.85,
+      speed: 420,
       autoplay: { delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true },
       pagination: { el: ".swiper-pagination", clickable: true },
       on: {
