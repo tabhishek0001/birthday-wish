@@ -12,7 +12,7 @@ if(!is_array($items))$items=[];
 $byFile=[];foreach($items as $item){if(is_array($item)&&isset($item['file']))$byFile[$item['file']]=$item;}
 $cleanOrder=[];$seen=[];
 foreach($order as $file){
- if(!is_string($file)||!preg_match('/^[a-f0-9]{32}\.(jpg|png|webp|gif|mp4|webm|mov)$/',$file)||!isset($byFile[$file])||isset($seen[$file])){http_response_code(422);echo json_encode(['success'=>false,'error'=>'Memory order contains an invalid item.']);exit;}
+ if(!is_string($file)||!preg_match('/^[a-f0-9]{32}\.(jpg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|flac)$/',$file)||!isset($byFile[$file])||isset($seen[$file])){http_response_code(422);echo json_encode(['success'=>false,'error'=>'Memory order contains an invalid item.']);exit;}
  $seen[$file]=true;$cleanOrder[]=$byFile[$file];
 }
 if(count($cleanOrder)!==count($byFile)){http_response_code(422);echo json_encode(['success'=>false,'error'=>'The order must include every saved memory.']);exit;}
