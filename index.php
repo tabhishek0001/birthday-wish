@@ -99,7 +99,9 @@ if ($customMusic !== '') {
 if ($musicSource === '') $musicSource = 'happy-birthday-song.mp3';
 $wishFormHeading = trim((string)($experienceSettings['formHeading'] ?? '')) ?: 'Leave a little happiness';
 $wishFormDescription = trim((string)($experienceSettings['formDescription'] ?? '')) ?: 'Share a note, a memory or a wish. It will mean more than you know.';
-$shareMessage = "🎈 Vaibhav ka 2nd Birthday! 🎂\n\nHamare chhote Kittu ko birthday wish bhejiye! ❤️\nApni pyari si wish yahan bhejein 👉 {$shareUrl}\n\nPhotos dekhein, wish bhejein aur celebration ka hissa banein! 🎉\n\n📸 Vaibhav ki aur photos aur yaadein yahan dekhein:\n{$eventsUrl}";
+$shareMessage = $isHindi
+    ? "🎈 हमारे छोटे किट्टू वैभव का दूसरा जन्मदिन! 🎂\n\nउसे अपनी प्यारी-सी विश और ढेर सारा प्यार भेजें। ❤️\nयहाँ अपनी विश लिखें 👉 {$shareUrl}\n\nफोटो देखें, अपनी यादें शेयर करें और इस खुशी का हिस्सा बनें! 🎉\n\n📸 वैभव की और भी प्यारी तस्वीरें और यादें यहाँ देखें:\n{$eventsUrl}"
+    : "🎈 Vaibhav ka 2nd Birthday! 🎂\n\nHamare chhote Kittu ko birthday wish bhejiye! ❤️\nApni pyari si wish yahan bhejein 👉 {$shareUrl}\n\nPhotos dekhein, wish bhejein aur celebration ka hissa banein! 🎉\n\n📸 Vaibhav ki aur photos aur yaadein yahan dekhein:\n{$eventsUrl}";
 $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 ?>
 <!DOCTYPE html>
@@ -108,8 +110,8 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <!-- Primary Meta Tags -->
-<title>Happy Birthday <?= $escapeHtml($name); ?> 🎉 | Send Your Wishes!</title>
-<meta name="title" content="Happy Birthday <?= $escapeHtml($name); ?> 🎉 | Send Your Wishes!">
+<title><?= $isHindi ? 'वैभव का जन्मदिन 🎉 | अपनी शुभकामनाएँ भेजें' : 'Happy Birthday ' . $escapeHtml($name) . ' 🎉 | Send Your Wishes!' ?></title>
+<meta name="title" content="<?= $isHindi ? 'वैभव का जन्मदिन 🎉 | अपनी शुभकामनाएँ भेजें' : 'Happy Birthday ' . $escapeHtml($name) . ' 🎉 | Send Your Wishes!' ?>">
 <meta name="description" content="<?= $escapeHtml($metaDescription); ?>">
 
 <!-- Open Graph / Facebook -->
@@ -1510,6 +1512,32 @@ body.birthday-public .birthday-sound-control {
 (function(){
   if(document.documentElement.lang!=='hi')return;
   const dictionary={
+
+    "Aaj ka din hai hamare Kittu ke naam!":"आज का दिन हमारे छोटे किट्टू के नाम! ❤️",
+    "Vaibhav ki yaadein":"वैभव की प्यारी यादें",
+    "Vaibhav ki pyari yaadein":"वैभव की प्यारी-प्यारी यादें",
+    "Chhote-chhote pal, dher saari khushiyan!":"छोटे-छोटे पल और ढेर सारी खुशियाँ!",
+    "Saari Photos dekhein":"वैभव की सारी तस्वीरें देखें",
+    "Vaibhav ke aur bhi pyare pal":"वैभव की और भी प्यारी यादें",
+    "Photo ko full screen mein dekhein":"फोटो को बड़ा करके देखें",
+    "Video memory ko full screen mein dekhein":"वीडियो को बड़ा करके देखें",
+    "Audio memory":"ऑडियो याद",
+    "Tap to listen":"सुनने के लिए टैप करें",
+    "Audio memory sunne ke liye kholein":"ऑडियो सुनने के लिए खोलें",
+    "Mummy":"मम्मी",
+    "Papa":"पापा",
+    "Dada-Dadi":"दादा-दादी",
+    "Nana-Nani":"नाना-नानी",
+    "Mama-Mami":"मामा-मामी",
+    "Chacha-Chachi":"चाचा-चाची",
+    "Bua-Fufa":"बुआ-फूफा",
+    "Friend":"दोस्त",
+    "Aapka rishta":"आपका रिश्ता",
+    "जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️":"जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️",
+    "Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️":"जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️",
+    "Janamdin mubarak ho hamare Kittu! Bhagwan tumhe hamesha khush rakhe. 🌟":"हमारे किट्टू को जन्मदिन की ढेर सारी बधाई! भगवान तुम्हें हमेशा खुश रखे। 🌟",
+    "Happy 2nd Birthday, little champ! Khoob khelo, masti karo aur hamesha muskurate raho! 🧸🎈":"दूसरे जन्मदिन की बहुत-बहुत बधाई, हमारे छोटे चैंप! खूब खेलो, मस्ती करो और हमेशा मुस्कुराते रहो! 🧸🎈",
+    "Vaibhav beta, tumhari hasi hamesha aise hi chamakti rahe. Bahut saara aashirwad aur pyaar! 💛":"वैभव बेटा, तुम्हारी हँसी हमेशा ऐसे ही खिलखिलाती रहे। ढेर सारा आशीर्वाद और प्यार! 💛",
     "Vaibhav ko wish bhejein":"वैभव को प्यारी-सी विश भेजें",
     "Aaj ka din sirf Vaibhav ke naam!":"आज का पूरा दिन हमारे वैभव के नाम! ❤️",
     "Chhote Kittu ke liye":"हमारे छोटे किट्टू के लिए",
@@ -1580,6 +1608,16 @@ body.birthday-public .birthday-sound-control {
     "Kittu ke liye dher saari wishes!":"किट्टू के लिए ढेर सारी शुभकामनाएँ!",
     "More birthday magic!":"थोड़ा और बर्थडे मैजिक!"
   };
+
+  const dynamicPhrases=[
+    [<?= json_encode($heroTitle, JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT) ?>,<?= json_encode("जन्मदिन मुबारक हो {$displayName}! 🎉", JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT) ?>,"Happy Birthday <?= $escapeHtml($displayName) ?>!"],
+    [<?= json_encode($heroSubtitle, JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT) ?>,"तुम्हारी ज़िंदगी हमेशा हँसी, प्यार और ढेर सारी खुशियों से भरी रहे!","May your year ahead be full of success, peace, and unforgettable moments."],
+    [<?= json_encode($birthdayLabel, JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT) ?>,<?= json_encode($birthdayAge !== null ? "अब वैभव {$birthdayAge} साल के हो गए हैं! 🎂" : "आज का पूरा दिन वैभव के नाम! ❤️", JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT) ?>,null],
+    [<?= json_encode($letterMessage, JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT) ?>,"कुछ लोग हमारी रोज़मर्रा की ज़िंदगी को भी खास बना देते हैं। आज का दिन तुम्हारी सारी प्यारी बातों और खुशियों के नाम!","Some people make ordinary days feel special. Today is a chance to celebrate everything that makes you wonderful."],
+    [<?= json_encode($cakeMessage, JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT) ?>,"थोड़ा रुककर एक प्यारी-सी विश माँगो… तुम्हारे लिए ढेर सारा जादू और खुशियाँ इंतज़ार कर रही हैं!","Take a breath, make a wish, and keep a little room for magic."],
+    [<?= json_encode($finalMessage, JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT) ?>,"आने वाला हर दिन अच्छे लोगों, प्यारे सरप्राइज़ और यादगार पलों से भरा रहे!","May the next chapter bring kind people, beautiful surprises and moments worth remembering."]
+  ];
+  dynamicPhrases.forEach(([source,target,defaultText])=>{if(defaultText===null||source===defaultText)dictionary[source]=target;});
   const skipSelector='#wishBoard, input, textarea, select, script, style, noscript';
   function translateNode(node){
     const parent=node.parentElement;
@@ -1591,10 +1629,10 @@ body.birthday-public .birthday-sound-control {
     const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
     let node;while((node=walker.nextNode()))translateNode(node);
     if(root.nodeType===1){
-      const attrs=['placeholder','aria-label','title'];
-      if(!root.closest(skipSelector))attrs.forEach(attr=>{const value=root.getAttribute(attr);if(value&&dictionary[value])root.setAttribute(attr,dictionary[value]);});
+      const attrs=['placeholder','aria-label','title','data-wish-suggestion'];
+      if(!root.closest('#wishBoard, script, style, noscript'))attrs.forEach(attr=>{const value=root.getAttribute(attr);if(value&&dictionary[value])root.setAttribute(attr,dictionary[value]);});
       if(root.querySelectorAll)root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(el=>{
-        if(el.closest(skipSelector))return;
+        if(el.closest('#wishBoard, script, style, noscript'))return;
         attrs.forEach(attr=>{const value=el.getAttribute(attr);if(value&&dictionary[value])el.setAttribute(attr,dictionary[value]);});
       });
     }
@@ -1606,6 +1644,9 @@ body.birthday-public .birthday-sound-control {
   }));
   observer.observe(document.body,{subtree:true,childList:true,characterData:true});
   const message=document.getElementById('wishMessage');
+  if(message&&message.value==='Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️'){
+    message.value='जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️';
+  }
   if(message&&message.value==='Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️'){
     message.value='जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️';
   }
