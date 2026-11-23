@@ -485,7 +485,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <!-- Vaibhav's little memory gallery -->
 <section class="birthday-gallery" id="birthdayMemories" data-aos="fade-up" aria-label="Vaibhav ki yaadein">
   <div class="birthday-section-heading"><span>📸</span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
-  <div class="birthday-all-memories-wrap"><a class="birthday-all-memories-link" href="https://www.docsansar.com/events?event=vaibhav" target="_blank" rel="noopener noreferrer">🖼️ Saari yaadein dekhein <span aria-hidden="true">↗</span></a></div>
+  <div class="birthday-all-memories-wrap"><a class="birthday-all-memories-link" href="https://www.docsansar.com/events?event=vaibhav" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-images" aria-hidden="true"></i> Saari Photos dekhein <span aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a></div>
   <?php
   $allMemoriesUrl = 'https://www.docsansar.com/events?event=vaibhav';
   $allMemoriesImage = '';
@@ -504,7 +504,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <a class="birthday-all-memories-card" href="<?= $escapeHtml($allMemoriesUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="Doc Sansar par Vaibhav ki saari yaadein dekhein">
     <?php if ($allMemoriesImage !== ''): ?><img src="<?= $escapeHtml($allMemoriesImage) ?>" alt="Vaibhav ki ek pyari yaad" loading="lazy"><?php else: ?><span class="birthday-all-memories-card__placeholder" aria-hidden="true">📸</span><?php endif; ?>
     <span class="birthday-all-memories-card__shade"></span>
-    <span class="birthday-all-memories-card__content"><strong>Saari yaadein dekhein</strong><small>Vaibhav ke aur bhi pyare pal</small></span>
+    <span class="birthday-all-memories-card__content"><strong>Saari Photos dekhein</strong><small>Vaibhav ke aur bhi pyare pal</small></span>
     <span class="birthday-all-memories-card__arrow" aria-hidden="true">↗</span>
   </a>
   <?php if ($featuredImages || $birthdayMedia): ?>
@@ -635,7 +635,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
 <!-- Persistent side share action -->
 <button type="button" class="birthday-side-share" id="birthdaySideShare" onclick="shareGeneral()" aria-label="Share Vaibhav's birthday page">
-  <span aria-hidden="true">↗</span><span>Share</span>
+  <span aria-hidden="true"><i class="fa-solid fa-share-nodes"></i></span><span>Share</span>
 </button>
 
 <!-- Scripts -->
