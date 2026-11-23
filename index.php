@@ -906,16 +906,93 @@ function loadWishes() {
     document.querySelectorAll("[data-wish-suggestion]").forEach(button=>button.addEventListener("click",()=>{wishMessage.value=button.dataset.wishSuggestion||defaultWish;document.querySelectorAll("[data-wish-suggestion]").forEach(item=>item.classList.toggle("selected",item===button));}));
     document.querySelectorAll("[data-relation]").forEach(button=>{button.setAttribute("aria-pressed","false");button.addEventListener("click",()=>{const relation=button.dataset.relation||"";wishRelation.value=wishRelation.value===relation?"":relation;document.querySelectorAll("[data-relation]").forEach(item=>{const selected=item===button&&wishRelation.value!=="";item.classList.toggle("selected",selected);item.setAttribute("aria-pressed",selected?"true":"false");});});});
     wishForm.on("submit",function(e){
+      e.preventDefault();
       const senderName=wishName.value.trim();
       if(!senderName || ["guest","aapka naam","your name"].includes(senderName.toLowerCase())){
-        e.preventDefault();e.stopImmediatePropagation();
         Swal.fire({icon:"info",title:"Apna naam likhna na bhoolein",text:"Kripya apna naam likhkar phir wish bhejein.",confirmButtonText:"Naam edit karein",confirmButtonColor:"#f47e70",customClass:{popup:"birthday-swal-popup"},buttonsStyling:true}).then(()=>wishName.focus());
         return;
       }
-    });
-    wishForm.on("submit",function(e){e.preventDefault();if(!wishName.value.trim()||wishName.value.trim().toLowerCase()==="aapka naam"){wishFeedback.textContent="Kripya ‘Aapka naam’ ki jagah apna naam likhein.";wishName.focus();return;}if(!wishMessage.value.trim()){wishFeedback.textContent="Ek chhoti si wish chuniye ya likh dijiye.";wishMessage.focus();return;}if(wishAttachments.files.length>3||Array.from(wishAttachments.files).some(file=>file.size>10*1024*1024)){wishFeedback.textContent="Maximum 3 attachments aur 10 MB per file allowed hai.";return;}
-      wishSubmit.disabled=true;wishSubmit.innerHTML='<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Wish bheji ja rahi hai...';wishFeedback.textContent="Bas ek pal...";const formData=new FormData(wishForm[0]);
-      $.ajax({url:"submit_wish.php",method:"POST",data:formData,dataType:"json",processData:false,contentType:false}).done(function(res){if(res.success){try{localStorage.setItem("vaibhavWishSenderName",wishName.value.trim());}catch(e){}wishMessage.value=defaultWish;wishAttachments.value="";wishAttachmentList.innerHTML="";wishRelation.value="";document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>{item.classList.remove("selected");if(item.hasAttribute("data-relation"))item.setAttribute("aria-pressed","false");});wishFeedback.innerHTML='<i class="fa-solid fa-gift" aria-hidden="true"></i> Aapki wish Vaibhav tak pahunch gayi! Shukriya <i class="fa-solid fa-heart" aria-hidden="true"></i>';loadWishes();if(typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});}else{wishFeedback.textContent=res.error||"Wish send nahi ho paayi. Dobara try kijiye.";}}).fail(function(xhr){wishFeedback.textContent=xhr.responseJSON&&xhr.responseJSON.error?xhr.responseJSON.error:"Internet ya server mein dikkat hai. Ek baar phir try kijiye.";}).always(function(){wishSubmit.disabled=false;wishSubmit.innerHTML='<i class="fa-solid fa-envelope" aria-hidden="true"></i> <?= $escapeHtml($submitLabel); ?>';});
+      if(!wishMessage.value.trim()){
+        wishFeedback.textContent="Ek chhoti si wish chuniye ya likh dijiye.";
+        wishMessage.focus();
+        return;
+      }
+      const files=Array.from(wishAttachments.files||[]);
+      if(files.length>3||files.some(file=>file.size>10*1024*1024)){
+        wishFeedback.textContent="Maximum 3 attachments aur 10 MB per file allowed hai.";
+        return;
+      }
+
+      wishSubmit.disabled=true;
+      wishSubmit.innerHTML='<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Wish bheji ja rahi hai...';
+      wishFeedback.textContent=files.length?"Photo/media upload ho rahi hai...":"Wish bheji ja rahi hai...";
+      const formData=new FormData(wishForm[0]);
+
+      $.ajax({
+        url:"submit_wish.php",
+        method:"POST",
+        data:formData,
+        dataType:"json",
+        processData:false,
+        contentType:false,
+        cache:false,
+        timeout:120000,
+        xhr:function(){
+          const xhr=$.ajaxSettings.xhr();
+          if(xhr.upload){
+            xhr.upload.addEventListener("progress",function(event){
+              if(event.lengthComputable&&files.length){
+                const percent=Math.min(100,Math.round((event.loaded/event.total)*100));
+                wishFeedback.textContent=percent<100
+                  ?"Media upload ho rahi hai... "+percent+"%"
+                  :"Media upload ho gayi. Wish save ho rahi hai...";
+              }
+            });
+          }
+          return xhr;
+        }
+      }).done(function(res){
+        if(res&&res.success){
+          try{localStorage.setItem("vaibhavWishSenderName",senderName);}catch(e){}
+          wishMessage.value=defaultWish;
+          wishAttachments.value="";
+          wishAttachmentList.innerHTML="";
+          wishAttachmentList.classList.remove("has-files","has-error");
+          wishRelation.value="";
+          document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>{
+            item.classList.remove("selected");
+            if(item.hasAttribute("data-relation"))item.setAttribute("aria-pressed","false");
+          });
+          wishFeedback.innerHTML='<i class="fa-solid fa-gift" aria-hidden="true"></i> Aapki wish Vaibhav tak pahunch gayi! Shukriya <i class="fa-solid fa-heart" aria-hidden="true"></i>';
+          loadWishes();
+          if(typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});
+        }else{
+          wishFeedback.textContent=(res&&res.error)||"Wish send nahi ho paayi. Dobara try kijiye.";
+        }
+      }).fail(function(xhr,textStatus){
+        let response=xhr.responseJSON||null;
+        if(!response&&xhr.responseText){
+          try{response=JSON.parse(xhr.responseText);}catch(parseError){}
+        }
+        if(response&&response.error){
+          wishFeedback.textContent=response.error;
+        }else if(xhr.status===413){
+          wishFeedback.textContent="Selected media server ki upload limit se badi hai. Chhoti file ya kam files try kijiye.";
+        }else if(xhr.status===429){
+          wishFeedback.textContent="Aapne abhi ek wish bheji hai. Kripya kuch seconds baad try kijiye.";
+        }else if(textStatus==="timeout"){
+          wishFeedback.textContent="Upload mein zyada samay lag gaya. Internet stable hone par dobara try kijiye. Agar wish board par dikh rahi ho, dobara submit na karein.";
+        }else if(textStatus==="parsererror"){
+          wishFeedback.textContent="Server se valid response nahi mila. Aapki wish save hui ya nahi, wish board check karke hi dobara bhejein.";
+        }else if(xhr.status===0){
+          wishFeedback.textContent="Connection beech mein toot gaya. Internet check karke wish board dekh lein; phir zarurat ho to dobara bhejein.";
+        }else{
+          wishFeedback.textContent="Server error ("+(xhr.status||"unknown")+"). Kripya thodi der baad dobara try kijiye.";
+        }
+      }).always(function(){
+        wishSubmit.disabled=false;
+        wishSubmit.innerHTML='<i class="fa-solid fa-envelope" aria-hidden="true"></i> <?= $escapeHtml($submitLabel); ?>';
+      });
     });
     loadWishes();
   const revealLetter = document.getElementById('revealLetter');
