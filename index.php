@@ -362,9 +362,9 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     <h2><?= $escapeHtml($wishFormHeading); ?></h2><p class="wish-invite-description"><?= $escapeHtml($wishFormDescription); ?></p>
     <form id="wishForm" autocomplete="on" enctype="multipart/form-data">
       <div class="wish-compact-fields">
-        <label class="wish-field-label" for="wishSenderName">Aapka naam</label>
-        <input id="wishSenderName" type="text" name="name" value="Aapka naam" required maxlength="80" autocomplete="name" class="wish-input" aria-describedby="wishNameHint" />
-        <small id="wishNameHint" class="wish-name-hint">Naam pehle se bhara hai — bhejne se pehle apna naam zaroor likhein.</small>
+        <label class="wish-field-label" for="wishSenderName">Your name</label>
+        <input id="wishSenderName" type="text" name="name" value="Guest" placeholder="Enter your name" required maxlength="80" autocomplete="name" class="wish-input" aria-describedby="wishNameHint" />
+        <small id="wishNameHint" class="wish-name-hint">A sample name is filled in. Replace it with your own name before sending.</small>
         <label class="wish-field-label" for="wishMessage">Vaibhav ke liye wish</label>
         <textarea id="wishMessage" name="message" required maxlength="1200" rows="2" class="wish-input wish-message-input">Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️</textarea>
       </div>
@@ -597,7 +597,7 @@ function loadWishes() {
 
     const wishForm=$("#wishForm"), wishName=document.getElementById("wishSenderName"), wishMessage=document.getElementById("wishMessage"), wishRelation=document.getElementById("wishRelation"), wishFeedback=document.getElementById("wishFeedback"), wishSubmit=document.getElementById("wishSubmitButton");
     const wishAttachments=document.getElementById("wishAttachments"), wishAttachmentList=document.getElementById("wishAttachmentList"), defaultWish="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️";
-    try{const saved=localStorage.getItem("vaibhavWishSenderName");if(saved){wishName.value=saved;document.getElementById("wishNameHint").textContent="Aapka pichhla naam yaad rakha gaya hai. Zarurat ho to badal sakte hain.";}else if(!localStorage.getItem("vaibhavWishNamePromptShown")){alert("Naam pehle se bhara hua hai. Wish bhejne se pehle ‘Aapka naam’ ko apne naam se badal dein.");localStorage.setItem("vaibhavWishNamePromptShown","1");}}catch(e){}
+    try{const saved=localStorage.getItem("vaibhavWishSenderName");if(saved&& !["aapka naam","guest","your name"].includes(saved.trim().toLowerCase())){wishName.value=saved;document.getElementById("wishNameHint").textContent="Your previous name is remembered on this device. You can change it anytime.";}else if(!localStorage.getItem("vaibhavGuestNamePromptShownV2")){alert("The name field contains a sample name (Guest). Please replace it with your own name before sending your wish.");localStorage.setItem("vaibhavGuestNamePromptShownV2","1");}}catch(e){}
     wishAttachments.addEventListener("change",()=>{const files=Array.from(wishAttachments.files||[]);wishAttachmentList.innerHTML="";if(files.length>3||files.some(file=>file.size>10*1024*1024)){wishAttachmentList.textContent="Maximum 3 files choose karein; har file 10 MB se chhoti honi chahiye.";wishAttachments.value="";return;}files.forEach(file=>{const tag=document.createElement("span");tag.textContent="✓ "+file.name;wishAttachmentList.appendChild(tag);});});
     document.querySelectorAll("[data-wish-suggestion]").forEach(button=>button.addEventListener("click",()=>{wishMessage.value=button.dataset.wishSuggestion||defaultWish;document.querySelectorAll("[data-wish-suggestion]").forEach(item=>item.classList.toggle("selected",item===button));}));
     document.querySelectorAll("[data-relation]").forEach(button=>button.addEventListener("click",()=>{const relation=button.dataset.relation||"";wishRelation.value=wishRelation.value===relation?"":relation;document.querySelectorAll("[data-relation]").forEach(item=>item.classList.toggle("selected",item===button&&wishRelation.value!==""));}));
@@ -630,6 +630,7 @@ function loadWishes() {
   const musicVolume = document.getElementById("musicVolume");
   if (music && musicBtn && musicVolume) {
     music.volume = 0.12;
+    let skipMusicToggleOnce = false;
     const syncSoundControl = () => {
       const isPlaying = !music.paused && !music.muted && music.volume > 0;
       musicBtn.textContent = isPlaying ? "🔊 Sound on" : "🔇 Sound off";
@@ -637,7 +638,23 @@ function loadWishes() {
       musicBtn.setAttribute("aria-label", isPlaying ? "Turn birthday music off" : "Turn birthday music on");
       musicVolume.value = String(Math.round(music.volume * 100));
     };
+    const startMusicOnFirstInteraction = (event) => {
+      if (!music.paused && !music.muted && music.volume > 0) return;
+      music.muted = false;
+      if (music.volume <= 0) music.volume = 0.12;
+      musicVolume.value = String(Math.round(music.volume * 100));
+      if (event && event.target instanceof Element && event.target.closest("#musicControlBtn")) skipMusicToggleOnce = true;
+      music.play().then(syncSoundControl).catch(() => {
+        musicBtn.textContent = "▶ Tap to play";
+        musicBtn.setAttribute("aria-label", "Tap to play birthday music");
+      });
+      document.removeEventListener("pointerdown", startMusicOnFirstInteraction, true);
+      document.removeEventListener("keydown", startMusicOnFirstInteraction, true);
+    };
+    document.addEventListener("pointerdown", startMusicOnFirstInteraction, {capture:true, once:true});
+    document.addEventListener("keydown", startMusicOnFirstInteraction, {capture:true, once:true});
     musicBtn.addEventListener("click", () => {
+      if (skipMusicToggleOnce) { skipMusicToggleOnce = false; syncSoundControl(); return; }
       if (music.paused || music.muted || music.volume === 0) {
         music.muted = false;
         if (music.volume === 0) music.volume = 0.12;
