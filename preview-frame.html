@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{font-family:Inter,system-ui,-apple-system,sans-serif;color:#4d4541;background:#faf7f2}
+*{box-sizing:border-box}body{margin:0;background:#faf7f2}.page{min-height:100vh;padding:18px}.hero{padding:48px 20px 38px;text-align:center;border-radius:22px;background:linear-gradient(145deg,#f2e4df,#fffaf4 65%,#e9eee6)}.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#987a78}.hero h1{font:600 clamp(30px,7vw,48px) Georgia,serif;line-height:1.1;color:#655050;margin:14px auto;max-width:560px}.hero p{font-size:14px;line-height:1.7;color:#81746e;max-width:540px;margin:0 auto}.hint{margin-top:18px;font-size:11px;color:#9b7f80}.memory{margin:18px auto;max-width:540px;aspect-ratio:16/10;border-radius:18px;overflow:hidden;background:#eee5df;display:grid;place-items:center;color:#9b8980}.memory img,.memory video{width:100%;height:100%;object-fit:cover}.memory-caption{position:absolute;left:10px;right:10px;bottom:10px;padding:8px 11px;border-radius:10px;background:#332c29b8;color:#fff;font-size:11px;text-align:center}.memory{position:relative}.wish-card{max-width:540px;margin:18px auto;background:#fff;border:1px solid #eee4dd;border-radius:20px;padding:22px;text-align:center;box-shadow:0 10px 28px #6954460b}.wish-card h2{font:600 23px Georgia,serif;color:#70565a;margin:0 0 8px}.wish-card p{font-size:12px;line-height:1.6;color:#948780}.field{height:38px;border:1px solid #eee3dc;border-radius:999px;background:#fffaf6;margin:9px 0;text-align:left;padding:10px 13px;color:#b0a39b;font-size:11px}.message{height:65px;border-radius:14px}.send{display:inline-block;margin-top:7px;padding:10px 22px;border-radius:999px;background:var(--accent,#b98990);color:#fff;font-size:11px;font-weight:700}.footer{text-align:center;color:#b1a49b;font-size:10px;padding:18px}body[data-theme="sage"] .hero{background:linear-gradient(145deg,#e4ece2,#fbf8f2 60%,#eef1e9)}body[data-theme="lavender"] .hero{background:linear-gradient(145deg,#e9e3f0,#fbf8f4 60%,#f0eaf1)}body[data-theme="sunset"] .hero{background:linear-gradient(145deg,#f4e3d6,#fbf7f1 60%,#f0e9df)}
+</style>
+</head>
+<body><main class="page">
+<section class="hero"><div class="eyebrow">A celebration for</div><h1 id="title">A day made just for you</h1><p id="subtitle">A little celebration filled with love, laughter and memories.</p><div class="hint" id="hint">Stay a little, leave a wish, and enjoy the memories.</div></section>
+<div class="memory" id="memory"><span>Your memories will appear here</span></div>
+<section class="wish-card" id="letterPreview"><h2 id="letterHeading">A little note for you</h2><p id="letterMessage">A personal note, waiting to be opened.</p></section>
+<section class="wish-card" id="cakePreview"><h2 id="cakeHeading">Make a little wish</h2><div style="font-size:54px">🎂</div><p id="cakeMessage">Take a breath, make a wish, and keep a little room for magic.</p></section>
+<section class="wish-card"><h2 id="wishHeading">Leave a little happiness</h2><p id="wishDescription">Share a note, a memory or a wish.</p><div class="field" id="nameHint">Your name</div><div class="field" id="relationshipHint">How do you know them?</div><div class="field message" id="messageHint">Write a warm wish or a favourite memory…</div><div class="send" id="submitLabel">Send your wish</div></section>
+<div class="wish-card" style="padding:16px"><h2 id="boardHeading">A little love from everyone</h2></div><section class="wish-card" id="finalPreview"><h2 id="finalHeading">Here is to everything ahead</h2><p id="finalMessage">May the next chapter bring kind people and beautiful surprises.</p></section><div class="footer" id="footerName">Made with care for someone special</div>
+</main>
+<script>
+(function(){
+function text(id,value){document.getElementById(id).textContent=value||'';}
+function renderMedia(items){
+ const box=document.getElementById('memory');box.replaceChildren();
+ const item=Array.isArray(items)?items[0]:null;
+ if(!item||typeof item.url!=='string'||!/^birthday-media\/[a-f0-9]{32}\.(jpg|png|webp|gif|mp4|webm|mov)$/.test(item.url)){const label=document.createElement('span');label.textContent='Your memories will appear here';box.appendChild(label);return;}
+ const media=item.type==='video'?document.createElement('video'):document.createElement('img');
+ media.src=item.url;if(media.tagName==='VIDEO'){media.muted=true;media.playsInline=true;media.controls=true;}else media.alt=item.caption||'Birthday memory';box.appendChild(media);if(item.caption){const caption=document.createElement('div');caption.className='memory-caption';caption.textContent=item.caption;box.appendChild(caption);}
+}
+window.addEventListener('message',event=>{
+ if(event.source!==window.parent||!event.data||event.data.type!=='birthday-studio-preview')return;
+ const d=event.data.data||{};
+ document.body.dataset.theme=d.theme||'rose';document.documentElement.style.setProperty('--accent',d.accent||'#b98990');
+ text('title',d.title||'A day made just for you');text('subtitle',d.subtitle||'A little celebration filled with love, laughter and memories.');
+ text('hint',d.hint||'Stay a little, leave a wish, and enjoy the memories.');text('wishHeading',d.formHeading||'Leave a little happiness');
+ text('wishDescription',d.formDescription||'Share a note, a memory or a wish.');text('nameHint',d.namePlaceholder||'Your name');
+ text('relationshipHint',d.relationshipPlaceholder||'How do you know them?');text('messageHint',d.messagePlaceholder||'Write a warm wish or a favourite memory…');
+ text('submitLabel',d.submitLabel||'Send your wish');text('boardHeading',d.wishBoardHeading||'A little love from everyone');
+ text('letterHeading',d.letterHeading||'A little note for you');text('letterMessage',d.letterMessage||'A personal note, waiting to be opened.');
+ text('cakeHeading',d.cakeHeading||'Make a little wish');text('cakeMessage',d.cakeMessage||'Take a breath, make a wish, and keep a little room for magic.');
+ text('finalHeading',d.finalHeading||'Here is to everything ahead');text('finalMessage',d.finalMessage||'May the next chapter bring kind people and beautiful surprises.');
+ document.getElementById('letterPreview').style.display=d.modules&&d.modules.letter?'block':'none';
+ document.getElementById('cakePreview').style.display=d.modules&&d.modules.cake?'block':'none';
+ document.getElementById('finalPreview').style.display=d.modules&&d.modules.final?'block':'none';text('footerName','Made with care for '+(d.displayName||d.name||'someone special')+(d.senderName?' · from '+d.senderName:''));
+ renderMedia(d.media);
+});
+})();
+</script></body></html>

@@ -1,0 +1,51 @@
+{
+    "person": {
+        "name": "Vaibhav",
+        "nickname": "Kittu",
+        "birthday": "2024-11-23",
+        "pronoun": "he"
+    },
+    "sender": {
+        "name": "Someone who cares"
+    },
+    "experience": {
+        "title": "A day made just for Vaibhav",
+        "subtitle": "A little celebration filled with love, laughter and memories.",
+        "formHeading": "Leave a little happiness",
+        "formDescription": "Share a note, a memory or a wish.",
+        "shareUrl": "https://www.docsansar.com/birthday-wish/",
+        "wishBoardHeading": "A little love from everyone",
+        "namePlaceholder": "Your name",
+        "relationshipPlaceholder": "How do you know them? (optional)",
+        "messagePlaceholder": "Write a warm wish or a favourite memory…",
+        "submitLabel": "Send your wish",
+        "scrollHint": "Stay a little, leave a wish, and enjoy the memories.",
+        "metaDescription": "",
+        "letterHeading": "A little note for Vaibhav",
+        "letterMessage": "Some people make ordinary days feel special. Today is a chance to celebrate everything that makes you wonderful.",
+        "letterButton": "Open your little letter",
+        "cakeHeading": "Make a little wish",
+        "cakeMessage": "Take a breath, make a wish, and keep a little room for magic.",
+        "cakeButton": "Blow out the candles",
+        "finalHeading": "Here is to everything ahead",
+        "finalMessage": "May the next chapter bring kind people, beautiful surprises and moments worth remembering.",
+        "musicUrl": ""
+    },
+    "theme": {
+        "preset": "rose",
+        "accent": "#b98990"
+    },
+    "modules": {
+        "letter": true,
+        "cake": true,
+        "final": true,
+        "music": true
+    },
+    "notifications": {
+        "to": "",
+        "cc": "",
+        "bcc": "",
+        "fromName": "Birthday Bot",
+        "fromEmail": ""
+    }
+}
