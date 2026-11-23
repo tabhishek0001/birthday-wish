@@ -28,6 +28,7 @@ $sender = is_array($config['sender'] ?? null) ? $config['sender'] : [];
 $experience = is_array($config['experience'] ?? null) ? $config['experience'] : [];
 $theme = is_array($config['theme'] ?? null) ? $config['theme'] : [];
 $modules = is_array($config['modules'] ?? null) ? $config['modules'] : [];
+$celebration = is_array($config['celebration'] ?? null) ? $config['celebration'] : [];
 $notifications = is_array($config['notifications'] ?? null) ? $config['notifications'] : [];
 
 $mediaPath = dirname(__DIR__) . '/birthday-media/.media-index.json';
@@ -74,6 +75,7 @@ unset($_SESSION['birthday_admin_notice']);
   <button data-section="memories">Memories</button>
   <button data-section="wishes">Wishes</button>
   <button data-section="appearance">Appearance</button>
+  <button data-section="celebration">Celebration</button>
   <button data-section="notifications">Email</button>
 </nav>
 
@@ -87,6 +89,7 @@ unset($_SESSION['birthday_admin_notice']);
     <button data-section="memories">Memories</button>
     <button data-section="wishes">Wishes</button>
     <button data-section="appearance">Appearance</button>
+    <button data-section="celebration">Celebration</button>
     <button data-section="notifications">Email Notifications</button>
   </nav>
   <div class="admin-help"><strong>Administrative view</strong><br>Manage the birthday person’s details, memories, wishes and visitor experience from one place.</div>
@@ -233,6 +236,38 @@ unset($_SESSION['birthday_admin_notice']);
       <div class="field"><label>Accent colour</label><input type="text" name="theme[accent]" pattern="#[0-9a-fA-F]{6}" maxlength="7" value="<?= admin_h(admin_v($theme,'accent','#b98990')) ?>"></div>
     </div></div>
     <div class="save-row"><button class="admin-btn primary" type="submit">Save appearance</button></div>
+  </form>
+</section>
+
+<section class="admin-section" data-section-panel="celebration">
+  <div class="eyebrow">Motion and engagement</div>
+  <h1>Celebration</h1>
+  <p class="lead">Fine-tune the interactive birthday moments, floating decorations, confetti celebrations and compact visitor controls. These settings affect the public birthday page only.</p>
+  <form method="post" action="save.php">
+    <input type="hidden" name="csrf" value="<?= admin_h($csrf) ?>">
+    <input type="hidden" name="section" value="celebration">
+    <div class="admin-card">
+      <h2>Interactive atmosphere</h2>
+      <p>Keep the page lively without overwhelming visitors or slowing down smaller devices.</p>
+      <div class="check-grid">
+        <label class="check"><input type="checkbox" name="celebration[confetti]" value="1" <?= ($celebration['confetti'] ?? true) !== false ? 'checked' : '' ?>><span><strong>Confetti and celebration bursts</strong><small>Celebrate page entry, cake wishes, sent wishes, balloons and the celebration button.</small></span></label>
+        <label class="check"><input type="checkbox" name="celebration[floatingDecor]" value="1" <?= ($celebration['floatingDecor'] ?? true) !== false ? 'checked' : '' ?>><span><strong>Floating birthday decorations</strong><small>Show gently floating, tappable balloons and ambient decorative motion.</small></span></label>
+        <label class="check"><input type="checkbox" name="celebration[celebrationTrail]" value="1" <?= ($celebration['celebrationTrail'] ?? true) !== false ? 'checked' : '' ?>><span><strong>Birthday journey guide</strong><small>Show quick links for memories, the letter, cake time and sending a wish.</small></span></label>
+      </div>
+    </div>
+    <div class="admin-card">
+      <h2>Floating controls</h2>
+      <p>The sound and celebration controls stay tucked into one small launcher. Visitors tap it to open the panel; it closes itself after inactivity.</p>
+      <div class="form-grid">
+        <div class="field">
+          <label>Auto-hide delay (seconds)</label>
+          <input type="number" name="celebration[controlsAutoHideSeconds]" min="3" max="15" step="1" value="<?= admin_h((string)max(3,min(15,(int)($celebration['controlsAutoHideSeconds'] ?? 5)))) ?>">
+          <small>Choose 3–15 seconds. The timer restarts when a visitor interacts with the panel.</small>
+        </div>
+      </div>
+      <div class="section-note">Accessibility: reduced-motion preferences automatically disable continuous animation and confetti. The floating controls remain keyboard accessible and can be closed with Escape.</div>
+    </div>
+    <div class="save-row"><button class="admin-btn primary" type="submit">Save celebration settings</button></div>
   </form>
 </section>
 
