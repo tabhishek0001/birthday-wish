@@ -9,6 +9,18 @@ $featuredImages = glob('featured/*.{jpg,jpeg,png}', GLOB_BRACE) ?: [];
 $mediaIndexPath = __DIR__ . '/birthday-media/.media-index.json';
 $birthdayMedia = is_file($mediaIndexPath) ? json_decode((string)file_get_contents($mediaIndexPath), true) : [];
 if (!is_array($birthdayMedia)) $birthdayMedia = [];
+$heroMemoriesImage = '';
+foreach ($birthdayMedia as $memoryPreview) {
+    if (!is_array($memoryPreview) || ($memoryPreview['type'] ?? '') !== 'image') continue;
+    $candidate = basename((string)($memoryPreview['file'] ?? ''));
+    if (preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif)$/i', $candidate) && is_file(__DIR__ . '/birthday-media/' . $candidate)) {
+        $heroMemoriesImage = 'birthday-media/' . rawurlencode($candidate);
+        break;
+    }
+}
+if ($heroMemoriesImage === '' && !empty($featuredImages[0]) && is_file(__DIR__ . '/' . $featuredImages[0])) {
+    $heroMemoriesImage = $featuredImages[0];
+}
 $wishesFile = 'wishes.json';
 if (!file_exists($wishesFile)) file_put_contents($wishesFile, '[]');
 
@@ -460,6 +472,19 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 }
 </style>
 
+<style>
+/* Memories shortcut is part of the birthday hero, not a second gallery banner. */
+.birthday-hero-memories{position:relative;z-index:2;display:flex;align-items:center;gap:13px;width:min(100%,390px);min-height:88px;margin:24px auto 4px;padding:10px 15px 10px 10px;border:1px solid rgba(255,255,255,.88);border-radius:999px;background:rgba(255,253,247,.82);box-shadow:0 13px 34px rgba(120,86,48,.13),inset 0 1px 0 rgba(255,255,255,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#765247!important;text-align:left;text-decoration:none;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;animation:luxRise .9s .28s both}
+.birthday-hero-memories:hover,.birthday-hero-memories:focus-visible{transform:translateY(-3px);border-color:#f4c98e;box-shadow:0 18px 40px rgba(120,86,48,.19),inset 0 1px 0 #fff;outline:3px solid rgba(255,184,77,.42);outline-offset:3px}
+.birthday-hero-memories__photo{display:grid;flex:0 0 66px;width:66px;height:66px;place-items:center;overflow:hidden;border:3px solid #fff;border-radius:50%;background:linear-gradient(135deg,#ffe6b7,#f8d8cb);box-shadow:0 5px 14px rgba(120,86,48,.16);color:#a87543;font-size:25px}
+.birthday-hero-memories__photo img{width:100%;height:100%;object-fit:cover;aspect-ratio:1/1}
+.birthday-hero-memories__text{display:grid;flex:1;min-width:0;gap:4px}
+.birthday-hero-memories__text strong{font-size:15px;font-weight:900;line-height:1.2;color:#805447}
+.birthday-hero-memories__text small{font-size:11px;font-weight:650;line-height:1.35;color:#92766a}
+.birthday-hero-memories__arrow{display:grid;flex:0 0 34px;width:34px;height:34px;place-items:center;border-radius:50%;background:#fff0d9;color:#b16d50;font-size:14px}
+@media(max-width:640px){.birthday-hero-memories{width:min(100%,350px);min-height:80px;margin:20px auto 2px;padding:8px 12px 8px 8px;gap:11px}.birthday-hero-memories__photo{flex-basis:60px;width:60px;height:60px}.birthday-hero-memories__text strong{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.birthday-hero-memories{animation:none;transition:none}}
+</style>
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" data-decor-enabled="<?= $floatingDecorEnabled ? 'true' : 'false' ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -470,6 +495,13 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     <div class="birthday-hero__toys" aria-hidden="true"><i class="fa-solid fa-child" aria-hidden="true"></i> <i class="fa-solid fa-paw" aria-hidden="true"></i> <i class="fa-solid fa-car" aria-hidden="true"></i> <i class="fa-solid fa-star" aria-hidden="true"></i></div>
     <h1><?= $escapeHtml($heroTitle); ?></h1><p><?= $escapeHtml($heroSubtitle); ?></p>
     <div class="birthday-age"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> <?= $escapeHtml($birthdayLabel); ?> <i class="fa-solid fa-gift" aria-hidden="true"></i></div>
+    <a class="birthday-hero-memories" href="https://www.docsansar.com/events?event=vaibhav" target="_blank" rel="noopener noreferrer" aria-label="Doc Sansar par Vaibhav ki saari photos dekhein">
+      <span class="birthday-hero-memories__photo">
+        <?php if ($heroMemoriesImage !== ''): ?><img src="<?= $escapeHtml($heroMemoriesImage) ?>" alt="" loading="eager"><?php else: ?><i class="fa-solid fa-images" aria-hidden="true"></i><?php endif; ?>
+      </span>
+      <span class="birthday-hero-memories__text"><strong>Saari Photos dekhein</strong><small>Vaibhav ke aur bhi pyare pal</small></span>
+      <span class="birthday-hero-memories__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+    </a>
     <a class="birthday-hero__button" href="#wishSection"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Vaibhav ko wish bhejein</a>
     <div class="birthday-hero__bottom" aria-hidden="true"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-gift"></i> <i class="fa-solid fa-face-grin-stars"></i> <i class="fa-solid fa-gift"></i> <i class="fa-solid fa-star"></i></div>
   </header>
@@ -486,28 +518,6 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <!-- Vaibhav's little memory gallery -->
 <section class="birthday-gallery" id="birthdayMemories" data-aos="fade-up" aria-label="Vaibhav ki yaadein">
   <div class="birthday-section-heading"><span><i class="fa-solid fa-images" aria-hidden="true"></i></span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
-  <div class="birthday-all-memories-wrap"><a class="birthday-all-memories-link" href="https://www.docsansar.com/events?event=vaibhav" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-images" aria-hidden="true"></i> Saari Photos dekhein <span aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a></div>
-  <?php
-  $allMemoriesUrl = 'https://www.docsansar.com/events?event=vaibhav';
-  $allMemoriesImage = '';
-  foreach ($birthdayMedia as $memoryPreview) {
-      if (!is_array($memoryPreview) || ($memoryPreview['type'] ?? '') !== 'image') continue;
-      $candidate = basename((string)($memoryPreview['file'] ?? ''));
-      if (preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif)$/i', $candidate) && is_file(__DIR__ . '/birthday-media/' . $candidate)) {
-          $allMemoriesImage = 'birthday-media/' . rawurlencode($candidate);
-          break;
-      }
-  }
-  if ($allMemoriesImage === '' && !empty($featuredImages[0]) && is_file(__DIR__ . '/' . $featuredImages[0])) {
-      $allMemoriesImage = $featuredImages[0];
-  }
-  ?>
-  <a class="birthday-all-memories-card" href="<?= $escapeHtml($allMemoriesUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="Doc Sansar par Vaibhav ki saari yaadein dekhein">
-    <?php if ($allMemoriesImage !== ''): ?><img src="<?= $escapeHtml($allMemoriesImage) ?>" alt="Vaibhav ki ek pyari yaad" loading="lazy"><?php else: ?><span class="birthday-all-memories-card__placeholder" aria-hidden="true"><i class="fa-solid fa-images"></i></span><?php endif; ?>
-    <span class="birthday-all-memories-card__shade"></span>
-    <span class="birthday-all-memories-card__content"><strong>Saari Photos dekhein</strong><small>Vaibhav ke aur bhi pyare pal</small></span>
-    <span class="birthday-all-memories-card__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-  </a>
   <?php if ($featuredImages || $birthdayMedia): ?>
   <div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
     <?php foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="lazy"></a></div><?php endforeach; ?>
