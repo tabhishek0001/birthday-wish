@@ -171,6 +171,7 @@ unset($_SESSION['birthday_admin_notice']);
         </div>
         <small>Select a visible thumbnail instead of guessing from a filename. A newly uploaded image takes priority over this selection.</small>
       </div>
+      <div class="field full"><label style="display:flex;align-items:center;gap:10px"><input type="checkbox" name="experience[ogImageSameForHindi]" value="1" <?= admin_v($experience,'ogImageSameForHindi','1')!=='0'?'checked':'' ?> style="width:auto"> Use the same social preview image for the Hindi page</label><small>When enabled, the Hindi page uses the exact OG image selected or uploaded above, even if the Hindi text configuration has a different image value.</small></div>
       <div class="field full"><label>Public share URL</label><input type="url" name="experience[shareUrl]" maxlength="250" value="<?= admin_h(admin_v($experience,'shareUrl')) ?>"></div>
     </div></div>
     <div class="admin-card"><h2>Wishes</h2><div class="form-grid">
