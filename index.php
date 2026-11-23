@@ -871,9 +871,10 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     const memoryCarouselElement = document.querySelector(".featured-swiper");
     let memoryCarouselInteracted = false;
     const memorySwiper = memoryCarouselElement ? new Swiper(memoryCarouselElement, {
-      // Use a standard slide transition so every card follows the same swipe direction.
-      // The slide artwork keeps its card appearance without the Cards effect's opposing rotations.
-      effect: "slide",
+      // Keep the stacked playing-card deck, but remove opposing card rotations.
+      // The active card follows the user's finger; neighbouring cards stay neatly stacked.
+      effect: "cards",
+      cardsEffect: { slideShadows: false, rotate: false, perSlideOffset: 5, perSlideRotate: 0 },
       grabCursor: true, centeredSlides: true, slidesPerView: 1, loop: true,
       allowTouchMove: true, followFinger: true, threshold: 6,
       speed: 420, preventInteractionOnTransition: true, resistanceRatio: 0.75,
