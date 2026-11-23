@@ -372,11 +372,13 @@ unset($_SESSION['birthday_admin_notice']);
  }
  const ogGrid=document.getElementById('ogMemoryGrid');
  if(ogGrid){
+   const ogPreview=document.getElementById('ogImagePreview');
+   const ogHint=document.getElementById('ogImagePreviewHint');
    ogGrid.addEventListener('change',event=>{
      if(!event.target.matches('input[type="radio"]'))return;
      ogGrid.querySelectorAll('.og-memory-choice').forEach(choice=>choice.classList.toggle('selected',choice.contains(event.target)&&event.target.checked));
-     if(event.target.value){preview.src='../'+event.target.value;preview.style.display='block';hint.textContent='Selected memory: '+(event.target.closest('.og-memory-choice').querySelector('strong')?.textContent||'Birthday photo');}
-     else{preview.removeAttribute('src');preview.style.display='none';hint.textContent='Automatic default: first uploaded photo';}
+     if(event.target.value){ogPreview.src='../'+event.target.value;ogPreview.style.display='block';ogHint.textContent='Selected memory: '+(event.target.closest('.og-memory-choice').querySelector('strong')?.textContent||'Birthday photo');}
+     else{ogPreview.removeAttribute('src');ogPreview.style.display='none';ogHint.textContent='Automatic default: first uploaded photo';}
    });
  }
  document.querySelectorAll('.edit-caption').forEach(btn=>{
@@ -410,6 +412,7 @@ unset($_SESSION['birthday_admin_notice']);
    if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>8*1024*1024){this.value='';hint.textContent='Choose a JPEG, PNG or WebP image up to 8 MB.';return;}
    objectUrl=URL.createObjectURL(file);preview.src=objectUrl;preview.style.display='block';hint.textContent=file.name+' — will be used as the social preview image.';
    if(existing)existing.value='';
+   document.querySelectorAll('#ogMemoryGrid input[type="radio"]').forEach(radio=>{radio.checked=false;radio.closest('.og-memory-choice')?.classList.remove('selected');});
  });
  if(existing)existing.addEventListener('change',function(){
    if(input.files&&input.files.length){input.value='';}
