@@ -422,7 +422,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
   <!-- 🎵 Background Music -->
   <?php if ($musicEnabled): ?>
-  <audio id="bgMusic" loop preload="none" volume="0.12"><source src="<?= $escapeHtml($musicSource); ?>" type="audio/mpeg"></audio>
+  <audio id="bgMusic" loop preload="auto" volume="0.12"><source src="<?= $escapeHtml($musicSource); ?>" type="audio/mpeg"></audio>
   <?php endif; ?>
 <!-- Share Buttons Section -->
 <div class="mt-6 flex flex-wrap gap-3 justify-center items-center">
@@ -651,6 +651,8 @@ function loadWishes() {
   if (music && musicBtn && musicVolume) {
     music.volume = 0.12;
     let skipMusicToggleOnce = false;
+    let musicStartPending = false;
+    let musicStartedByGesture = false;
     const syncSoundControl = () => {
       const isPlaying = !music.paused && !music.muted && music.volume > 0;
       musicBtn.textContent = isPlaying ? "🔊 Sound on" : "🔇 Sound off";
@@ -658,21 +660,53 @@ function loadWishes() {
       musicBtn.setAttribute("aria-label", isPlaying ? "Turn birthday music off" : "Turn birthday music on");
       musicVolume.value = String(Math.round(music.volume * 100));
     };
-    const startMusicOnFirstInteraction = (event) => {
+    const removeFirstInteractionListeners = () => {
       document.removeEventListener("pointerdown", startMusicOnFirstInteraction, true);
+      document.removeEventListener("touchend", startMusicOnFirstInteraction, true);
+      document.removeEventListener("click", startMusicOnFirstInteraction, true);
       document.removeEventListener("keydown", startMusicOnFirstInteraction, true);
-      if (!music.paused && !music.muted && music.volume > 0) return;
+    };
+    const startMusicOnFirstInteraction = (event) => {
+      if (musicStartedByGesture || musicStartPending || (!music.paused && !music.muted && music.volume > 0)) {
+        if (!music.paused && !music.muted && music.volume > 0) {
+          musicStartedByGesture = true;
+          removeFirstInteractionListeners();
+        }
+        return;
+      }
+      if (event && event.isTrusted === false) return;
       music.muted = false;
       if (music.volume <= 0) music.volume = 0.12;
       musicVolume.value = String(Math.round(music.volume * 100));
       if (event && event.target instanceof Element && event.target.closest("#musicControlBtn")) skipMusicToggleOnce = true;
-      music.play().then(syncSoundControl).catch(() => {
-        musicBtn.textContent = "▶ Tap to play";
-        musicBtn.setAttribute("aria-label", "Tap to play birthday music");
-      });
+
+      // Keep listening until playback actually succeeds. A rejected first attempt
+      // (common while mobile media is still loading) must not consume the gesture hook.
+      musicStartPending = true;
+      const playAttempt = music.play();
+      if (playAttempt && typeof playAttempt.then === "function") {
+        playAttempt.then(() => {
+          musicStartPending = false;
+          musicStartedByGesture = true;
+          removeFirstInteractionListeners();
+          syncSoundControl();
+        }).catch(() => {
+          musicStartPending = false;
+          syncSoundControl();
+          musicBtn.textContent = "▶ Tap to play";
+          musicBtn.setAttribute("aria-label", "Tap to play birthday music");
+        });
+      } else {
+        musicStartPending = false;
+        musicStartedByGesture = !music.paused;
+        if (musicStartedByGesture) removeFirstInteractionListeners();
+        syncSoundControl();
+      }
     };
-    document.addEventListener("pointerdown", startMusicOnFirstInteraction, {capture:true, once:true});
-    document.addEventListener("keydown", startMusicOnFirstInteraction, {capture:true, once:true});
+    document.addEventListener("pointerdown", startMusicOnFirstInteraction, true);
+    document.addEventListener("touchend", startMusicOnFirstInteraction, true);
+    document.addEventListener("click", startMusicOnFirstInteraction, true);
+    document.addEventListener("keydown", startMusicOnFirstInteraction, true);
     musicBtn.addEventListener("click", () => {
       if (skipMusicToggleOnce) { skipMusicToggleOnce = false; syncSoundControl(); return; }
       if (music.paused || music.muted || music.volume === 0) {
