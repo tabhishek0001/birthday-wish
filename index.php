@@ -1606,6 +1606,17 @@ body.birthday-public .birthday-sound-control {
     "Connection beech mein toot gaya. Internet check karke wish board dekh lein; phir zarurat ho to dobara bhejein.":"इंटरनेट कनेक्शन टूट गया। पहले कनेक्शन चेक करें और नीचे विश बोर्ड देखें। ज़रूरत हो तभी दोबारा भेजें।",
     "Kripya thodi der baad dobara try kijiye.":"कृपया थोड़ी देर बाद फिर कोशिश करें।",
     "Kittu ke liye dher saari wishes!":"किट्टू के लिए ढेर सारी शुभकामनाएँ!",
+    "Vaibhav ki photos jald hi yahan aayengi!":"वैभव की प्यारी तस्वीरें जल्द ही यहाँ देखने को मिलेंगी! 📸",
+    "Birthday Studio se photos, videos aur audio memories add kar sakte hain.":"Birthday Studio से वैभव की तस्वीरें, वीडियो और ऑडियो यादें यहाँ जोड़ सकते हैं।",
+    "Birthday audio memory":"जन्मदिन की ऑडियो याद",
+    "Made with":"बनाया है",
+    "to celebrate":"के जन्मदिन की खुशी में",
+    "'s Birthday":"का जन्मदिन",
+    "Thanks for being part of the joy!":"इस खुशी का हिस्सा बनने के लिए आपका बहुत-बहुत शुक्रिया! ❤️",
+    "All wishes stored safely for a lifetime":"आपकी सभी शुभकामनाएँ प्यार से सँभालकर रखी जाएँगी",
+    "Vaibhav ki yaad":"वैभव की प्यारी याद",
+    "Photo ko full screen mein dekhein":"तस्वीर को बड़ा करके देखें",
+    "Video memory ko full screen mein dekhein":"वीडियो को बड़ा करके देखें",
     "More birthday magic!":"थोड़ा और बर्थडे मैजिक!"
   };
 
