@@ -422,27 +422,25 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
         <label class="wish-field-label" for="wishSenderName">Your name</label>
         <input id="wishSenderName" type="text" name="name" value="Guest" placeholder="Enter your name" required maxlength="80" autocomplete="name" class="wish-input" aria-describedby="wishNameHint" />
         <small id="wishNameHint" class="wish-name-hint">A sample name is filled in. Replace it with your own name before sending.</small>
-
-        <textarea id="wishMessage" name="message" required maxlength="1200" rows="2" class="wish-input wish-message-input">Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️</textarea>
-      <details class="wish-extra-options">
-        <summary>Wish ko aur personal banayein (optional)</summary>
-        <div class="wish-field-label">Aap Vaibhav ke kya lagte hain?</div>
-        <div class="wish-relationship-choices" role="group" aria-label="Aapka rishta">
-          <button type="button" class="wish-choice" data-relation="Mummy">Mummy</button><button type="button" class="wish-choice" data-relation="Papa">Papa</button>
-          <button type="button" class="wish-choice" data-relation="Dada-Dadi">Dada-Dadi</button><button type="button" class="wish-choice" data-relation="Nana-Nani">Nana-Nani</button>
-          <button type="button" class="wish-choice" data-relation="Mama-Mami">Mama-Mami</button><button type="button" class="wish-choice" data-relation="Chacha-Chachi">Chacha-Chachi</button>
-          <button type="button" class="wish-choice" data-relation="Bua-Fufa">Bua-Fufa</button><button type="button" class="wish-choice" data-relation="Friend">Friend</button>
-        </div>
-        <input type="hidden" name="pahchan" id="wishRelation" value="">
-        <div class="wish-field-label">Ready-made wishes</div>
-        <div class="wish-suggestions" role="group" aria-label="Ready-made birthday wishes">
-          <button type="button" class="wish-suggestion" data-wish-suggestion="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️">🎂 Simple wish</button>
-          <button type="button" class="wish-suggestion" data-wish-suggestion="Janamdin mubarak ho hamare Kittu! Bhagwan tumhe hamesha khush rakhe. 🌟">🌟 Pyaar bhari wish</button>
-          <button type="button" class="wish-suggestion" data-wish-suggestion="Happy 2nd Birthday, little champ! Khoob khelo, masti karo aur hamesha muskurate raho! 🧸🎈">🧸 Little champ</button>
-          <button type="button" class="wish-suggestion" data-wish-suggestion="Vaibhav beta, tumhari hasi hamesha aise hi chamakti rahe. Bahut saara aashirwad aur pyaar! 💛">💛 Aashirwad</button>
-        </div>
-      </details>
-              <label class="wish-field-label" for="wishMessage">Vaibhav ke liye wish</label>
+        <details class="wish-extra-options">
+          <summary>Wish ko aur personal banayein (optional)</summary>
+          <div class="wish-field-label">Aap Vaibhav ke kya lagte hain?</div>
+          <div class="wish-relationship-choices" role="group" aria-label="Aapka rishta">
+            <button type="button" class="wish-choice" data-relation="Mummy">Mummy</button><button type="button" class="wish-choice" data-relation="Papa">Papa</button>
+            <button type="button" class="wish-choice" data-relation="Dada-Dadi">Dada-Dadi</button><button type="button" class="wish-choice" data-relation="Nana-Nani">Nana-Nani</button>
+            <button type="button" class="wish-choice" data-relation="Mama-Mami">Mama-Mami</button><button type="button" class="wish-choice" data-relation="Chacha-Chachi">Chacha-Chachi</button>
+            <button type="button" class="wish-choice" data-relation="Bua-Fufa">Bua-Fufa</button><button type="button" class="wish-choice" data-relation="Friend">Friend</button>
+          </div>
+          <input type="hidden" name="pahchan" id="wishRelation" value="">
+          <div class="wish-field-label">Ready-made wishes</div>
+          <div class="wish-suggestions" role="group" aria-label="Ready-made birthday wishes">
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️">🎂 Simple wish</button>
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Janamdin mubarak ho hamare Kittu! Bhagwan tumhe hamesha khush rakhe. 🌟">🌟 Pyaar bhari wish</button>
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Happy 2nd Birthday, little champ! Khoob khelo, masti karo aur hamesha muskurate raho! 🧸🎈">🧸 Little champ</button>
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Vaibhav beta, tumhari hasi hamesha aise hi chamakti rahe. Bahut saara aashirwad aur pyaar! 💛">💛 Aashirwad</button>
+          </div>
+        </details>
+        <label class="wish-field-label" for="wishMessage">Vaibhav ke liye wish</label>
         <textarea id="wishMessage" name="message" required maxlength="1200" rows="2" class="wish-input wish-message-input">Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️</textarea>
       </div>
       <div class="wish-attachment-box">
