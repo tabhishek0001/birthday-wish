@@ -17,6 +17,17 @@ $exampleConfigPath = __DIR__ . '/experience.example.json';
 $configSource = is_file($experienceConfigPath) ? $experienceConfigPath : $exampleConfigPath;
 $experienceConfig = is_file($configSource) ? json_decode((string) file_get_contents($configSource), true) : [];
 if (!is_array($experienceConfig)) $experienceConfig = [];
+$isHindi = strtolower(trim((string)($_GET['lang'] ?? ''))) === 'hi';
+if ($isHindi) {
+    $hindiConfigPath = __DIR__ . '/experience.hi.json';
+    if (is_file($hindiConfigPath)) {
+        $hindiConfig = json_decode((string)file_get_contents($hindiConfigPath), true);
+        if (is_array($hindiConfig) && is_array($hindiConfig['experience'] ?? null)) {
+            $baseExperience = is_array($experienceConfig['experience'] ?? null) ? $experienceConfig['experience'] : [];
+            $experienceConfig['experience'] = array_replace($baseExperience, $hindiConfig['experience']);
+        }
+    }
+}
 $personConfig = is_array($experienceConfig['person'] ?? null) ? $experienceConfig['person'] : [];
 $name = trim((string) ($personConfig['name'] ?? 'Someone special')) ?: 'Someone special';
 $displayName = trim((string) ($personConfig['nickname'] ?? '')) ?: $name;
@@ -59,7 +70,6 @@ if ($shareImage === $publicBaseUrl . '/favicon.ico') {
         }
     }
 }
-$isHindi = strtolower(trim((string)($_GET['lang'] ?? ''))) === 'hi';
 $requestPath = (string)(parse_url($_SERVER['REQUEST_URI'] ?? '/birthday-wish/', PHP_URL_PATH) ?: '/birthday-wish/');
 $requestQuery = [];
 parse_str((string)(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_QUERY) ?? ''), $requestQuery);
