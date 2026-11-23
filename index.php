@@ -678,7 +678,7 @@ function loadWishes() {
         const $attachments=$("<div>").addClass("wish-board-attachments");
         const wishGallery="birthday-wish-"+String(data.length)+"-"+String(wish.timestamp||Date.now());
         wish.media.slice(0,3).forEach(item=>{
-          if(!item||typeof item.file!=="string"||!/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|pdf)$/i.test(item.file))return;
+          if(!item||typeof item.file!=="string"||!/^[a-f0-9]{32}\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|pdf)$/i.test(item.file))return;
           const url="wish-media/"+encodeURIComponent(item.file);
           const $link=$("<a>").addClass("birthday-lightbox wish-media-trigger").attr({"data-gallery":wishGallery,"aria-label":"Open wish attachment"});
           if(item.type==="image"){
