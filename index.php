@@ -263,6 +263,7 @@ body.birthday-public:before{content:"";position:fixed;inset:0;z-index:0;pointer-
 @media(prefers-reduced-motion:reduce){.birthday-public *,.birthday-public *:before,.birthday-public *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.lux-cursor,.lux-cursor-dot,.lux-touch-ripple,.lux-sparkle{display:none!important}}
 </style>
 <style id="vaibhav-celebration-experience">
+body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 .celebration-trail{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:9px;padding:20px 16px 8px;max-width:1040px;margin:0 auto}
 .trail-label{width:100%;text-align:center;color:#a17c67;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
 .celebration-trail a{display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border:1px solid #f0dfc9;border-radius:999px;background:#fffdf8;color:#7c6252;text-decoration:none;font-size:12px;font-weight:800;box-shadow:0 7px 20px #9e744010;transition:transform .22s,background .22s,border-color .22s}
@@ -296,7 +297,7 @@ body.birthday-public:before{content:"";position:fixed;inset:0;z-index:0;pointer-
 @media(prefers-reduced-motion:reduce){.birthday-balloon,.dock-launcher-icon,.dock-launcher-pulse{animation:none!important}.birthday-control-panel{animation:none!important}.celebration-trail a,.dock-action,.birthday-dock-launcher{transition:none!important}}
 </style>
 </head>
-<body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
+<body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" data-decor-enabled="<?= $floatingDecorEnabled ? 'true' : 'false' ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <!-- 🎉 Interactive Heading -->
   
@@ -589,7 +590,7 @@ function loadWishes() {
     document.querySelectorAll("[data-relation]").forEach(button=>button.addEventListener("click",()=>{const relation=button.dataset.relation||"";wishRelation.value=wishRelation.value===relation?"":relation;document.querySelectorAll("[data-relation]").forEach(item=>item.classList.toggle("selected",item===button&&wishRelation.value!==""));}));
     wishForm.on("submit",function(e){e.preventDefault();if(!wishName.value.trim()){wishFeedback.textContent="Pehle apna naam likh dijiye.";wishName.focus();return;}if(!wishMessage.value.trim()){wishFeedback.textContent="Ek chhoti si wish chuniye ya likh dijiye.";wishMessage.focus();return;}
       wishSubmit.disabled=true;wishSubmit.textContent="⏳ Wish bheji ja rahi hai...";wishFeedback.textContent="Bas ek pal...";
-      $.ajax({url:"submit_wish.php",method:"POST",data:wishForm.serialize(),dataType:"json"}).done(function(res){if(res.success){try{localStorage.setItem("vaibhavWishSenderName",wishName.value.trim());}catch(e){}wishMessage.value=defaultWish;wishRelation.value="";document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>item.classList.remove("selected"));wishFeedback.textContent="🎉 Aapki wish Vaibhav tak pahunch gayi! Shukriya ❤️";loadWishes();if(typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});}else{wishFeedback.textContent=res.error||"Wish send nahi ho paayi. Dobara try kijiye.";}}).fail(function(xhr){wishFeedback.textContent=xhr.responseJSON&&xhr.responseJSON.error?xhr.responseJSON.error:"Internet ya server mein dikkat hai. Ek baar phir try kijiye.";}).always(function(){wishSubmit.disabled=false;wishSubmit.textContent="💌 <?= $escapeHtml($submitLabel); ?>";});
+      $.ajax({url:"submit_wish.php",method:"POST",data:wishForm.serialize(),dataType:"json"}).done(function(res){if(res.success){try{localStorage.setItem("vaibhavWishSenderName",wishName.value.trim());}catch(e){}wishMessage.value=defaultWish;wishRelation.value="";document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>item.classList.remove("selected"));wishFeedback.textContent="🎉 Aapki wish Vaibhav tak pahunch gayi! Shukriya ❤️";loadWishes();if(<?= $confettiEnabled ? 'true' : 'false' ?> && typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});}else{wishFeedback.textContent=res.error||"Wish send nahi ho paayi. Dobara try kijiye.";}}).fail(function(xhr){wishFeedback.textContent=xhr.responseJSON&&xhr.responseJSON.error?xhr.responseJSON.error:"Internet ya server mein dikkat hai. Ek baar phir try kijiye.";}).always(function(){wishSubmit.disabled=false;wishSubmit.textContent="💌 <?= $escapeHtml($submitLabel); ?>";});
     });
     loadWishes();
   const revealLetter = document.getElementById('revealLetter');
@@ -605,11 +606,11 @@ function loadWishes() {
     document.getElementById('cakeMessage').hidden = false;
     makeWishBtn.textContent = 'Kittu ke liye dher saari wishes! ✨';
     makeWishBtn.disabled = true;
-    if (typeof confettiInstance === 'function') confettiInstance({particleCount: 90, spread: 75, origin: {y: 0.68}});
+    if (<?= $confettiEnabled ? 'true' : 'false' ?> && typeof confettiInstance === 'function') confettiInstance({particleCount: 90, spread: 75, origin: {y: 0.68}});
   });
   const celebrateAgain = document.getElementById('celebrateAgain');
   if (celebrateAgain) celebrateAgain.addEventListener('click', () => {
-    if (typeof confettiInstance === 'function') confettiInstance({particleCount: 110, spread: 95, origin: {y: 0.65}});
+    if (<?= $confettiEnabled ? 'true' : 'false' ?> && typeof confettiInstance === 'function') confettiInstance({particleCount: 110, spread: 95, origin: {y: 0.65}});
   });
   const music = document.getElementById("bgMusic");
   const musicBtn = document.getElementById("musicControlBtn");
@@ -694,7 +695,7 @@ function loadWishes() {
  const dock=document.getElementById('birthdayControlDock'),panel=document.getElementById('celebrationControlPanel'),toggle=document.getElementById('celebrationDockToggle'),close=document.getElementById('celebrationDockClose');
  let hideTimer=null;
  function closeDock(){if(!panel||panel.hidden)return;panel.hidden=true;toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Open celebration controls');clearTimeout(hideTimer);}
- function scheduleHide(){clearTimeout(hideTimer);hideTimer=setTimeout(()=>{if(panel&&!panel.contains(document.activeElement))closeDock();},Math.max(3,Math.min(15,Number(config.autoHide)||5))*1000);}
+ function scheduleHide(){clearTimeout(hideTimer);hideTimer=setTimeout(()=>{if(panel&&!panel.querySelector(':focus-visible'))closeDock();else scheduleHide();},Math.max(3,Math.min(15,Number(config.autoHide)||5))*1000);}
  function openDock(){if(!panel)return;panel.hidden=false;toggle.setAttribute('aria-expanded','true');toggle.setAttribute('aria-label','Close celebration controls');scheduleHide();}
  if(toggle&&panel){
    toggle.addEventListener('click',()=>panel.hidden?openDock():closeDock());
