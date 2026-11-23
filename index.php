@@ -388,7 +388,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
       </details>
       <div class="wish-attachment-box">
         <label class="wish-field-label" for="wishAttachments">Photo, video ya voice wish (optional)</label>
-        <input id="wishAttachments" type="file" name="attachments[]" multiple accept="image/*,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/webm,application/pdf" class="wish-attachment-input">
+        <input id="wishAttachments" type="file" name="attachments[]" multiple accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/webm,application/pdf" class="wish-attachment-input">
         <small id="wishAttachmentHint">Maximum 3 files • 10 MB each • Photos, videos, audio or PDF</small>
         <div id="wishAttachmentList" class="wish-attachment-list" aria-live="polite"></div>
       </div>
