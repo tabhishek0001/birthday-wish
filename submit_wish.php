@@ -300,7 +300,9 @@ if ($to !== '' && filter_var($to, FILTER_VALIDATE_EMAIL)) {
     $sharePath = (string)($shareParts['path'] ?? '/');
     $mediaBaseUrl = '';
     if (in_array($shareScheme, ['http', 'https'], true) && $shareHost !== '') {
-        $basePath = rtrim(str_replace('\\', '/', dirname($sharePath)), '/.');
+        $basePath = ($sharePath !== '' && substr($sharePath, -1) === '/')
+            ? rtrim($sharePath, '/')
+            : rtrim(str_replace('\\', '/', dirname($sharePath)), '/.');
         $mediaBaseUrl = $shareScheme . '://' . $shareHost . ($basePath !== '' ? $basePath : '') . '/wish-media/';
     }
 
@@ -358,7 +360,11 @@ if ($to !== '' && filter_var($to, FILTER_VALIDATE_EMAIL)) {
         if ($mediaTextLines) $plainMessage .= "\nAttachments:\n- " . implode("\n- ", $mediaTextLines) . "\n";
         else $plainMessage .= "\nNo media was attached.\n";
         $plainMessage .= "\nOpen birthday experience: {$shareUrl}\n";
-        $boundary = '=_BirthdayWish_' . bin2hex(random_bytes(12));
+        try {
+            $boundary = '=_BirthdayWish_' . bin2hex(random_bytes(12));
+        } catch (Throwable $exception) {
+            $boundary = '=_BirthdayWish_' . hash('sha256', uniqid((string)mt_rand(), true));
+        }
         $headers = "MIME-Version: 1.0\r\n";
         $headers .= 'Content-Type: multipart/alternative; boundary="' . $boundary . '"' . "\r\n";
         $senderAddress = filter_var($fromEmail, FILTER_VALIDATE_EMAIL) ? $fromEmail : $to;
