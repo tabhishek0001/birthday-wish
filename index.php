@@ -1848,5 +1848,185 @@ body.birthday-public .birthday-sound-control {
   if(suggestions)suggestions.setAttribute('aria-label','जन्मदिन की प्यारी शुभकामनाएँ');
 })();
 </script>
+
+<style id="birthday-colourful-heart-refresh">
+/* A brighter, playful birthday palette while keeping text contrast comfortable. */
+:root{
+  --party-pink:#ff78a8;--party-coral:#ff806f;--party-orange:#ffad55;
+  --party-yellow:#ffd45f;--party-blue:#78c9ef;--party-purple:#b49af4;
+  --party-green:#83d6b2;
+}
+body.birthday-public{
+  background:
+    radial-gradient(ellipse at 4% 18%,rgba(255,190,216,.34),transparent 30%),
+    radial-gradient(ellipse at 96% 42%,rgba(173,221,255,.35),transparent 32%),
+    radial-gradient(ellipse at 12% 84%,rgba(255,220,145,.28),transparent 30%),
+    linear-gradient(180deg,#fff4f8 0%,#fffaf0 34%,#f3faff 68%,#fff5ec 100%)!important;
+}
+.birthday-public .birthday-hero{
+  background:linear-gradient(128deg,#ffe0ec 0%,#fff0c8 34%,#d9f5f1 68%,#e8e0ff 100%)!important;
+}
+.birthday-public .birthday-hero h1{
+  background:linear-gradient(105deg,#ef668c 0%,#e78b55 32%,#9b79dc 66%,#4ea9b9 100%)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;
+}
+.birthday-public .birthday-hero__top{background:linear-gradient(100deg,#ffffffd9,#fff6fbd9)!important;border-color:#ffffff!important;color:#a65d79!important}
+.birthday-public .birthday-age{background:linear-gradient(110deg,#fff,#fff2d5)!important;border-color:#ffdca1!important;color:#a45d36!important}
+.birthday-public .birthday-hero__button,
+.birthday-public .wish-send-button,
+.birthday-public .surprise-button{
+  background:linear-gradient(115deg,#ff789e 0%,#ff9b70 48%,#ffc45f 100%)!important;
+  color:#fff!important;border:1px solid #ffffffa8!important;
+  box-shadow:0 7px 0 #df7180,0 13px 30px #e77c8140!important;
+}
+.birthday-public .birthday-hero__button:hover,
+.birthday-public .wish-send-button:hover,
+.birthday-public .surprise-button:hover{
+  filter:saturate(1.12) brightness(1.04);transform:translateY(-3px);
+}
+.birthday-public .birthday-gallery{background:linear-gradient(180deg,#fff8f0 0%,#f7f1ff 100%)}
+.birthday-public .birthday-section-heading>span{
+  background:linear-gradient(145deg,#ffe0ed,#fff0c9 52%,#dff6ef)!important;
+  color:#d66f89;box-shadow:0 10px 26px #c17a9b24!important;
+}
+.birthday-public .birthday-section-heading h2,
+.birthday-public h2{color:#80516e!important}
+.birthday-public .birthday-gallery__frame{
+  background:linear-gradient(145deg,#ffe4ef,#fff0cb,#dff5ef)!important;
+  border-color:#fff!important;box-shadow:0 25px 65px #bd83a52b!important;
+}
+.birthday-public .birthday-gallery__frame .swiper-slide{
+  background:linear-gradient(145deg,#fff0f5,#fff4dc,#eaf8f4)!important;
+}
+.birthday-public .surprise-card{
+  background:linear-gradient(140deg,#fff0f6 0%,#fff8e8 48%,#edf9f5 100%)!important;
+  border:1px solid #f4c7d9!important;box-shadow:0 18px 42px #c17c9c20!important;
+}
+.birthday-public .wish-invite-section{
+  background:linear-gradient(180deg,#f5edff 0%,#fff1f5 48%,#fff8e9 100%)!important;
+}
+.birthday-public .wish-invite-card{
+  background:linear-gradient(145deg,#fff 0%,#fff8fc 55%,#f5fbff 100%)!important;
+  border:2px solid #f2c9df!important;box-shadow:0 20px 48px #a66c9b20!important;
+}
+.birthday-public .wish-choice,
+.birthday-public .wish-suggestion{
+  background:linear-gradient(120deg,#fff0f6,#fff7e8)!important;
+  border-color:#f0bfd4!important;color:#87516c!important;
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease,background .2s ease!important;
+}
+.birthday-public .wish-choice:nth-child(4n+2),
+.birthday-public .wish-suggestion:nth-child(4n+2){background:linear-gradient(120deg,#edf7ff,#f3efff)!important;border-color:#c9c4f1!important}
+.birthday-public .wish-choice:nth-child(4n+3),
+.birthday-public .wish-suggestion:nth-child(4n+3){background:linear-gradient(120deg,#eaf9f1,#fff8e5)!important;border-color:#b9e4ce!important}
+.birthday-public .wish-choice.selected,
+.birthday-public .wish-suggestion.selected{
+  background:linear-gradient(120deg,#ffd8e8,#ffe8b8)!important;border-color:#ed91b4!important;
+  color:#783c5b!important;box-shadow:0 0 0 3px #f9c9dc70,0 7px 18px #d47b9a20!important;
+}
+.birthday-public .wish-choice:hover,
+.birthday-public .wish-suggestion:hover{transform:translateY(-2px);filter:saturate(1.12);box-shadow:0 7px 18px #a66c9b1c!important}
+.birthday-public .wish-input{background:#fff!important;border-color:#edc9dc!important}
+.birthday-public .wish-input:focus{border-color:#e98ab0!important;box-shadow:0 0 0 4px #f5c1d966!important}
+.birthday-public .wish-upload-trigger{
+  background:linear-gradient(110deg,#fff0f7,#fff5df,#eff9ff)!important;
+  border-color:#e9b6d0!important;color:#89536c!important;
+}
+.birthday-public #wishBoard article{
+  background:linear-gradient(145deg,#fff,#fff7fb 58%,#f4faff)!important;
+  border-color:#f1cadd!important;box-shadow:0 10px 26px #a66c9b18!important;
+}
+.birthday-public .birthday-dock-launcher{
+  background:linear-gradient(115deg,#ff83a8,#ffb36d 55%,#ffe078)!important;
+  color:#653e50!important;border-color:#fff!important;
+  box-shadow:0 12px 32px #db829b45,0 4px 0 #df8a78!important;
+}
+.birthday-public .birthday-control-panel{
+  background:linear-gradient(145deg,#fff7fc 0%,#fff8e9 55%,#f0faff 100%)!important;
+  border-color:#f1c9dc!important;
+}
+.birthday-public .dock-panel-heading{color:#8b4e70!important}
+.birthday-public .dock-action{
+  background:linear-gradient(110deg,#ffe5f0,#fff0d3 55%,#e9f8f4)!important;
+  border-color:#efc4d7!important;color:#80516e!important;
+}
+.birthday-public .dock-action:hover{filter:saturate(1.12);background:linear-gradient(110deg,#ffd8e9,#ffe7bb 55%,#d9f3eb)!important}
+.birthday-public .birthday-sound-control{background:linear-gradient(110deg,#fff0f6,#fff8e8)!important;border-color:#f0c8da!important}
+.birthday-public .birthday-confetti-trigger{
+  background:linear-gradient(145deg,#ff7fa8,#ffb45f 55%,#ffe16d)!important;
+  border:2px solid #fff!important;box-shadow:0 12px 30px #db779c55,0 5px 0 #d96c80!important;
+}
+.birthday-public .celebration-trail a{
+  background:linear-gradient(120deg,#fff0f6,#fff6df 55%,#eef9f5)!important;
+  border-color:#efc4d7!important;color:#87516c!important;
+}
+.birthday-public footer{
+  background:linear-gradient(110deg,#ffe9f2,#fff2d8 48%,#e7f7f3)!important;
+  border-color:#f0c9d9!important;color:#79566a!important;
+}
+.birthday-public .birthday-hero__bottom i:nth-child(1),
+.birthday-public .birthday-hero__bottom i:nth-child(5){color:#e77c9c}
+.birthday-public .birthday-hero__bottom i:nth-child(2),
+.birthday-public .birthday-hero__bottom i:nth-child(4){color:#e6a34d}
+.birthday-public .birthday-hero__bottom i:nth-child(3){color:#8d83d7}
+/* The canvas is softly masked at both viewport edges: bursts fade as they rise and descend. */
+.birthday-public>#confetti-canvas{
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 13%,#000 78%,transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 13%,#000 78%,transparent 100%);
+}
+.birthday-floating-hearts{
+  position:fixed;inset:0;z-index:1;overflow:hidden;pointer-events:none;
+  contain:layout paint;user-select:none;
+}
+.birthday-floating-hearts span{
+  position:absolute;bottom:-12vh;left:var(--heart-x);display:block;
+  color:var(--heart-colour);font-size:var(--heart-size);line-height:1;
+  opacity:0;text-shadow:0 5px 14px #d56b9a25;
+  will-change:transform,opacity;
+  animation:birthdayHeartDrift var(--heart-duration) linear var(--heart-delay) infinite;
+}
+@keyframes birthdayHeartDrift{
+  0%{transform:translate3d(0,0,0) rotate(-12deg) scale(.72);opacity:0}
+  12%{opacity:var(--heart-opacity)}
+  78%{opacity:calc(var(--heart-opacity)*.7)}
+  100%{transform:translate3d(var(--heart-drift),-118vh,0) rotate(24deg) scale(1.18);opacity:0}
+}
+@media(max-width:640px){
+  .birthday-floating-hearts span{font-size:calc(var(--heart-size)*.78)}
+  .birthday-public .birthday-hero{background:linear-gradient(145deg,#ffe3ef,#fff0cc 48%,#dff5f0 78%,#eae3ff)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .birthday-floating-hearts{display:none!important}
+  .birthday-public>#confetti-canvas{-webkit-mask-image:none;mask-image:none}
+}
+</style>
+<script id="birthday-colourful-heart-refresh">
+(function(){
+  const body=document.body;
+  if(!body||body.dataset.decorEnabled==='false')return;
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(document.querySelector('.birthday-floating-hearts'))return;
+  const layer=document.createElement('div');
+  layer.className='birthday-floating-hearts';
+  layer.setAttribute('aria-hidden','true');
+  const hearts=['♥','❤','♡','💗','💖'];
+  const colours=['#f47da5','#ed83bb','#f0a2b8','#d98ee8','#ff9d87','#f3b85d'];
+  const count=window.matchMedia&&window.matchMedia('(pointer:coarse)').matches?11:17;
+  for(let i=0;i<count;i++){
+    const heart=document.createElement('span');
+    heart.textContent=hearts[i%hearts.length];
+    heart.style.setProperty('--heart-x',(3+Math.random()*94)+'%');
+    heart.style.setProperty('--heart-size',(13+Math.random()*20)+'px');
+    heart.style.setProperty('--heart-colour',colours[i%colours.length]);
+    heart.style.setProperty('--heart-duration',(13+Math.random()*13)+'s');
+    heart.style.setProperty('--heart-delay',(-Math.random()*24)+'s');
+    heart.style.setProperty('--heart-drift',((Math.random()-.5)*110)+'px');
+    heart.style.setProperty('--heart-opacity',(0.22+Math.random()*.2).toFixed(2));
+    layer.appendChild(heart);
+  }
+  body.appendChild(layer);
+})();
+</script>
+
 </body>
 </html>
