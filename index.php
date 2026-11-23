@@ -59,7 +59,16 @@ if ($shareImage === $publicBaseUrl . '/favicon.ico') {
         }
     }
 }
-$shareUrl = 'https://www.docsansar.com/birthday-wish/#wishSection';
+$isHindi = strtolower(trim((string)($_GET['lang'] ?? ''))) === 'hi';
+$requestPath = (string)(parse_url($_SERVER['REQUEST_URI'] ?? '/birthday-wish/', PHP_URL_PATH) ?: '/birthday-wish/');
+$requestQuery = [];
+parse_str((string)(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_QUERY) ?? ''), $requestQuery);
+unset($requestQuery['lang']);
+$englishPageUrl = $requestPath . ($requestQuery ? '?' . http_build_query($requestQuery) : '');
+$hindiQuery = $requestQuery;
+$hindiQuery['lang'] = 'hi';
+$hindiPageUrl = $requestPath . '?' . http_build_query($hindiQuery);
+$shareUrl = 'https://www.docsansar.com/birthday-wish/' . ($isHindi ? '?lang=hi' : '') . '#wishSection';
 $eventsUrl = 'https://www.docsansar.com/events/?event=vaibhav';
 $heroTitle = trim((string)($experienceSettings['title'] ?? '')) ?: "Happy Birthday {$displayName}!";
 $heroSubtitle = trim((string)($experienceSettings['subtitle'] ?? '')) ?: 'May your year ahead be full of success, peace, and unforgettable moments.';
@@ -94,7 +103,7 @@ $shareMessage = "🎈 Vaibhav ka 2nd Birthday! 🎂\n\nHamare chhote Kittu ko bi
 $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 ?>
 <!DOCTYPE html>
-<html lang="hi-Latn">
+<html lang="<?= $isHindi ? 'hi' : 'hi-Latn' ?>">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -345,6 +354,13 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 @media(prefers-reduced-motion:reduce){.wish-extra-options>summary,.wish-extra-options>summary::after{transition:none}.wish-extra-options[open]>.wish-field-label:first-of-type,.wish-extra-options[open] .wish-relationship-choices,.wish-extra-options[open] .wish-suggestions{animation:none}}
 </style>
 
+
+<style id="birthday-language-switch-style">
+.birthday-language-switch{position:absolute;top:14px;right:14px;z-index:8;display:flex;gap:4px;padding:4px;border:1px solid #ffffffb8;border-radius:999px;background:#fff9eddb;box-shadow:0 5px 18px #795b2a18;backdrop-filter:blur(8px)}
+.birthday-language-switch a{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:6px 12px;border-radius:999px;color:#79583c;text-decoration:none;font-size:12px;font-weight:800}
+.birthday-language-switch a[aria-current="page"]{background:#e77c68;color:#fff;box-shadow:0 2px 7px #b85d4c35}
+@media(max-width:520px){.birthday-language-switch{top:9px;right:9px}.birthday-language-switch a{min-height:32px;padding:5px 10px;font-size:11px}.birthday-hero{padding-top:55px!important}}
+</style>
 <style id="wish-choice-upload-visual-feedback">
 /* Make relationship choices visibly selected on touch screens and accessible to assistive technology. */
 .wish-relationship-choices{gap:9px!important}
@@ -542,6 +558,10 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <!-- Interactive Heading -->
   
   <header class="birthday-hero">
+    <nav class="birthday-language-switch" aria-label="Choose language">
+      <a href="<?= $escapeHtml($englishPageUrl) ?>" <?= !$isHindi ? 'aria-current="page"' : '' ?>>English</a>
+      <a href="<?= $escapeHtml($hindiPageUrl) ?>" <?= $isHindi ? 'aria-current="page"' : '' ?>>हिन्दी</a>
+    </nav>
     <div class="birthday-hero__top"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> &nbsp; Aaj ka din hai hamare Kittu ke naam! &nbsp; <i class="fa-solid fa-cake-candles" aria-hidden="true"></i></div>
     <div class="birthday-hero__toys" aria-hidden="true"><i class="fa-solid fa-child" aria-hidden="true"></i> <i class="fa-solid fa-paw" aria-hidden="true"></i> <i class="fa-solid fa-car" aria-hidden="true"></i> <i class="fa-solid fa-star" aria-hidden="true"></i></div>
         <section class="birthday-gallery" id="birthdayMemories" aria-label="Vaibhav ki yaadein">
@@ -1486,5 +1506,114 @@ body.birthday-public .birthday-sound-control {
 }
 </style>
 
+<script id="birthday-hindi-conversation">
+(function(){
+  if(document.documentElement.lang!=='hi')return;
+  const dictionary={
+    "Vaibhav ko wish bhejein":"वैभव को प्यारी-सी विश भेजें",
+    "Aaj ka din sirf Vaibhav ke naam!":"आज का पूरा दिन हमारे वैभव के नाम! ❤️",
+    "Chhote Kittu ke liye":"हमारे छोटे किट्टू के लिए",
+    "Leave a little happiness":"अपनी तरफ़ से थोड़ी-सी खुशियाँ भेजें",
+    "Share a note, a memory or a wish. It will mean more than you know.":"कोई प्यारी-सी बात, याद या विश लिख दीजिए। आपके ये छोटे-से शब्द बहुत खास होंगे।",
+    "A little love from everyone":"सबकी तरफ़ से ढेर सारा प्यार",
+    "Your name":"आपका नाम",
+    "Enter your name":"अपना नाम लिखें",
+    "A sample name is filled in. Replace it with your own name before sending.":"नाम उदाहरण के तौर पर भरा है। विश भेजने से पहले अपना नाम लिख दें।",
+    "Wish ko aur personal banayein (optional)":"अपनी विश में थोड़ा और अपनापन जोड़ें (ज़रूरी नहीं)",
+    "Aap Vaibhav ke kya lagte hain?":"आप वैभव के क्या लगते हैं?",
+    "Ready-made wishes":"कुछ प्यारी-सी विश चुनें",
+    "Simple wish":"छोटी-सी प्यारी विश",
+    "Pyaar bhari wish":"प्यार भरी विश",
+    "Little champ":"हमारा छोटा चैंप",
+    "Aashirwad":"ढेर सारा आशीर्वाद",
+    "Vaibhav ke liye wish":"वैभव के लिए अपनी प्यारी-सी बात लिखें",
+    "Photo, video ya voice wish":"फोटो, वीडियो या वॉइस मैसेज",
+    "Optional · Apni koi pyari memory share karein":"चाहें तो कोई प्यारी याद भी शेयर करें",
+    "Files choose karein":"फाइल चुनें",
+    "Gallery, video ya audio select karein":"गैलरी से फोटो, वीडियो या ऑडियो चुनें",
+    "Maximum 3 files · 10 MB each · Photo, video, audio or PDF":"ज़्यादा से ज़्यादा 3 फाइलें · हर फाइल 10 MB तक · फोटो, वीडियो, ऑडियो या PDF",
+    "Aapki wish aur attached media birthday page par dikh sakte hain. Sirf wahi share karein jo sabke saath share karna theek ho.":"आपकी विश और भेजी गई फोटो/वीडियो इस पेज पर सबको दिख सकती हैं। वही चीज़ें शेयर करें जिन्हें सबके साथ साझा करना ठीक हो।",
+    "Send your wish":"अपनी विश भेजें",
+    "A little birthday journey":"जन्मदिन का छोटा-सा सफ़र",
+    "Memories":"प्यारी यादें",
+    "Love note":"दिल से एक बात",
+    "Cake time":"केक का टाइम",
+    "Send a wish":"विश भेजें",
+    "Dil se ek chhota sa note":"दिल से एक छोटी-सी बात",
+    "A little note for you":"तुम्हारे लिए एक प्यारा-सा संदेश",
+    "Open your little letter":"अपना प्यारा-सा संदेश खोलें",
+    "Kittu ke liye ek special moment":"किट्टू के लिए एक खास पल",
+    "Make a little wish":"एक प्यारी-सी विश माँगो",
+    "Take a breath, make a wish, and keep a little room for magic.":"आँखें बंद करो, एक प्यारी-सी विश माँगो… और ढेर सारी खुशियों के लिए तैयार हो जाओ!",
+    "Blow out the candles":"चलो, मोमबत्तियाँ बुझाओ",
+    "Here is to everything ahead":"आने वाला हर दिन खुशियों से भरा हो",
+    "Sabki taraf se dher saara pyaar":"सबकी तरफ़ से ढेर सारा प्यार",
+    "Chalo aur celebrate karein":"चलो, एक बार फिर जश्न मनाएँ!",
+    "WhatsApp":"WhatsApp पर शेयर करें",
+    "Share on X":"X पर शेयर करें",
+    "Facebook":"Facebook पर शेयर करें",
+    "Telegram":"Telegram पर शेयर करें",
+    "Copy Link":"लिंक कॉपी करें",
+    "Share":"शेयर करें",
+    "Fun controls":"मस्ती वाले कंट्रोल",
+    "Celebration corner":"जश्न का कोना",
+    "Sound off":"आवाज़ बंद",
+    "Sound on":"आवाज़ चालू",
+    "Volume":"आवाज़",
+    "Make it rain confetti":"ढेर सारी कॉन्फेटी बरसाएँ",
+    "Send Vaibhav a wish":"वैभव को विश भेजें",
+    "This little panel closes itself after a moment.":"ये कंट्रोल कुछ देर में अपने-आप बंद हो जाएँगे।",
+    "Thanks for being part of the joy!":"इस खुशी का हिस्सा बनने के लिए शुक्रिया!",
+    "All wishes stored safely for a lifetime":"सभी विश सुरक्षित रखी जाती हैं",
+    "Link copied to clipboard! Share it with your friends!":"लिंक कॉपी हो गया! अब इसे अपने दोस्तों और परिवार के साथ शेयर करें।",
+    "Failed to copy. Please copy manually.":"लिंक कॉपी नहीं हो पाया। कृपया इसे खुद कॉपी करें।",
+    "Share failed or cancelled.":"शेयर नहीं हो पाया या आपने कैंसल कर दिया।",
+    "Your browser does not support the share feature.":"आपके ब्राउज़र में शेयर करने की सुविधा उपलब्ध नहीं है।",
+    "Aapki wish Vaibhav tak pahunch gayi! Shukriya":"आपकी प्यारी-सी विश वैभव तक पहुँच गई! बहुत-बहुत शुक्रिया ❤️",
+    "Wish send nahi ho paayi. Dobara try kijiye.":"विश भेजी नहीं जा सकी। एक बार फिर कोशिश करें।",
+    "Selected media server ki upload limit se badi hai. Chhoti file ya kam files try kijiye.":"चुनी हुई फाइल सर्वर की लिमिट से बड़ी है। छोटी फाइल या कम फाइलें चुनें।",
+    "Aapne abhi ek wish bheji hai. Kripya kuch seconds baad try kijiye.":"आपने अभी एक विश भेजी है। कुछ सेकंड बाद फिर कोशिश करें।",
+    "Upload mein zyada samay lag gaya. Internet stable hone par dobara try kijiye. Agar wish board par dikh rahi ho, dobara submit na karein.":"अपलोड में ज़्यादा समय लग गया। इंटरनेट ठीक होने पर फिर कोशिश करें। अगर आपकी विश नीचे दिख रही है, तो उसे दोबारा न भेजें।",
+    "Server se valid response nahi mila. Aapki wish save hui ya nahi, wish board check karke hi dobara bhejein.":"सर्वर से सही जवाब नहीं मिला। दोबारा भेजने से पहले नीचे विश बोर्ड में चेक कर लें कि आपकी विश सेव हुई है या नहीं।",
+    "Connection beech mein toot gaya. Internet check karke wish board dekh lein; phir zarurat ho to dobara bhejein.":"इंटरनेट कनेक्शन टूट गया। पहले कनेक्शन चेक करें और नीचे विश बोर्ड देखें। ज़रूरत हो तभी दोबारा भेजें।",
+    "Kripya thodi der baad dobara try kijiye.":"कृपया थोड़ी देर बाद फिर कोशिश करें।",
+    "Kittu ke liye dher saari wishes!":"किट्टू के लिए ढेर सारी शुभकामनाएँ!",
+    "More birthday magic!":"थोड़ा और बर्थडे मैजिक!"
+  };
+  const skipSelector='#wishBoard, input, textarea, select, script, style, noscript';
+  function translateNode(node){
+    const parent=node.parentElement;
+    if(!parent||parent.closest(skipSelector))return;
+    const original=node.nodeValue,trimmed=original.trim();
+    if(trimmed&&dictionary[trimmed])node.nodeValue=original.replace(trimmed,dictionary[trimmed]);
+  }
+  function translateTree(root){
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    let node;while((node=walker.nextNode()))translateNode(node);
+    if(root.nodeType===1){
+      const attrs=['placeholder','aria-label','title'];
+      if(!root.closest(skipSelector))attrs.forEach(attr=>{const value=root.getAttribute(attr);if(value&&dictionary[value])root.setAttribute(attr,dictionary[value]);});
+      if(root.querySelectorAll)root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(el=>{
+        if(el.closest(skipSelector))return;
+        attrs.forEach(attr=>{const value=el.getAttribute(attr);if(value&&dictionary[value])el.setAttribute(attr,dictionary[value]);});
+      });
+    }
+  }
+  translateTree(document.body);
+  const observer=new MutationObserver(records=>records.forEach(record=>{
+    record.addedNodes&&record.addedNodes.forEach(node=>{if(node.nodeType===3)translateNode(node);else if(node.nodeType===1)translateTree(node);});
+    if(record.type==='characterData')translateNode(record.target);
+  }));
+  observer.observe(document.body,{subtree:true,childList:true,characterData:true});
+  const message=document.getElementById('wishMessage');
+  if(message&&message.value==='Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️'){
+    message.value='जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️';
+  }
+  const relation=document.querySelector('.wish-relationship-choices');
+  if(relation)relation.setAttribute('aria-label','आपका रिश्ता');
+  const suggestions=document.querySelector('.wish-suggestions');
+  if(suggestions)suggestions.setAttribute('aria-label','जन्मदिन की प्यारी शुभकामनाएँ');
+})();
+</script>
 </body>
 </html>
