@@ -1272,5 +1272,131 @@ function loadWishes() {
  if(config.trail){const board=document.getElementById('wishBoard');if(board&&'IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)completeStep('wish');}),{threshold:.15});observer.observe(board);}}
 })();
 </script>
+
+<style id="birthday-viewport-overflow-fix">
+/* Keep the document inside the viewport; let the cards animate freely inside it. */
+html:has(body.birthday-public) {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+body.birthday-public {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+}
+body.birthday-public *,
+body.birthday-public *::before,
+body.birthday-public *::after {
+  box-sizing: border-box;
+}
+body.birthday-public .birthday-hero,
+body.birthday-public .birthday-gallery {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+body.birthday-public .birthday-gallery__stage {
+  position: relative !important;
+  width: min(100%, 360px) !important;
+  max-width: calc(100vw - 24px) !important;
+  height: 420px !important;
+  margin-inline: auto !important;
+  overflow: visible !important;
+  contain: none !important;
+  isolation: isolate;
+}
+body.birthday-public .birthday-gallery__frame.featured-swiper {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: min(220px, calc(100vw - 88px)) !important;
+  height: auto !important;
+  aspect-ratio: 5 / 7 !important;
+  max-width: calc(100vw - 88px) !important;
+  max-height: 308px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  contain: none !important;
+  clip-path: none !important;
+  transform: translate(-50%, -50%) !important;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: contain;
+}
+body.birthday-public .birthday-gallery__frame.featured-swiper > .swiper-wrapper {
+  overflow: visible !important;
+  align-items: stretch;
+  will-change: transform;
+}
+body.birthday-public .birthday-gallery__frame.featured-swiper > .swiper-wrapper > .swiper-slide {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+body.birthday-public .birthday-side-share {
+  position: fixed !important;
+  right: max(8px, env(safe-area-inset-right)) !important;
+  top: 50% !important;
+  width: 48px !important;
+  min-width: 0 !important;
+  max-width: calc(100vw - 16px) !important;
+  transform: translateY(-50%) !important;
+  z-index: 1000 !important;
+}
+body.birthday-public .birthday-side-share:hover,
+body.birthday-public .birthday-side-share:focus-visible {
+  transform: translateY(-50%) scale(1.04) !important;
+}
+body.birthday-public .birthday-side-share:active {
+  transform: translateY(-50%) scale(.97) !important;
+}
+body.birthday-public .birthday-control-dock {
+  position: fixed !important;
+  right: max(8px, env(safe-area-inset-right)) !important;
+  bottom: max(8px, env(safe-area-inset-bottom)) !important;
+  left: auto !important;
+  width: max-content !important;
+  max-width: calc(100vw - 16px) !important;
+  z-index: 1100 !important;
+}
+body.birthday-public .birthday-control-panel {
+  width: min(310px, calc(100vw - 16px)) !important;
+  max-width: calc(100vw - 16px) !important;
+}
+body.birthday-public .birthday-dock-launcher,
+body.birthday-public .dock-action,
+body.birthday-public .dock-panel-heading {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere;
+}
+body.birthday-public .birthday-sound-control {
+  right: max(8px, env(safe-area-inset-right)) !important;
+  bottom: max(8px, env(safe-area-inset-bottom)) !important;
+  max-width: calc(100vw - 16px) !important;
+}
+@media (max-width: 520px) {
+  body.birthday-public .birthday-gallery__stage {
+    width: min(100%, 340px) !important;
+    height: 390px !important;
+  }
+  body.birthday-public .birthday-gallery__frame.featured-swiper {
+    width: min(205px, calc(100vw - 88px)) !important;
+    max-height: 287px !important;
+  }
+  body.birthday-public .birthday-side-share {
+    right: max(6px, env(safe-area-inset-right)) !important;
+    width: 44px !important;
+  }
+}
+</style>
+
 </body>
 </html>
