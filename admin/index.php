@@ -189,7 +189,7 @@ unset($_SESSION['birthday_admin_notice']);
   <div class="admin-card">
     <form method="post" action="../upload-media.php" enctype="multipart/form-data">
       <input type="hidden" name="csrf" value="<?= admin_h($studioCsrf) ?>"><input type="hidden" name="return_to" value="admin">
-      <label class="dropzone"><input id="adminMediaFiles" type="file" name="media[]" accept="image/*,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/x-wav,audio/ogg,audio/webm,audio/aac,audio/flac" multiple><strong>📸 Photos, videos ya audio choose karein</strong><small>Ek saath multiple files • har file 25 MB tak • total 30 memories</small><span id="adminUploadSelection" class="section-note">Abhi koi file select nahi hai</span></label>
+      <label class="dropzone"><input id="adminMediaFiles" type="file" name="media[]" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/x-wav,audio/ogg,audio/webm,audio/aac,audio/flac" multiple><strong>📸 Photos, videos ya audio choose karein</strong><small>Ek saath multiple files • har file 25 MB tak • total 30 memories</small><span id="adminUploadSelection" class="section-note">Abhi koi file select nahi hai</span></label>
       <div class="save-row"><button class="admin-btn primary" type="submit">Upload memories</button></div>
     </form>
     <?php if (!$media): ?><div class="section-note">No memories have been uploaded yet. Add the first photos, videos or audio memories for visitors to discover.</div><?php else: ?>
