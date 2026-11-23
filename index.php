@@ -649,7 +649,8 @@ function loadWishes() {
   $.getJSON("wishes.json?ts=" + new Date().getTime(), function (data) {
     $("#wishBoard").html("");
 
-    data.reverse().forEach((wish) => {
+    $(".wish-inline-lightbox").remove();
+    data.reverse().forEach((wish, wishIndex) => {
       const name = wish.name?.trim() || "Anonymous";
       const message = wish.message?.trim() || "🎉 Sent you best wishes!";
       const pahchan = wish.pahchan?.trim();
@@ -676,7 +677,7 @@ function loadWishes() {
       const $date = $("<p>").addClass("text-xs text-gray-400 mt-1").text(time);$card.append($wishText,$byline,$date);
       if(Array.isArray(wish.media)&&wish.media.length){
         const $attachments=$("<div>").addClass("wish-board-attachments");
-        const wishGallery="birthday-wish-"+String(data.length)+"-"+String(wish.timestamp||Date.now());
+        const wishGallery="birthday-wish-"+String(wishIndex)+"-"+String(wish.timestamp||Date.now());
         wish.media.slice(0,3).forEach(item=>{
           if(!item||typeof item.file!=="string"||!/^[a-f0-9]{32}\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|pdf)$/i.test(item.file))return;
           const url="wish-media/"+encodeURIComponent(item.file);
@@ -684,11 +685,11 @@ function loadWishes() {
           if(item.type==="image"){
             $link.attr({href:url,"data-type":"image"}).append($("<img>").attr({src:url,alt:"Wish photo",loading:"lazy"}));
           }else if(item.type==="video"){
-            $link.attr({href:url,"data-type":"video"}).append($("<span>").addClass("wish-media-label").text("▶ Play video"));
+            $link.attr({href:url,"data-type":"video"}).append($("<video>").attr({src:url,muted:true,playsinline:true,preload:"metadata"}),$("<span>").addClass("wish-media-label").text("▶ Play video"));
           }else if(item.type==="audio"){
             const inlineId="wish-audio-"+(++wishMediaInlineSequence);
             $link.attr({href:"#"+inlineId,"data-type":"inline"}).append($("<span>").addClass("wish-media-label").text("🎵 Listen to audio"));
-            $("<div>").attr("id",inlineId).addClass("lightbox-inline-media").append(
+            $("<div>").attr("id",inlineId).addClass("lightbox-inline-media wish-inline-lightbox").append(
               $("<div>").addClass("lightbox-inline-card").append(
                 $("<span>").addClass("memory-media-icon").text("🎵"),
                 $("<strong>").text("Voice / audio wish"),
