@@ -81,7 +81,7 @@ $mediaNotice=(string)($_SESSION['birthday_media_notice']??'');unset($_SESSION['b
 </div></section></form>
 <section class="studio-panel" id="memories"><h2>Gather your memories</h2><p>Add photos and short videos. These appear in the birthday page's featured memory carousel. Up to 30 items, 25 MB each; JPG, PNG, WebP, GIF, MP4, WebM and MOV are supported.</p>
 <form id="mediaUploadForm" method="post" action="upload-media.php" enctype="multipart/form-data"><input type="hidden" name="csrf" value="<?=studio_h($csrf)?>">
-<label class="studio-drop" id="mediaDrop"><span style="font-size:28px">♡</span><strong>Drop your photos and videos here</strong><small>or choose files from your device</small><input id="mediaFiles" type="file" name="media[]" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" multiple required></label>
+<label class="studio-drop" id="mediaDrop"><span style="font-size:28px">♡</span><strong>Drop your photos and videos here</strong><small>or choose files from your device</small><input id="mediaFiles" type="file" name="media[]" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" multiple></label>
 <div class="studio-actions" style="position:static;margin-top:13px"><span class="studio-muted" id="selectedFiles">Photos/videos choose karein (25 MB per file)</span><button class="primary" id="uploadSubmit" type="submit" disabled>Upload photos / videos</button></div></form>
 <div class="media-library" id="mediaLibrary">
 <?php foreach($media as $item): if(!is_array($item)||empty($item['file'])) continue; $file=basename((string)$item['file']); $url='birthday-media/'.rawurlencode($file); $isVideo=($item['type']??'')==='video'; ?>
