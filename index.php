@@ -165,6 +165,97 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
 .birthday-public #wishBoard{gap:14px}.birthday-public #wishBoard article{background:#fffdf8!important;border:1px solid #f1dfc7;box-shadow:0 8px 22px #805b3010!important;border-radius:20px!important}.birthday-public #wishBoard article p{color:#64554a!important}.birthday-public footer{background:#fff3df!important;color:#806d5d!important;border-color:#f1dfc7!important}.birthday-public .btn{min-height:44px}.birthday-public .swiper-pagination-bullet-active{background:#ff806f!important}
 @media(max-width:520px){.birthday-hero{padding-top:34px}.birthday-gallery__frame{height:min(64vh,560px);height:clamp(260px,64svh,560px);min-height:260px}.wish-suggestions{grid-template-columns:1fr}.wish-invite-card{border-radius:23px}.birthday-hero__toys{letter-spacing:3px}.birthday-public .mt-6.flex{padding:0 12px 18px}.birthday-public .btn{flex:1 1 42%;font-size:13px}}
 </style>
+
+<style id="vaibhav-premium-experience">
+:root{--lux-ink:#49372f;--lux-muted:#88766b;--lux-cream:#fffaf0;--lux-peach:#ffe2c8;--lux-coral:#f47e70;--lux-gold:#f4bd61;--lux-shadow:0 24px 70px rgba(105,70,46,.12);scroll-behavior:smooth}
+body.birthday-public{background:radial-gradient(ellipse at 8% 4%,#fff0d8 0,transparent 34%),radial-gradient(ellipse at 92% 24%,#e5f5f0 0,transparent 32%),linear-gradient(180deg,#fffaf2 0%,#fffdf9 48%,#fff3e8 100%)!important;color:var(--lux-ink)!important}
+body.birthday-public:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.2;background-image:radial-gradient(#d9a77d 1px,transparent 1px);background-size:26px 26px;mask-image:linear-gradient(to bottom,black,transparent 70%)}
+.birthday-public>*{position:relative}
+.birthday-hero{isolation:isolate;min-height:590px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(65px,10vw,118px) 20px 76px!important;border-radius:0 0 58px 58px!important;background:linear-gradient(135deg,#ffe9bd 0%,#fff0d9 42%,#dff3ee 100%)!important;box-shadow:0 28px 80px rgba(129,91,51,.10);overflow:hidden}
+.birthday-hero:before,.birthday-hero:after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(1px);pointer-events:none}
+.birthday-hero:before{width:320px;height:320px;left:-110px;top:-100px;background:radial-gradient(circle,#fff9df 0 38%,transparent 70%);animation:luxFloat 9s ease-in-out infinite}
+.birthday-hero:after{width:390px;height:390px;right:-150px;bottom:-180px;background:radial-gradient(circle,#c9e9dc 0 35%,transparent 72%);animation:luxFloat 11s ease-in-out infinite reverse}
+.birthday-hero__top{padding:10px 18px;border:1px solid rgba(180,132,75,.18);border-radius:999px;background:#ffffff9c;backdrop-filter:blur(12px);box-shadow:0 8px 28px #986b3212;letter-spacing:.04em;animation:luxRise .8s both}
+.birthday-hero__toys{font-size:clamp(30px,6vw,54px);letter-spacing:clamp(5px,2vw,17px);margin:24px 0 10px;filter:drop-shadow(0 8px 9px #936a3020);animation:luxBob 4s ease-in-out infinite}
+.birthday-hero h1{font-family:Georgia,"Times New Roman",serif!important;font-size:clamp(46px,8.8vw,92px)!important;font-weight:700!important;letter-spacing:-.055em;line-height:1.02!important;max-width:980px;text-wrap:balance;background:linear-gradient(110deg,#db725f 5%,#b86f73 45%,#9c8155 90%);-webkit-background-clip:text;background-clip:text;color:transparent!important;text-shadow:none!important;margin:14px auto 18px;animation:luxRise .9s .08s both}
+.birthday-hero p{font-size:clamp(16px,2.2vw,21px)!important;max-width:650px;line-height:1.8!important;color:#756357!important;animation:luxRise .9s .16s both}
+.birthday-age{padding:12px 22px!important;background:#fffdf7d9!important;border:1px solid #fff!important;color:#a46646!important;box-shadow:0 12px 35px #9d74401c!important;animation:luxRise .9s .24s both}
+.birthday-hero__button{position:relative;overflow:hidden;padding:17px 30px!important;border-radius:999px!important;background:linear-gradient(115deg,#f47e70,#e98a70 55%,#d89a62)!important;box-shadow:0 13px 0 #d56c5d,0 20px 36px #d66f5a35!important;transition:transform .25s,box-shadow .25s!important;animation:luxRise .9s .32s both}
+.birthday-hero__button:after{content:"";position:absolute;inset:-80% auto -80% -45%;width:32%;transform:rotate(22deg);background:linear-gradient(90deg,transparent,#ffffff80,transparent);animation:luxShine 4.8s ease-in-out infinite}
+.birthday-hero__button:hover{transform:translateY(-4px)!important;box-shadow:0 16px 0 #d56c5d,0 25px 42px #d66f5a40!important}
+.birthday-hero__button:active{transform:translateY(4px)!important;box-shadow:0 5px 0 #d56c5d!important}
+.birthday-hero__bottom{margin-top:35px;animation:luxBob 5s ease-in-out infinite}
+.birthday-gallery{padding:clamp(52px,8vw,90px) 18px 42px!important}
+.birthday-section-heading{margin-bottom:30px!important}
+.birthday-section-heading>span{display:inline-grid;place-items:center;width:58px;height:58px;border-radius:20px;background:#fff1d9;box-shadow:0 9px 25px #a77b4218;font-size:27px;transform:rotate(-7deg)}
+.birthday-section-heading h2,.birthday-public h2{font-family:Georgia,"Times New Roman",serif!important;font-weight:700!important;letter-spacing:-.035em!important;color:#715248!important}
+.birthday-section-heading h2{font-size:clamp(30px,5vw,46px)!important;margin:15px 0 8px!important}
+.birthday-section-heading p{color:#978477!important}
+.birthday-gallery__frame{max-width:760px!important;height:clamp(340px,68vw,610px)!important;border-radius:34px!important;background:linear-gradient(145deg,#f8e8d3,#e8f0e8)!important;border:8px solid #ffffffc9;box-shadow:0 30px 85px rgba(99,67,42,.16)!important;overflow:hidden}
+.birthday-gallery__frame .swiper-slide{padding:8px;background:linear-gradient(145deg,#f8ead8,#edf4ed)!important}
+.birthday-gallery__frame img,.birthday-gallery__frame video{border-radius:23px;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.birthday-gallery__frame .swiper-slide-active img{transform:scale(1.015)}
+.birthday-gallery__frame .swiper-pagination{bottom:18px!important}
+.birthday-gallery__frame .swiper-pagination-bullet{width:8px;height:8px;background:#fff;opacity:.7;transition:width .25s}
+.birthday-gallery__frame .swiper-pagination-bullet-active{width:25px;border-radius:9px;background:#ef8b72!important;opacity:1}
+.birthday-surprise-section{padding:28px 18px 38px!important;background:transparent!important}
+.surprise-card{position:relative;overflow:hidden;max-width:820px!important;padding:clamp(30px,6vw,58px)!important;border:1px solid #fff!important;border-radius:34px!important;background:linear-gradient(145deg,#fffefa 0%,#fff5e9 100%)!important;box-shadow:var(--lux-shadow)!important;transition:transform .35s,box-shadow .35s}
+.surprise-card:before{content:"✦";position:absolute;right:28px;top:18px;font-size:36px;color:#efc77e;opacity:.7;animation:luxTwinkle 3s ease-in-out infinite}
+.surprise-card:hover{transform:translateY(-5px);box-shadow:0 30px 85px rgba(105,70,46,.16)!important}
+.surprise-kicker{color:#d18a65!important;letter-spacing:.17em!important}
+.surprise-card h2{font-size:clamp(29px,5vw,43px)!important}
+.surprise-button{padding:15px 25px!important;min-height:52px;border-radius:999px!important;background:linear-gradient(115deg,#ef9879,#e7ae69)!important;box-shadow:0 10px 25px #dc91613d!important;transition:transform .25s,filter .25s,box-shadow .25s!important}
+.surprise-button:hover{transform:translateY(-3px) scale(1.025)!important;filter:saturate(1.08);box-shadow:0 15px 30px #dc91614d!important}
+.cake-illustration{animation:luxBob 3.5s ease-in-out infinite;filter:drop-shadow(0 15px 18px #95633a25)!important}
+.cake-illustration.candles-out{animation:luxPop .55s ease both!important}
+.wish-invite-section{padding:clamp(45px,8vw,90px) 16px!important;background:linear-gradient(180deg,#fff5e9aa,#f1f7efaa)!important}
+.wish-invite-card{max-width:720px!important;padding:clamp(24px,5vw,52px)!important;border:1px solid #fff!important;border-radius:36px!important;background:rgba(255,254,250,.91)!important;box-shadow:0 30px 90px rgba(93,70,50,.12)!important;backdrop-filter:blur(18px)}
+.wish-invite-kicker{display:inline-flex;padding:9px 15px;border-radius:999px;background:#fff1d9;color:#b77a51!important}
+.wish-invite-card h2{font-size:clamp(32px,5.5vw,48px)!important}
+.wish-input{min-height:58px!important;border:1.5px solid #eee0d0!important;border-radius:17px!important;background:#fffdf8!important;transition:border-color .25s,box-shadow .25s,transform .25s!important}
+.wish-input:focus{border-color:#e7a47d!important;box-shadow:0 0 0 5px #efb68c28!important;transform:translateY(-1px)}
+.wish-choice,.wish-suggestion{border:1.5px solid #efe2d4!important;background:#fffaf2!important;color:#796354!important;transition:transform .22s,border-color .22s,background .22s,box-shadow .22s!important}
+.wish-choice:hover,.wish-suggestion:hover{transform:translateY(-3px);border-color:#e8b18a!important;box-shadow:0 9px 22px #b98b5a18}
+.wish-choice.selected,.wish-suggestion.selected{background:#fff0d5!important;border-color:#e9b15e!important;box-shadow:0 0 0 3px #f7dca64a!important;transform:translateY(-2px)}
+.wish-suggestions{gap:12px!important}
+.wish-suggestion{min-height:68px!important;padding:14px 16px!important;border-radius:18px!important}
+.wish-send-button{position:relative;overflow:hidden;min-height:62px!important;border-radius:18px!important;background:linear-gradient(110deg,#ed806f,#e99b6b 55%,#d9a15f)!important;box-shadow:0 8px 0 #d87962,0 17px 32px #d8796230!important;transition:transform .2s,box-shadow .2s!important}
+.wish-send-button:hover{transform:translateY(-3px);box-shadow:0 11px 0 #d87962,0 22px 38px #d8796240!important}
+.wish-send-button:active{transform:translateY(5px);box-shadow:0 3px 0 #d87962!important}
+.wish-send-button:disabled{transform:none;filter:saturate(.6)}
+.birthday-public #wishBoard{max-width:1120px;margin:0 auto!important;gap:18px!important}
+.birthday-public #wishBoard article{position:relative;padding:25px!important;border:1px solid #fff!important;border-radius:25px!important;background:linear-gradient(145deg,#fffefa,#fff7ec)!important;box-shadow:0 12px 35px #80604412!important;transition:transform .3s,box-shadow .3s!important}
+.birthday-public #wishBoard article:hover{transform:translateY(-6px) rotate(-.4deg)!important;box-shadow:0 22px 48px #80604420!important}
+.birthday-public #wishBoard article:before{content:"“";position:absolute;right:18px;top:4px;font:70px Georgia,serif;color:#f0d7b7}
+.birthday-public #wishBoard article p{position:relative}
+.birthday-public>section:has(#wishBoard){background:transparent!important}
+.birthday-public footer{background:#fff4e4!important;border-color:#f0e2cf!important;color:#8c7767!important}
+.birthday-public .btn{min-height:48px!important;padding:13px 19px!important;border-radius:999px!important;transition:transform .22s,filter .22s!important}
+.birthday-public .btn:hover{transform:translateY(-3px);filter:brightness(1.04)}
+.birthday-sound-control{border:1px solid #fff!important;background:rgba(255,252,243,.88)!important;box-shadow:0 12px 35px #70503320!important;backdrop-filter:blur(18px)!important}
+#musicControlBtn{background:linear-gradient(110deg,#f5c56d,#ee9878)!important;color:#62452e!important;transition:transform .2s!important}
+#musicControlBtn:active{transform:scale(.96)}
+.birthday-public button:focus-visible,.birthday-public a:focus-visible,.birthday-public input:focus-visible,.birthday-public textarea:focus-visible{outline:3px solid #e7a56d!important;outline-offset:4px}
+.lux-cursor,.lux-cursor-dot{position:fixed;left:0;top:0;z-index:10001;pointer-events:none;border-radius:50%;opacity:0;transform:translate(-50%,-50%);will-change:transform}
+.lux-cursor{width:34px;height:34px;border:1.5px solid #d88770;background:#f5b77a20;transition:width .2s,height .2s,background .2s,opacity .2s}
+.lux-cursor-dot{width:6px;height:6px;background:#d97866}
+.lux-cursor.is-visible,.lux-cursor-dot.is-visible{opacity:1}
+.lux-cursor.is-hover{width:52px;height:52px;background:#f5b77a38}
+.lux-touch-ripple{position:fixed;z-index:10000;pointer-events:none;width:18px;height:18px;border:2px solid #e78e70;border-radius:50%;transform:translate(-50%,-50%);animation:luxRipple .65s ease-out forwards}
+.lux-scroll-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:10002;background:linear-gradient(90deg,#e98b70,#f3c36d,#a7c7ad);box-shadow:0 1px 8px #e98b7070}
+.lux-sparkle{position:fixed;z-index:0;pointer-events:none;color:#e5b56c;opacity:.65;animation:luxDrift 8s ease-in-out infinite}
+@keyframes luxRise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes luxFloat{50%{transform:translate3d(20px,-18px,0) scale(1.06)}}
+@keyframes luxBob{50%{transform:translateY(-9px) rotate(1deg)}}
+@keyframes luxShine{0%,55%{left:-45%}85%,100%{left:130%}}
+@keyframes luxTwinkle{0%,100%{transform:rotate(0) scale(.9);opacity:.45}50%{transform:rotate(18deg) scale(1.2);opacity:.9}}
+@keyframes luxPop{0%{transform:scale(.8) rotate(-8deg)}65%{transform:scale(1.16) rotate(4deg)}100%{transform:scale(1.06)}}
+@keyframes luxRipple{to{width:76px;height:76px;opacity:0}}
+@keyframes luxDrift{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-22px) rotate(18deg)}}
+@media(max-width:640px){.birthday-hero{min-height:540px;padding:58px 18px 55px!important;border-radius:0 0 34px 34px!important}.birthday-hero__toys{margin:20px 0}.birthday-gallery__frame{height:clamp(300px,62svh,520px)!important;border-width:5px!important;border-radius:26px!important}.surprise-card,.wish-invite-card{border-radius:26px!important}.wish-suggestions{grid-template-columns:1fr!important}.wish-suggestion{text-align:left}.birthday-public #wishBoard article{padding:20px!important}.birthday-sound-control{max-width:calc(100vw - 18px)}}
+@media(pointer:coarse){.lux-cursor,.lux-cursor-dot{display:none}.birthday-public button,.birthday-public a{touch-action:manipulation}.birthday-public button:active,.birthday-public a:active{filter:brightness(.97)}}
+@media(prefers-reduced-motion:reduce){.birthday-public *,.birthday-public *:before,.birthday-public *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.lux-cursor,.lux-cursor-dot,.lux-touch-ripple,.lux-sparkle{display:none!important}}
+</style>
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -504,5 +595,27 @@ function loadWishes() {
   </script>
 
 
+
+<script id="vaibhav-premium-interactions">
+(function(){
+ const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const progress=document.createElement('div');progress.className='lux-scroll-progress';document.body.appendChild(progress);
+ const updateProgress=()=>{const max=document.documentElement.scrollHeight-window.innerHeight;progress.style.width=(max>0?window.scrollY/max*100:0)+'%';};
+ window.addEventListener('scroll',updateProgress,{passive:true});updateProgress();
+ if(!reduce){
+   const symbols=['✦','✧','♡','·'];for(let i=0;i<9;i++){const s=document.createElement('span');s.className='lux-sparkle';s.textContent=symbols[i%symbols.length];s.style.left=(5+(i*11)%91)+'%';s.style.top=(12+(i*17)%78)+'%';s.style.fontSize=(12+(i%3)*8)+'px';s.style.animationDelay=(-i*.8)+'s';document.body.appendChild(s);}
+ }
+ const fine=window.matchMedia&&window.matchMedia('(pointer: fine)').matches;
+ if(fine&&!reduce){
+   const ring=document.createElement('span'),dot=document.createElement('span');ring.className='lux-cursor';dot.className='lux-cursor-dot';document.body.append(ring,dot);
+   let x=-50,y=-50,dx=-50,dy=-50,raf=0;
+   document.addEventListener('pointermove',e=>{x=e.clientX;y=e.clientY;ring.classList.add('is-visible');dot.classList.add('is-visible');dot.style.transform='translate('+x+'px,'+y+'px) translate(-50%,-50%)';if(!raf)raf=requestAnimationFrame(function move(){dx+=(x-dx)*.22;dy+=(y-dy)*.22;ring.style.transform='translate('+dx+'px,'+dy+'px) translate(-50%,-50%)';if(Math.abs(x-dx)+Math.abs(y-dy)>.3)raf=requestAnimationFrame(move);else raf=0;});},{passive:true});
+   document.addEventListener('pointerover',e=>{if(e.target.closest('a,button,input,textarea,select,[role=button]'))ring.classList.add('is-hover');});
+   document.addEventListener('pointerout',e=>{if(e.target.closest('a,button,input,textarea,select,[role=button]'))ring.classList.remove('is-hover');});
+   document.addEventListener('pointerleave',()=>{ring.classList.remove('is-visible');dot.classList.remove('is-visible');});
+ }
+ document.addEventListener('pointerdown',e=>{if(reduce)return;const ripple=document.createElement('span');ripple.className='lux-touch-ripple';ripple.style.left=e.clientX+'px';ripple.style.top=e.clientY+'px';document.body.appendChild(ripple);ripple.addEventListener('animationend',()=>ripple.remove(),{once:true});},{passive:true});
+})();
+</script>
 </body>
 </html>
