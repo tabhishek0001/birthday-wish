@@ -120,6 +120,7 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
 
 
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
@@ -462,15 +463,15 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" data-decor-enabled="<?= $floatingDecorEnabled ? 'true' : 'false' ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-  <!-- 🎉 Interactive Heading -->
+  <!-- Interactive Heading -->
   
   <header class="birthday-hero" data-aos="zoom-in">
-    <div class="birthday-hero__top">🎈 &nbsp; Aaj ka din hai hamare Kittu ke naam! &nbsp; 🎈</div>
-    <div class="birthday-hero__toys" aria-hidden="true">🧸 🦁 🚗 🦕</div>
+    <div class="birthday-hero__top"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> &nbsp; Aaj ka din hai hamare Kittu ke naam! &nbsp; <i class="fa-solid fa-cake-candles" aria-hidden="true"></i></div>
+    <div class="birthday-hero__toys" aria-hidden="true"><i class="fa-solid fa-child" aria-hidden="true"></i> <i class="fa-solid fa-paw" aria-hidden="true"></i> <i class="fa-solid fa-car" aria-hidden="true"></i> <i class="fa-solid fa-star" aria-hidden="true"></i></div>
     <h1><?= $escapeHtml($heroTitle); ?></h1><p><?= $escapeHtml($heroSubtitle); ?></p>
-    <div class="birthday-age">🎂 <?= $escapeHtml($birthdayLabel); ?> 🎉</div>
-    <a class="birthday-hero__button" href="#wishSection">💌 Vaibhav ko wish bhejein</a>
-    <div class="birthday-hero__bottom" aria-hidden="true">⭐ 🎁 🥳 🎁 ⭐</div>
+    <div class="birthday-age"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> <?= $escapeHtml($birthdayLabel); ?> <i class="fa-solid fa-gift" aria-hidden="true"></i></div>
+    <a class="birthday-hero__button" href="#wishSection"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Vaibhav ko wish bhejein</a>
+    <div class="birthday-hero__bottom" aria-hidden="true"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-gift"></i> <i class="fa-solid fa-face-grin-stars"></i> <i class="fa-solid fa-gift"></i> <i class="fa-solid fa-star"></i></div>
   </header>
   <?php if ($celebrationTrailEnabled): ?>
   <nav class="celebration-trail" aria-label="Celebration journey">
@@ -484,7 +485,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
   <!-- Vaibhav's little memory gallery -->
 <section class="birthday-gallery" id="birthdayMemories" data-aos="fade-up" aria-label="Vaibhav ki yaadein">
-  <div class="birthday-section-heading"><span>📸</span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
+  <div class="birthday-section-heading"><span><i class="fa-solid fa-images" aria-hidden="true"></i></span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
   <div class="birthday-all-memories-wrap"><a class="birthday-all-memories-link" href="https://www.docsansar.com/events?event=vaibhav" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-images" aria-hidden="true"></i> Saari Photos dekhein <span aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a></div>
   <?php
   $allMemoriesUrl = 'https://www.docsansar.com/events?event=vaibhav';
@@ -502,10 +503,10 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   }
   ?>
   <a class="birthday-all-memories-card" href="<?= $escapeHtml($allMemoriesUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="Doc Sansar par Vaibhav ki saari yaadein dekhein">
-    <?php if ($allMemoriesImage !== ''): ?><img src="<?= $escapeHtml($allMemoriesImage) ?>" alt="Vaibhav ki ek pyari yaad" loading="lazy"><?php else: ?><span class="birthday-all-memories-card__placeholder" aria-hidden="true">📸</span><?php endif; ?>
+    <?php if ($allMemoriesImage !== ''): ?><img src="<?= $escapeHtml($allMemoriesImage) ?>" alt="Vaibhav ki ek pyari yaad" loading="lazy"><?php else: ?><span class="birthday-all-memories-card__placeholder" aria-hidden="true"><i class="fa-solid fa-images"></i></span><?php endif; ?>
     <span class="birthday-all-memories-card__shade"></span>
     <span class="birthday-all-memories-card__content"><strong>Saari Photos dekhein</strong><small>Vaibhav ke aur bhi pyare pal</small></span>
-    <span class="birthday-all-memories-card__arrow" aria-hidden="true">↗</span>
+    <span class="birthday-all-memories-card__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
   </a>
   <?php if ($featuredImages || $birthdayMedia): ?>
   <div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
@@ -513,10 +514,10 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     <?php $memoryAudioIndex = 0; foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); if (!preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|flac)$/i', $mediaFile)) continue; $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); $memoryType = (string)($memory['type'] ?? 'image'); $memoryCaption = trim((string)($memory['caption'] ?? '')); ?>
       <div class="swiper-slide">
         <?php if ($memoryType === 'video'): ?>
-          <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="video" aria-label="Video memory ko full screen mein dekhein"><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" muted playsinline preload="metadata" tabindex="-1"></video><span class="memory-media-play" aria-hidden="true">▶</span></a>
+          <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="video" aria-label="Video memory ko full screen mein dekhein"><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" muted playsinline preload="metadata" tabindex="-1"></video><span class="memory-media-play" aria-hidden="true"><i class="fa-solid fa-circle-play"></i></span></a>
         <?php elseif ($memoryType === 'audio'): $memoryAudioIndex++; $audioId = 'birthday-memory-audio-' . $memoryAudioIndex; ?>
-          <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="#<?= $escapeHtml($audioId) ?>" data-type="inline" data-gallery="vaibhav-memories" aria-label="Audio memory sunne ke liye kholein"><span class="memory-media-icon" aria-hidden="true">🎵</span><strong>Audio memory</strong><span class="memory-media-open-hint">Tap to listen</span></a>
-          <div id="<?= $escapeHtml($audioId) ?>" class="lightbox-inline-media"><div class="lightbox-inline-card"><span class="memory-media-icon">🎵</span><strong><?= $escapeHtml($memoryCaption ?: 'Birthday audio memory') ?></strong><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="metadata"></audio></div></div>
+          <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="#<?= $escapeHtml($audioId) ?>" data-type="inline" data-gallery="vaibhav-memories" aria-label="Audio memory sunne ke liye kholein"><span class="memory-media-icon" aria-hidden="true"><i class="fa-solid fa-music"></i></span><strong>Audio memory</strong><span class="memory-media-open-hint">Tap to listen</span></a>
+          <div id="<?= $escapeHtml($audioId) ?>" class="lightbox-inline-media"><div class="lightbox-inline-card"><span class="memory-media-icon"><i class="fa-solid fa-music"></i></span><strong><?= $escapeHtml($memoryCaption ?: 'Birthday audio memory') ?></strong><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="metadata"></audio></div></div>
         <?php else: ?>
           <a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memoryCaption ?: 'Vaibhav ki yaad') ?>" loading="lazy"></a>
         <?php endif; ?>
@@ -524,7 +525,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
       </div>
     <?php endforeach; ?>
   </div><div class="swiper-pagination"></div></div>
-  <?php else: ?><div class="birthday-gallery__empty"><span>🧸</span><strong>Vaibhav ki photos jald hi yahan aayengi!</strong><small>Birthday Studio se photos, videos aur audio memories add kar sakte hain.</small></div><?php endif; ?>
+  <?php else: ?><div class="birthday-gallery__empty"><span><i class="fa-solid fa-images"></i></span><strong>Vaibhav ki photos jald hi yahan aayengi!</strong><small>Birthday Studio se photos, videos aur audio memories add kar sakte hain.</small></div><?php endif; ?>
 </section>
 
 <?php if ($showLetter): ?>
@@ -542,7 +543,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <div class="surprise-card cake-card">
     <div class="surprise-kicker">Kittu ke liye ek special moment</div>
     <h2><?= $escapeHtml($cakeHeading); ?></h2>
-    <div class="cake-illustration" id="cakeIllustration" aria-hidden="true">🎂</div>
+    <div class="cake-illustration" id="cakeIllustration" aria-hidden="true"><i class="fa-solid fa-cake-candles"></i></div>
     <p id="cakeMessage" class="cake-message" hidden><?= $escapeHtml($cakeMessage); ?></p>
     <button type="button" class="surprise-button" id="makeWishBtn"><?= $escapeHtml($cakeButton); ?></button>
   </div>
@@ -551,7 +552,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
 <section class="wish-invite-section" id="wishSection" data-aos="fade-up">
   <div class="wish-invite-card">
-    <div class="wish-invite-kicker">💛 Chhote Kittu ke liye</div>
+    <div class="wish-invite-kicker"><i class="fa-solid fa-heart" aria-hidden="true"></i> Chhote Kittu ke liye</div>
     <h2><?= $escapeHtml($wishFormHeading); ?></h2><p class="wish-invite-description"><?= $escapeHtml($wishFormDescription); ?></p>
     <form id="wishForm" autocomplete="on" enctype="multipart/form-data">
       <div class="wish-compact-fields">
@@ -570,10 +571,10 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
           <input type="hidden" name="pahchan" id="wishRelation" value="">
           <div class="wish-field-label">Ready-made wishes</div>
           <div class="wish-suggestions" role="group" aria-label="Ready-made birthday wishes">
-            <button type="button" class="wish-suggestion" data-wish-suggestion="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️">🎂 Simple wish</button>
-            <button type="button" class="wish-suggestion" data-wish-suggestion="Janamdin mubarak ho hamare Kittu! Bhagwan tumhe hamesha khush rakhe. 🌟">🌟 Pyaar bhari wish</button>
-            <button type="button" class="wish-suggestion" data-wish-suggestion="Happy 2nd Birthday, little champ! Khoob khelo, masti karo aur hamesha muskurate raho! 🧸🎈">🧸 Little champ</button>
-            <button type="button" class="wish-suggestion" data-wish-suggestion="Vaibhav beta, tumhari hasi hamesha aise hi chamakti rahe. Bahut saara aashirwad aur pyaar! 💛">💛 Aashirwad</button>
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> Simple wish</button>
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Janamdin mubarak ho hamare Kittu! Bhagwan tumhe hamesha khush rakhe. 🌟"><i class="fa-solid fa-star" aria-hidden="true"></i> Pyaar bhari wish</button>
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Happy 2nd Birthday, little champ! Khoob khelo, masti karo aur hamesha muskurate raho! 🧸🎈"><i class="fa-solid fa-child" aria-hidden="true"></i> Little champ</button>
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Vaibhav beta, tumhari hasi hamesha aise hi chamakti rahe. Bahut saara aashirwad aur pyaar! 💛"><i class="fa-solid fa-hands-holding-heart" aria-hidden="true"></i> Aashirwad</button>
           </div>
         </details>
         <label class="wish-field-label" for="wishMessage">Vaibhav ke liye wish</label>
@@ -581,7 +582,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
       </div>
       <div class="wish-attachment-box">
         <div class="wish-attachment-heading">
-          <span class="wish-attachment-icon" aria-hidden="true">📎</span>
+          <span class="wish-attachment-icon" aria-hidden="true"><i class="fa-solid fa-paperclip"></i></span>
           <span><span class="wish-attachment-title">Photo, video ya voice wish</span><small>Optional · Apni koi pyari memory share karein</small></span>
         </div>
         <label class="wish-upload-trigger" for="wishAttachments">
@@ -592,15 +593,15 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
         <small id="wishAttachmentHint" class="wish-attachment-hint">Maximum 3 files · 10 MB each · Photo, video, audio or PDF</small>
         <div id="wishAttachmentList" class="wish-attachment-list" aria-live="polite"></div>
       </div>
-      <p class="wish-privacy-note">Aapki wish aur attached media birthday page par dikh sakte hain. Sirf wahi share karein jo sabke saath share karna theek ho. ❤️</p>
-      <button id="wishSubmitButton" type="submit" class="wish-send-button">💌 <?= $escapeHtml($submitLabel); ?></button>
+      <p class="wish-privacy-note">Aapki wish aur attached media birthday page par dikh sakte hain. Sirf wahi share karein jo sabke saath share karna theek ho. <i class="fa-solid fa-heart" aria-hidden="true"></i></p>
+      <button id="wishSubmitButton" type="submit" class="wish-send-button"><i class="fa-solid fa-envelope" aria-hidden="true"></i> <?= $escapeHtml($submitLabel); ?></button>
       <p id="wishFeedback" class="wish-feedback" role="status" aria-live="polite"></p>
     </form>  </div>
 </section>
 
   
 
-  <!-- 🎁 Wishes -->
+  <!-- Wishes -->
   <section class="px-4 py-16 bg-gradient-to-br from-pink-50 to-pink-100" data-aos="fade-up">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-3xl font-extrabold text-center text-pink-700 mb-10"><?= $escapeHtml($wishBoardHeading); ?></h2>
@@ -614,22 +615,22 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     <div class="surprise-kicker">Sabki taraf se dher saara pyaar</div>
     <h2><?= $escapeHtml($finalHeading); ?></h2>
     <p><?= $escapeHtml($finalMessage); ?></p>
-    <button type="button" class="surprise-button" id="celebrateAgain">Chalo aur celebrate karein ✨</button>
+    <button type="button" class="surprise-button" id="celebrateAgain"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Chalo aur celebrate karein</button>
   </div>
 </section>
 <?php endif; ?>
 
-  <!-- 🎵 Background Music -->
+  <!-- Background Music -->
   <?php if ($musicEnabled): ?>
   <audio id="bgMusic" loop preload="auto" volume="0.12"><source src="<?= $escapeHtml($musicSource); ?>" type="audio/mpeg"></audio>
   <?php endif; ?>
 <!-- Share Buttons Section -->
 <div class="mt-6 flex flex-wrap gap-3 justify-center items-center">
-  <a href="https://wa.me/?text=<?= rawurlencode($shareMessage) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-success">📱 WhatsApp</a>
+  <a href="https://wa.me/?text=<?= rawurlencode($shareMessage) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp</a>
   <a href="https://twitter.com/intent/tweet?text=<?= rawurlencode($shareMessage) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-info text-white">Share on X</a>
-  <a href="https://www.facebook.com/sharer/sharer.php?u=<?= rawurlencode($shareUrl) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-primary">📘 Facebook</a>
-  <a href="https://t.me/share/url?url=<?= rawurlencode($shareUrl) ?>&text=<?= rawurlencode($shareMessage) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">💬 Telegram</a>
-  <button onclick="copyBirthdayLink()" class="btn btn-dark" type="button">🔗 Copy Link</button>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=<?= rawurlencode($shareUrl) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-primary"><i class="fa-brands fa-facebook" aria-hidden="true"></i> Facebook</a>
+  <a href="https://t.me/share/url?url=<?= rawurlencode($shareUrl) ?>&text=<?= rawurlencode($shareMessage) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-secondary"><i class="fa-brands fa-telegram" aria-hidden="true"></i> Telegram</a>
+  <button onclick="copyBirthdayLink()" class="btn btn-dark" type="button"><i class="fa-solid fa-link" aria-hidden="true"></i> Copy Link</button>
   
 </div>
 
@@ -644,26 +645,26 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
   function copyBirthdayLink() {
     navigator.clipboard.writeText(<?= json_encode($shareUrl, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>).then(() => {
-      alert("🎉 Link copied to clipboard! Share it with your friends!");
+      alert("Link copied to clipboard! Share it with your friends!");
     }).catch(() => {
-      alert("❌ Failed to copy. Please copy manually.");
+      alert("Failed to copy. Please copy manually.");
     });
   }
 
   function shareGeneral() {
     if (navigator.share) {
       navigator.share({
-        title: "<?= $escapeHtml($name); ?>’s Birthday 🎂",
+        title: "<?= $escapeHtml($name); ?>’s Birthday",
         text: shareText,
         url: <?= json_encode($shareUrl, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>
       }).then(() => {
         console.log('Shared successfully');
       }).catch((err) => {
-        alert("❌ Share failed or cancelled.");
+        alert("Share failed or cancelled.");
         console.log(err);
       });
     } else {
-      alert("ℹ️ Your browser does not support the share feature.");
+      alert("Your browser does not support the share feature.");
     }
   }
 </script>
@@ -711,27 +712,27 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
 <div class="birthday-control-dock" id="birthdayControlDock">
   <button type="button" class="birthday-dock-launcher" id="celebrationDockToggle" aria-expanded="false" aria-controls="celebrationControlPanel" aria-label="Open celebration controls">
-    <span class="dock-launcher-icon">🎉</span><span class="dock-launcher-label">Fun controls</span><span class="dock-launcher-pulse"></span>
+    <span class="dock-launcher-icon"><i class="fa-solid fa-gift" aria-hidden="true"></i></span><span class="dock-launcher-label">Fun controls</span><span class="dock-launcher-pulse"></span>
   </button>
   <div class="birthday-control-panel" id="celebrationControlPanel" hidden role="group" aria-label="Celebration controls">
-    <div class="dock-panel-heading"><span>✨ Celebration corner</span><button type="button" id="celebrationDockClose" aria-label="Close controls">×</button></div>
+    <div class="dock-panel-heading"><span><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Celebration corner</span><button type="button" id="celebrationDockClose" aria-label="Close controls">×</button></div>
     <?php if ($musicEnabled): ?>
     <div class="birthday-sound-control" role="group" aria-label="Sound controls">
-      <button id="musicControlBtn" type="button" aria-label="Turn birthday music on" aria-pressed="false">🔇 Sound off</button>
+      <button id="musicControlBtn" type="button" aria-label="Turn birthday music on" aria-pressed="false"><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i> Sound off</button>
       <label for="musicVolume">Volume <input id="musicVolume" type="range" min="0" max="30" value="12" step="1"></label>
     </div>
     <?php endif; ?>
-    <?php if ($confettiEnabled): ?><button type="button" class="dock-action" id="dockConfettiButton">🎊 Make it rain confetti</button><?php endif; ?>
-    <a class="dock-action" href="#wishSection" id="dockWishLink">💌 Send Vaibhav a wish</a>
+    <?php if ($confettiEnabled): ?><button type="button" class="dock-action" id="dockConfettiButton"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Make it rain confetti</button><?php endif; ?>
+    <a class="dock-action" href="#wishSection" id="dockWishLink"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Send Vaibhav a wish</a>
     <p class="dock-auto-hide">This little panel closes itself after a moment.</p>
   </div>
 </div>
 
 
 <footer class="bg-pink-50 text-center py-6 mt-10 border-t border-pink-100 text-sm text-gray-600">
-  <p class="mb-2">Made with ❤️ to celebrate <strong><?= $escapeHtml($name); ?>'s Birthday</strong></p>
-  <p>Thanks for being part of the joy! 🎉</p>
-  <p class="mt-2 text-xs text-gray-400">© <?= date('Y') ?> <a href="/">DocSansar.com</a> • All wishes stored safely for a lifetime 🎁</p>
+  <p class="mb-2">Made with <i class="fa-solid fa-heart" aria-hidden="true"></i> to celebrate <strong><?= $escapeHtml($name); ?>'s Birthday</strong></p>
+  <p>Thanks for being part of the joy! <i class="fa-solid fa-gift" aria-hidden="true"></i></p>
+  <p class="mt-2 text-xs text-gray-400">© <?= date('Y') ?> <a href="/">DocSansar.com</a> • All wishes stored safely for a lifetime <i class="fa-solid fa-gift" aria-hidden="true"></i></p>
 </footer>
 
   <!-- Confetti JS -->
@@ -824,7 +825,7 @@ function loadWishes() {
     $(".wish-inline-lightbox").remove();
     data.reverse().forEach((wish, wishIndex) => {
       const name = wish.name?.trim() || "Anonymous";
-      const message = wish.message?.trim() || "🎉 Sent you best wishes!";
+      const message = wish.message?.trim() || "Sent you best wishes!";
       const pahchan = wish.pahchan?.trim();
       const timestamp = parseInt(wish.timestamp);
       let time = "Unknown time";
@@ -857,20 +858,20 @@ function loadWishes() {
           if(item.type==="image"){
             $link.attr({href:url,"data-type":"image"}).append($("<img>").attr({src:url,alt:"Wish photo",loading:"lazy"}));
           }else if(item.type==="video"){
-            $link.attr({href:url,"data-type":"video"}).append($("<video>").attr({src:url,muted:true,playsinline:true,preload:"metadata"}),$("<span>").addClass("wish-media-label").text("▶ Play video"));
+            $link.attr({href:url,"data-type":"video"}).append($("<video>").attr({src:url,muted:true,playsinline:true,preload:"metadata"}),$("<span>").addClass("wish-media-label").html('<i class="fa-solid fa-circle-play" aria-hidden="true"></i> Play video'));
           }else if(item.type==="audio"){
             const inlineId="wish-audio-"+(++wishMediaInlineSequence);
-            $link.attr({href:"#"+inlineId,"data-type":"inline"}).append($("<span>").addClass("wish-media-label").text("🎵 Listen to audio"));
+            $link.attr({href:"#"+inlineId,"data-type":"inline"}).append($("<span>").addClass("wish-media-label").html('<i class="fa-solid fa-music" aria-hidden="true"></i> Listen to audio'));
             $("<div>").attr("id",inlineId).addClass("lightbox-inline-media wish-inline-lightbox").append(
               $("<div>").addClass("lightbox-inline-card").append(
-                $("<span>").addClass("memory-media-icon").text("🎵"),
+                $("<span>").addClass("memory-media-icon").html('<i class="fa-solid fa-music" aria-hidden="true"></i>'),
                 $("<strong>").text("Voice / audio wish"),
                 $("<audio>").attr({src:url,controls:true,preload:"metadata"})
               )
             ).appendTo(document.body);
           }else if(item.type==="document"){
             const inlineId="wish-pdf-"+(++wishMediaInlineSequence);
-            $link.attr({href:"#"+inlineId,"data-type":"inline"}).append($("<span>").addClass("wish-media-label").text("📄 View PDF"));
+            $link.attr({href:"#"+inlineId,"data-type":"inline"}).append($("<span>").addClass("wish-media-label").html('<i class="fa-solid fa-file-pdf" aria-hidden="true"></i> View PDF'));
             $("<div>").attr("id",inlineId).addClass("lightbox-inline-media").append(
               $("<div>").addClass("lightbox-inline-card").append(
                 $("<strong>").text("Attached PDF"),
@@ -890,7 +891,7 @@ function loadWishes() {
   }).fail(function () {
     $("#wishBoard").html(`
       <div class="text-center text-red-500 p-4">
-        Abhi wishes load nahi ho paayi. Thodi der baad try kijiye 🙂.
+        Abhi wishes load nahi ho paayi. Thodi der baad try kijiye.
       </div>
     `);
   });
@@ -901,7 +902,7 @@ function loadWishes() {
     const wishForm=$("#wishForm"), wishName=document.getElementById("wishSenderName"), wishMessage=document.getElementById("wishMessage"), wishRelation=document.getElementById("wishRelation"), wishFeedback=document.getElementById("wishFeedback"), wishSubmit=document.getElementById("wishSubmitButton");
     const wishAttachments=document.getElementById("wishAttachments"), wishAttachmentList=document.getElementById("wishAttachmentList"), defaultWish="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️";
     try{const saved=localStorage.getItem("vaibhavWishSenderName");if(saved&& !["aapka naam","guest","your name"].includes(saved.trim().toLowerCase())){wishName.value=saved;document.getElementById("wishNameHint").textContent="Your previous name is remembered on this device. You can change it anytime.";}}catch(e){}
-    wishAttachments.addEventListener("change",()=>{const files=Array.from(wishAttachments.files||[]);wishAttachmentList.innerHTML="";wishAttachmentList.classList.toggle("has-files",files.length>0);if(files.length>3||files.some(file=>file.size>10*1024*1024)){wishAttachmentList.textContent="Maximum 3 files choose karein; har file 10 MB se chhoti honi chahiye.";wishAttachmentList.classList.add("has-error");wishAttachments.value="";return;}wishAttachmentList.classList.remove("has-error");files.forEach(file=>{const tag=document.createElement("span");tag.className="wish-attachment-file";const icon=document.createElement("b");icon.textContent=file.type.startsWith("image/")?"🖼️":file.type.startsWith("video/")?"🎬":file.type.startsWith("audio/")?"🎵":"📄";const name=document.createElement("span");name.textContent=file.name;tag.append(icon,name);wishAttachmentList.appendChild(tag);});});
+    wishAttachments.addEventListener("change",()=>{const files=Array.from(wishAttachments.files||[]);wishAttachmentList.innerHTML="";wishAttachmentList.classList.toggle("has-files",files.length>0);if(files.length>3||files.some(file=>file.size>10*1024*1024)){wishAttachmentList.textContent="Maximum 3 files choose karein; har file 10 MB se chhoti honi chahiye.";wishAttachmentList.classList.add("has-error");wishAttachments.value="";return;}wishAttachmentList.classList.remove("has-error");files.forEach(file=>{const tag=document.createElement("span");tag.className="wish-attachment-file";const icon=document.createElement("b");icon.innerHTML=file.type.startsWith("image/")?'<i class="fa-solid fa-image" aria-hidden="true"></i>':file.type.startsWith("video/")?'<i class="fa-solid fa-video" aria-hidden="true"></i>':file.type.startsWith("audio/")?'<i class="fa-solid fa-music" aria-hidden="true"></i>':'<i class="fa-solid fa-file" aria-hidden="true"></i>';const name=document.createElement("span");name.textContent=file.name;tag.append(icon,name);wishAttachmentList.appendChild(tag);});});
     document.querySelectorAll("[data-wish-suggestion]").forEach(button=>button.addEventListener("click",()=>{wishMessage.value=button.dataset.wishSuggestion||defaultWish;document.querySelectorAll("[data-wish-suggestion]").forEach(item=>item.classList.toggle("selected",item===button));}));
     document.querySelectorAll("[data-relation]").forEach(button=>{button.setAttribute("aria-pressed","false");button.addEventListener("click",()=>{const relation=button.dataset.relation||"";wishRelation.value=wishRelation.value===relation?"":relation;document.querySelectorAll("[data-relation]").forEach(item=>{const selected=item===button&&wishRelation.value!=="";item.classList.toggle("selected",selected);item.setAttribute("aria-pressed",selected?"true":"false");});});});
     let allowPrefilledWishOnce=false;
@@ -923,8 +924,8 @@ function loadWishes() {
       }
     });
     wishForm.on("submit",function(e){e.preventDefault();if(!wishName.value.trim()||wishName.value.trim().toLowerCase()==="aapka naam"){wishFeedback.textContent="Kripya ‘Aapka naam’ ki jagah apna naam likhein.";wishName.focus();return;}if(!wishMessage.value.trim()){wishFeedback.textContent="Ek chhoti si wish chuniye ya likh dijiye.";wishMessage.focus();return;}if(wishAttachments.files.length>3||Array.from(wishAttachments.files).some(file=>file.size>10*1024*1024)){wishFeedback.textContent="Maximum 3 attachments aur 10 MB per file allowed hai.";return;}
-      wishSubmit.disabled=true;wishSubmit.textContent="⏳ Wish bheji ja rahi hai...";wishFeedback.textContent="Bas ek pal...";const formData=new FormData(wishForm[0]);
-      $.ajax({url:"submit_wish.php",method:"POST",data:formData,dataType:"json",processData:false,contentType:false}).done(function(res){if(res.success){try{localStorage.setItem("vaibhavWishSenderName",wishName.value.trim());}catch(e){}wishMessage.value=defaultWish;wishAttachments.value="";wishAttachmentList.innerHTML="";wishRelation.value="";document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>{item.classList.remove("selected");if(item.hasAttribute("data-relation"))item.setAttribute("aria-pressed","false");});wishFeedback.textContent="🎉 Aapki wish Vaibhav tak pahunch gayi! Shukriya ❤️";loadWishes();if(typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});}else{wishFeedback.textContent=res.error||"Wish send nahi ho paayi. Dobara try kijiye.";}}).fail(function(xhr){wishFeedback.textContent=xhr.responseJSON&&xhr.responseJSON.error?xhr.responseJSON.error:"Internet ya server mein dikkat hai. Ek baar phir try kijiye.";}).always(function(){wishSubmit.disabled=false;wishSubmit.textContent="💌 <?= $escapeHtml($submitLabel); ?>";});
+      wishSubmit.disabled=true;wishSubmit.innerHTML='<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Wish bheji ja rahi hai...';wishFeedback.textContent="Bas ek pal...";const formData=new FormData(wishForm[0]);
+      $.ajax({url:"submit_wish.php",method:"POST",data:formData,dataType:"json",processData:false,contentType:false}).done(function(res){if(res.success){try{localStorage.setItem("vaibhavWishSenderName",wishName.value.trim());}catch(e){}wishMessage.value=defaultWish;wishAttachments.value="";wishAttachmentList.innerHTML="";wishRelation.value="";document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>{item.classList.remove("selected");if(item.hasAttribute("data-relation"))item.setAttribute("aria-pressed","false");});wishFeedback.innerHTML='<i class="fa-solid fa-gift" aria-hidden="true"></i> Aapki wish Vaibhav tak pahunch gayi! Shukriya <i class="fa-solid fa-heart" aria-hidden="true"></i>';loadWishes();if(typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});}else{wishFeedback.textContent=res.error||"Wish send nahi ho paayi. Dobara try kijiye.";}}).fail(function(xhr){wishFeedback.textContent=xhr.responseJSON&&xhr.responseJSON.error?xhr.responseJSON.error:"Internet ya server mein dikkat hai. Ek baar phir try kijiye.";}).always(function(){wishSubmit.disabled=false;wishSubmit.innerHTML='<i class="fa-solid fa-envelope" aria-hidden="true"></i> <?= $escapeHtml($submitLabel); ?>';});
     });
     loadWishes();
   const revealLetter = document.getElementById('revealLetter');
@@ -938,7 +939,7 @@ function loadWishes() {
   if (makeWishBtn) makeWishBtn.addEventListener('click', () => {
     document.getElementById('cakeIllustration').classList.add('candles-out');
     document.getElementById('cakeMessage').hidden = false;
-    makeWishBtn.textContent = 'Kittu ke liye dher saari wishes! ✨';
+    makeWishBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Kittu ke liye dher saari wishes!';
     makeWishBtn.disabled = true;
     if (<?= $confettiEnabled ? 'true' : 'false' ?> && typeof confettiInstance === 'function') confettiInstance({particleCount: 90, spread: 75, origin: {y: 0.68}});
   });
@@ -956,7 +957,7 @@ function loadWishes() {
     let musicStartedByGesture = false;
     const syncSoundControl = () => {
       const isPlaying = !music.paused && !music.muted && music.volume > 0;
-      musicBtn.textContent = isPlaying ? "🔊 Sound on" : "🔇 Sound off";
+      musicBtn.innerHTML = isPlaying ? '<i class="fa-solid fa-volume-high" aria-hidden="true"></i> Sound on' : '<i class="fa-solid fa-volume-xmark" aria-hidden="true"></i> Sound off';
       musicBtn.setAttribute("aria-pressed", isPlaying ? "true" : "false");
       musicBtn.setAttribute("aria-label", isPlaying ? "Turn birthday music off" : "Turn birthday music on");
       musicVolume.value = String(Math.round(music.volume * 100));
@@ -994,7 +995,7 @@ function loadWishes() {
         }).catch(() => {
           musicStartPending = false;
           syncSoundControl();
-          musicBtn.textContent = "▶ Tap to play";
+          musicBtn.innerHTML = '<i class="fa-solid fa-circle-play" aria-hidden="true"></i> Tap to play';
           musicBtn.setAttribute("aria-label", "Tap to play birthday music");
         });
       } else {
@@ -1015,7 +1016,7 @@ function loadWishes() {
         if (music.volume === 0) music.volume = 0.12;
         musicVolume.value = String(Math.round(music.volume * 100));
         music.play().then(syncSoundControl).catch(() => {
-          musicBtn.textContent = "▶ Tap to play";
+          musicBtn.innerHTML = '<i class="fa-solid fa-circle-play" aria-hidden="true"></i> Tap to play';
           musicBtn.setAttribute("aria-label", "Tap to play birthday music");
         });
       } else {
@@ -1094,10 +1095,10 @@ function loadWishes() {
    document.addEventListener('keydown',event=>{if(event.key==='Escape')closeDock();});
  }
  const confettiButton=document.getElementById('dockConfettiButton');
- if(confettiButton)confettiButton.addEventListener('click',()=>{confettiBurst(.55,true);confettiButton.textContent='✨ More birthday magic!';});
+ if(confettiButton)confettiButton.addEventListener('click',()=>{confettiBurst(.55,true);confettiButton.innerHTML='<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> More birthday magic!';});
  const hero=document.querySelector('.birthday-hero');
  if(hero&&config.decor&&!reduce){
-   ['balloon-one','balloon-two','balloon-three','balloon-four'].forEach(cls=>{const button=document.createElement('button');button.type='button';button.className='birthday-balloon '+cls;button.textContent='🎈';button.setAttribute('aria-label','Pop a birthday balloon');button.addEventListener('click',()=>{button.classList.add('popped');confettiBurst(.35,false);setTimeout(()=>button.remove(),350);});hero.appendChild(button);});
+   ['balloon-one','balloon-two','balloon-three','balloon-four'].forEach(cls=>{const button=document.createElement('button');button.type='button';button.className='birthday-balloon '+cls;button.innerHTML='<i class="fa-solid fa-cake-candles" aria-hidden="true"></i>';button.setAttribute('aria-label','Pop a birthday balloon');button.addEventListener('click',()=>{button.classList.add('popped');confettiBurst(.35,false);setTimeout(()=>button.remove(),350);});hero.appendChild(button);});
  }
  function completeStep(name){const item=document.querySelector('[data-trail-step="'+name+'"]');if(item&&!item.classList.contains('is-complete')){item.classList.add('is-complete');const n=item.querySelector('span');if(n)n.textContent='✓';}}
  const gallery=document.getElementById('birthdayMemories');
