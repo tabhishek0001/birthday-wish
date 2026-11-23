@@ -185,18 +185,18 @@ unset($_SESSION['birthday_admin_notice']);
 <section class="admin-section" data-section-panel="memories">
   <div class="eyebrow">Media library</div>
   <h1>Memories</h1>
-  <p class="lead">Manage the photos and videos displayed in the birthday experience. The existing 30-item limit and media validation remain in place.</p>
+  <p class="lead">Manage photos, videos and audio recordings displayed in the birthday experience. Up to 30 memories, 25 MB per file.</p>
   <div class="admin-card">
     <form method="post" action="../upload-media.php" enctype="multipart/form-data">
       <input type="hidden" name="csrf" value="<?= admin_h($studioCsrf) ?>"><input type="hidden" name="return_to" value="admin">
-      <label class="dropzone"><input id="adminMediaFiles" type="file" name="media[]" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" multiple><strong>📸 Photos ya videos choose karein</strong><small>Ek saath multiple files • har file 25 MB tak • total 30 memories</small><span id="adminUploadSelection" class="section-note">Abhi koi file select nahi hai</span></label>
+      <label class="dropzone"><input id="adminMediaFiles" type="file" name="media[]" accept="image/*,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/webm,audio/aac,audio/flac" multiple><strong>📸 Photos, videos ya audio choose karein</strong><small>Ek saath multiple files • har file 25 MB tak • total 30 memories</small><span id="adminUploadSelection" class="section-note">Abhi koi file select nahi hai</span></label>
       <div class="save-row"><button class="admin-btn primary" type="submit">Upload memories</button></div>
     </form>
     <?php if (!$media): ?><div class="section-note">No memories have been uploaded yet. Add the first photos or videos for visitors to discover.</div><?php else: ?>
     <div class="media-grid">
       <?php foreach ($media as $item): if (!is_array($item) || empty($item['file'])) continue; $file=basename((string)$item['file']); ?>
       <article class="media-item">
-        <?php if (($item['type'] ?? '') === 'video'): ?><video src="../birthday-media/<?= admin_h(rawurlencode($file)) ?>" controls muted preload="metadata"></video><?php else: ?><img src="../birthday-media/<?= admin_h(rawurlencode($file)) ?>" alt="<?= admin_h($item['caption'] ?? $item['name'] ?? 'Birthday memory') ?>" loading="lazy"><?php endif; ?>
+        <?php if (($item['type'] ?? '') === 'video'): ?><video src="../birthday-media/<?= admin_h(rawurlencode($file)) ?>" controls muted preload="metadata"></video><?php elseif (($item['type'] ?? '') === 'audio'): ?><div style="padding:14px;background:#f5eadc"><strong>🎵 Audio memory</strong><audio src="../birthday-media/<?= admin_h(rawurlencode($file)) ?>" controls preload="metadata" style="display:block;width:100%;margin-top:10px"></audio></div><?php else: ?><img src="../birthday-media/<?= admin_h(rawurlencode($file)) ?>" alt="<?= admin_h($item['caption'] ?? $item['name'] ?? 'Birthday memory') ?>" loading="lazy"><?php endif; ?>
         <div class="media-meta"><strong><?= admin_h($item['caption'] ?? $item['name'] ?? 'Birthday memory') ?></strong><small><?= admin_h($item['type'] ?? 'image') ?></small>
           <div class="media-tools"><button type="button" class="edit-caption" data-file="<?= admin_h($file) ?>" data-caption="<?= admin_h($item['caption'] ?? '') ?>">Edit caption</button><button type="button" class="delete-memory" data-file="<?= admin_h($file) ?>">Remove</button></div>
         </div>
