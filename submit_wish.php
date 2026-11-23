@@ -15,10 +15,30 @@ $now=time();$last=(int)($_SESSION['birthday_last_wish_at']??0);
 if($last>0&&($now-$last)<15){http_response_code(429);echo json_encode(['success'=>false,'error'=>'Please wait a few seconds before sending another wish.']);exit;}
 $uploadedMedia=[];$savedMediaFiles=[];
 if(isset($_FILES['attachments'])&&is_array($_FILES['attachments']['name'])){
- $names=$_FILES['attachments']['name'];$fileCount=count(array_filter($names,static fn($v)=>is_string($v)&&$v!==''));
+ $names=$_FILES['attachments']['name'];
+ $fileCount=count(array_filter($names,static fn($v)=>is_string($v)&&$v!==''));
  if($fileCount>3){http_response_code(422);echo json_encode(['success'=>false,'error'=>'Maximum 3 attachments are allowed.']);exit;}
- $mediaDir=__DIR__.'/wish-media';if(!is_dir($mediaDir)&&!mkdir($mediaDir,0755,true)){http_response_code(500);echo json_encode(['success'=>false,'error'=>'Media upload folder is unavailable.']);exit;}
- $guard="Options -Indexes\n<FilesMatch '(?i)^(\\.|.*\\.(php[0-9]?|phtml|phar|cgi|pl|py|sh|shtml))
+ $mediaDir=__DIR__.'/wish-media';
+ if(!is_dir($mediaDir)&&!mkdir($mediaDir,0755,true)){http_response_code(500);echo json_encode(['success'=>false,'error'=>'Media upload folder is unavailable.']);exit;}
+ $guard=implode(chr(10),['Options -Indexes',"<FilesMatch '(?i)^(\\.|.*\\.(php[0-9]?|phtml|phar|cgi|pl|py|sh|shtml))$'>",'Require all denied','</FilesMatch>','']);
+ if(!is_file($mediaDir.'/.htaccess'))file_put_contents($mediaDir.'/.htaccess',$guard,LOCK_EX);
+ $allowed=['image/jpeg'=>['jpg','image'],'image/png'=>['png','image'],'image/webp'=>['webp','image'],'image/gif'=>['gif','image'],'video/mp4'=>['mp4','video'],'video/webm'=>['webm','video'],'video/quicktime'=>['mov','video'],'audio/mpeg'=>['mp3','audio'],'audio/mp4'=>['m4a','audio'],'audio/x-m4a'=>['m4a','audio'],'audio/wav'=>['wav','audio'],'audio/x-wav'=>['wav','audio'],'audio/ogg'=>['ogg','audio'],'audio/webm'=>['weba','audio'],'application/pdf'=>['pdf','document']];
+ $finfo=new finfo(FILEINFO_MIME_TYPE);
+ for($i=0;$i<count($names);$i++){
+  $error=$_FILES['attachments']['error'][$i]??UPLOAD_ERR_NO_FILE;
+  if($error===UPLOAD_ERR_NO_FILE)continue;
+  if($error!==UPLOAD_ERR_OK){foreach($savedMediaFiles as $savedFile)@unlink($mediaDir.'/'.$savedFile);http_response_code(422);echo json_encode(['success'=>false,'error'=>'An attachment could not be uploaded. Please retry with smaller files.']);exit;}
+  $tmp=$_FILES['attachments']['tmp_name'][$i]??'';$size=(int)($_FILES['attachments']['size'][$i]??0);
+  if($size<1||$size>10*1024*1024){foreach($savedMediaFiles as $savedFile)@unlink($mediaDir.'/'.$savedFile);http_response_code(422);echo json_encode(['success'=>false,'error'=>'Each attachment must be 10 MB or smaller.']);exit;}
+  $mime=$finfo->file($tmp);
+  if(!isset($allowed[$mime])){foreach($savedMediaFiles as $savedFile)@unlink($mediaDir.'/'.$savedFile);http_response_code(422);echo json_encode(['success'=>false,'error'=>'Unsupported attachment type. Use a photo, video, audio file or PDF.']);exit;}
+  [$ext,$kind]=$allowed[$mime];$file=bin2hex(random_bytes(16)).'.'.$ext;
+  if(!move_uploaded_file($tmp,$mediaDir.'/'.$file)){foreach($savedMediaFiles as $savedFile)@unlink($mediaDir.'/'.$savedFile);http_response_code(500);echo json_encode(['success'=>false,'error'=>'Could not save an attachment. Please retry.']);exit;}
+  $savedMediaFiles[]=$file;$uploadedMedia[]=['file'=>$file,'type'=>$kind,'mime'=>$mime,'size'=>$size];
+ }
+}
+$wish=['name'=>$name,'message'=>$message,'pahchan'=>$pahchan,'timestamp'=>$now];
+if($uploadedMedia)$wish['media']=$uploadedMedia;
 $file=__DIR__.'/wishes.json';$handle=@fopen($file,'c+');
 if(!$handle||!flock($handle,LOCK_EX)){if(is_resource($handle))fclose($handle);http_response_code(500);echo json_encode(['success'=>false,'error'=>'Your wish could not be saved. Please try again.']);exit;}
 $contents=stream_get_contents($handle);$wishes=$contents!==false&&trim($contents)!==''?json_decode($contents,true):[];if(!is_array($wishes))$wishes=[];$wishes[]=$wish;if(count($wishes)>5000)$wishes=array_slice($wishes,-5000);
