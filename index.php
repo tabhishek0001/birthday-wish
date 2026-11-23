@@ -689,9 +689,9 @@ body.birthday-public .birthday-dock-launcher{background:linear-gradient(120deg,#
           <div class="wish-field-label">Aap Vaibhav ke kya lagte hain?</div>
           <div class="wish-relationship-choices" role="group" aria-label="Aapka rishta">
             <button type="button" class="wish-choice" data-relation="Mummy">Mummy</button><button type="button" class="wish-choice" data-relation="Papa">Papa</button>
-            <button type="button" class="wish-choice" data-relation="Dada-Dadi">Dada-Dadi</button><button type="button" class="wish-choice" data-relation="Nana-Nani">Nana-Nani</button>
-            <button type="button" class="wish-choice" data-relation="Mama-Mami">Mama-Mami</button><button type="button" class="wish-choice" data-relation="Chacha-Chachi">Chacha-Chachi</button>
-            <button type="button" class="wish-choice" data-relation="Bua-Fufa">Bua-Fufa</button><button type="button" class="wish-choice" data-relation="Friend">Friend</button>
+            <button type="button" class="wish-choice" data-relation="Dada-Dadi">Dada/Dadi</button><button type="button" class="wish-choice" data-relation="Nana-Nani">Nana/Nani</button>
+            <button type="button" class="wish-choice" data-relation="Mama-Mami">Mama/Mami</button><button type="button" class="wish-choice" data-relation="Chacha-Chachi">Chacha/Chachi</button>
+            <button type="button" class="wish-choice" data-relation="Bua-Fufa">Bua/Fufa</button><button type="button" class="wish-choice" data-relation="Friend">Friend</button>
           </div>
           <input type="hidden" name="pahchan" id="wishRelation" value="">
           <div class="wish-field-label">Ready-made wishes</div>
@@ -1714,11 +1714,11 @@ body.birthday-public .birthday-sound-control {
     "Audio memory sunne ke liye kholein":"ऑडियो सुनने के लिए खोलें",
     "Mummy":"मम्मी",
     "Papa":"पापा",
-    "Dada-Dadi":"दादा-दादी",
-    "Nana-Nani":"नाना-नानी",
-    "Mama-Mami":"मामा-मामी",
-    "Chacha-Chachi":"चाचा-चाची",
-    "Bua-Fufa":"बुआ-फूफा",
+    "Dada-Dadi":"दादा/दादी",
+    "Nana-Nani":"नाना/नानी",
+    "Mama-Mami":"मामा/मामी",
+    "Chacha-Chachi":"चाचा/चाची",
+    "Bua-Fufa":"बुआ/फूफा",
     "Friend":"दोस्त",
     "Aapka rishta":"आपका रिश्ता",
     "जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️":"जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️",
