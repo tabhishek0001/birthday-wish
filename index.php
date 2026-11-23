@@ -624,7 +624,7 @@ body.birthday-public .birthday-dock-launcher{background:linear-gradient(120deg,#
     </nav>
     <div class="birthday-hero__top"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> &nbsp; Aaj ka din hai hamare Kittu ke naam! &nbsp; <i class="fa-solid fa-cake-candles" aria-hidden="true"></i></div>
     <div class="birthday-hero__toys" aria-hidden="true"><i class="fa-solid fa-child" aria-hidden="true"></i> <i class="fa-solid fa-paw" aria-hidden="true"></i> <i class="fa-solid fa-car" aria-hidden="true"></i> <i class="fa-solid fa-star" aria-hidden="true"></i></div>
-        <h1><?= $escapeHtml($heroTitle); ?><h1><?= $escapeHtml($heroTitle); ?></h1><p><?= $escapeHtml($heroSubtitle); ?></p>
+    <h1><?= $escapeHtml($heroTitle); ?></h1><p><?= $escapeHtml($heroSubtitle); ?></p>
     <div class="birthday-age"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> <?= $escapeHtml($birthdayLabel); ?> <i class="fa-solid fa-gift" aria-hidden="true"></i></div>
 
     <a class="birthday-hero__button" href="#wishSection"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Vaibhav ko wish bhejein</a>
