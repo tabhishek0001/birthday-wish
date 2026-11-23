@@ -88,3 +88,67 @@ body[data-birthday-theme="sunset"] .surprise-card{background:linear-gradient(145
 /* Captions for memories in the public carousel */
 .featured-swiper .swiper-slide{position:relative}
 .memory-caption-overlay{position:absolute;left:12px;right:12px;bottom:12px;padding:11px 14px;border-radius:13px;background:rgba(45,37,34,.62);backdrop-filter:blur(10px);color:#fffaf5;font-size:12px;line-height:1.5;text-align:center;pointer-events:none}
+
+
+/* Public memory deck: keep card transforms inside a stable viewport and avoid page-width shifts. */
+html:has(.birthday-public),
+body.birthday-public {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip !important;
+}
+.birthday-public .featured-swiper {
+  position: relative;
+  display: block;
+  width: min(100%, 560px) !important;
+  max-width: calc(100vw - 32px) !important;
+  min-width: 0;
+  margin-inline: auto !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  contain: layout paint;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: contain;
+  border-radius: 26px !important;
+}
+.birthday-public .featured-swiper > .swiper-wrapper {
+  align-items: stretch;
+  will-change: transform;
+}
+.birthday-public .featured-swiper .swiper-slide {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.birthday-public .featured-swiper .swiper-slide > img,
+.birthday-public .featured-swiper .swiper-slide > video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.birthday-public .featured-swiper .swiper-slide-shadow,
+.birthday-public .featured-swiper .swiper-slide-shadow-cards {
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  .birthday-public .featured-swiper {
+    width: calc(100vw - 32px) !important;
+    max-width: 560px !important;
+    height: min(65svh, 520px) !important;
+    min-height: 320px !important;
+    border-radius: 22px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .birthday-public .featured-swiper,
+  .birthday-public .featured-swiper * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
