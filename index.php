@@ -569,42 +569,9 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     <a class="birthday-hero__button" href="#wishSection"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Vaibhav ko wish bhejein</a>
     <div class="birthday-hero__bottom" aria-hidden="true"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-gift"></i> <i class="fa-solid fa-face-grin-stars"></i> <i class="fa-solid fa-gift"></i> <i class="fa-solid fa-star"></i></div>
   </header>
-  <?php if ($celebrationTrailEnabled): ?>
-  <nav class="celebration-trail" aria-label="Celebration journey">
-    <span class="trail-label">A little birthday journey</span>
-    <a href="#birthdayMemories" data-trail-step="memories"><span>01</span> Memories</a>
-    <?php if ($showLetter): ?><a href="#secretLetterSection" data-trail-step="letter"><span>02</span> Love note</a><?php endif; ?>
-    <?php if ($showCake): ?><a href="#interactiveCakeSection" data-trail-step="cake"><span>03</span> Cake time</a><?php endif; ?>
-    <a href="#wishSection" data-trail-step="wish"><span>04</span> Send a wish</a>
-  </nav>
-  <?php endif; ?>
 
-  <!-- Vaibhav's little memory gallery -->
-
-
-<?php if ($showLetter): ?>
-<section class="birthday-surprise-section" id="secretLetterSection">
-  <div class="surprise-card letter-card">
-    <div class="surprise-kicker">Dil se ek chhota sa note</div>
-    <h2><?= $escapeHtml($letterHeading); ?></h2>
-    <button type="button" class="surprise-button" id="revealLetter" aria-expanded="false"><?= $escapeHtml($letterButton); ?></button>
-    <div class="surprise-reveal" id="letterContent" hidden><p><?= nl2br($escapeHtml($letterMessage)); ?></p></div>
-  </div>
-</section>
-<?php endif; ?>
-<?php if ($showCake): ?>
-<section class="birthday-surprise-section" id="interactiveCakeSection">
-  <div class="surprise-card cake-card">
-    <div class="surprise-kicker">Kittu ke liye ek special moment</div>
-    <h2><?= $escapeHtml($cakeHeading); ?></h2>
-    <div class="cake-illustration" id="cakeIllustration" aria-hidden="true"><i class="fa-solid fa-cake-candles"></i></div>
-    <p id="cakeMessage" class="cake-message" hidden><?= $escapeHtml($cakeMessage); ?></p>
-    <button type="button" class="surprise-button" id="makeWishBtn"><?= $escapeHtml($cakeButton); ?></button>
-  </div>
-</section>
-<?php endif; ?>
-
-<section class="wish-invite-section" id="wishSection">
+  <!-- Place the wish form directly below the birthday hero. -->
+  <section class="wish-invite-section" id="wishSection">
   <div class="wish-invite-card">
     <div class="wish-invite-kicker"><i class="fa-solid fa-heart" aria-hidden="true"></i> Chhote Kittu ke liye</div>
     <h2><?= $escapeHtml($wishFormHeading); ?></h2><p class="wish-invite-description"><?= $escapeHtml($wishFormDescription); ?></p>
@@ -652,6 +619,43 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
       <p id="wishFeedback" class="wish-feedback" role="status" aria-live="polite"></p>
     </form>  </div>
 </section>
+
+  <?php if ($celebrationTrailEnabled): ?>
+  <nav class="celebration-trail" aria-label="Celebration journey">
+    <span class="trail-label">A little birthday journey</span>
+    <a href="#birthdayMemories" data-trail-step="memories"><span>01</span> Memories</a>
+    <?php if ($showLetter): ?><a href="#secretLetterSection" data-trail-step="letter"><span>02</span> Love note</a><?php endif; ?>
+    <?php if ($showCake): ?><a href="#interactiveCakeSection" data-trail-step="cake"><span>03</span> Cake time</a><?php endif; ?>
+    <a href="#wishSection" data-trail-step="wish"><span>04</span> Send a wish</a>
+  </nav>
+  <?php endif; ?>
+
+  <!-- Vaibhav's little memory gallery -->
+
+
+<?php if ($showLetter): ?>
+<section class="birthday-surprise-section" id="secretLetterSection">
+  <div class="surprise-card letter-card">
+    <div class="surprise-kicker">Dil se ek chhota sa note</div>
+    <h2><?= $escapeHtml($letterHeading); ?></h2>
+    <button type="button" class="surprise-button" id="revealLetter" aria-expanded="false"><?= $escapeHtml($letterButton); ?></button>
+    <div class="surprise-reveal" id="letterContent" hidden><p><?= nl2br($escapeHtml($letterMessage)); ?></p></div>
+  </div>
+</section>
+<?php endif; ?>
+<?php if ($showCake): ?>
+<section class="birthday-surprise-section" id="interactiveCakeSection">
+  <div class="surprise-card cake-card">
+    <div class="surprise-kicker">Kittu ke liye ek special moment</div>
+    <h2><?= $escapeHtml($cakeHeading); ?></h2>
+    <div class="cake-illustration" id="cakeIllustration" aria-hidden="true"><i class="fa-solid fa-cake-candles"></i></div>
+    <p id="cakeMessage" class="cake-message" hidden><?= $escapeHtml($cakeMessage); ?></p>
+    <button type="button" class="surprise-button" id="makeWishBtn"><?= $escapeHtml($cakeButton); ?></button>
+  </div>
+</section>
+<?php endif; ?>
+
+
 
   
 
