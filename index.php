@@ -840,17 +840,27 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
         source.start(now); source.stop(now + 0.08);
       } catch (error) {}
     };
-    const memorySwiper = new Swiper(".featured-swiper", {
+    const memoryCarouselElement = document.querySelector(".featured-swiper");
+    let memoryCarouselInteracted = false;
+    const memorySwiper = memoryCarouselElement ? new Swiper(memoryCarouselElement, {
       effect: "cards",
-      cardsEffect: { slideShadows: true, rotate: true, perSlideOffset: 9, perSlideRotate: 2 },
+      // Smaller transforms and no per-slide shadow layers reduce compositing work on phones.
+      cardsEffect: { slideShadows: false, rotate: true, perSlideOffset: 6, perSlideRotate: 1.2 },
       grabCursor: true, centeredSlides: true, slidesPerView: 1, loop: true,
-      autoplay: { delay: 3200, disableOnInteraction: true, pauseOnMouseEnter: true },
+      speed: 420, preventInteractionOnTransition: true, resistanceRatio: 0.75,
+      autoplay: { delay: 4200, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true },
       pagination: { el: ".swiper-pagination", clickable: true },
       on: {
-        touchStart(swiper) { primeMemoryCardSound(); if (swiper.autoplay) swiper.autoplay.stop(); },
-        sliderFirstMove(swiper) { if (swiper.autoplay) swiper.autoplay.stop(); },
+        touchStart(swiper) { primeMemoryCardSound(); memoryCarouselInteracted = true; if (swiper.autoplay) swiper.autoplay.stop(); },
+        sliderFirstMove(swiper) { memoryCarouselInteracted = true; if (swiper.autoplay) swiper.autoplay.stop(); },
         slideChangeTransitionStart() { stopBirthdayMedia(); playMemoryCardSound(); }
       }
+    }) : null;
+    // Do not animate an off-screen carousel; resume only if the visitor has not taken control.
+    document.addEventListener("visibilitychange", () => {
+      if (!memorySwiper || !memorySwiper.autoplay) return;
+      if (document.hidden) memorySwiper.autoplay.stop();
+      else if (!memoryCarouselInteracted && memorySwiper.initialized) memorySwiper.autoplay.start();
     });
     const memoryCarousel = document.querySelector(".featured-swiper");
     if (memoryCarousel) {
