@@ -586,7 +586,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
     // Use a native, controlled memory viewer instead of GLightbox. This avoids
     // blank black overlays on mobile when a CDN/library fails to initialize.
-    const memoryLinks = Array.from(document.querySelectorAll("#birthdayMemories a.memory-lightbox-link"));
+    const memoryLinks = Array.from(document.querySelectorAll("#birthdayMemories a.memory-lightbox-link")).filter(link => !link.closest(".swiper-slide-duplicate"));
     const memoryViewer = document.createElement("div");
     memoryViewer.className = "memory-viewer";
     memoryViewer.hidden = true;
