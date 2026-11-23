@@ -571,7 +571,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
       </div>
       <?php if ($featuredImages || $birthdayMedia): ?>
       <div class="birthday-gallery__stage"><div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
-        <?php $featuredImageIndex = 0; foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="<?= $featuredImageIndex++ === 0 ? 'eager' : 'lazy' ?>" fetchpriority="<?= $featuredImageIndex === 1 ? 'high' : 'auto' ?>" decoding="async"></a></div><?php endforeach; ?>
+        <?php $featuredImageIndex = 0; foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="eager" fetchpriority="<?= $featuredImageIndex++ === 0 ? 'high' : 'auto' ?>" decoding="async"></a></div><?php endforeach; ?>
         <?php $memoryImagePriority = !$featuredImages; $memoryAudioIndex = 0; foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); if (!preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|flac)$/i', $mediaFile)) continue; $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); $memoryType = (string)($memory['type'] ?? 'image'); $memoryCaption = trim((string)($memory['caption'] ?? '')); ?>
           <div class="swiper-slide">
             <?php if ($memoryType === 'video'): ?>
@@ -579,7 +579,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
             <?php elseif ($memoryType === 'audio'): $memoryAudioIndex++; $audioId = 'birthday-memory-audio-' . $memoryAudioIndex; ?>
               <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="#<?= $escapeHtml($audioId) ?>" data-type="inline" data-gallery="vaibhav-memories" aria-label="Audio memory sunne ke liye kholein"><span class="memory-media-icon" aria-hidden="true"><i class="fa-solid fa-music"></i></span><strong>Audio memory</strong><span class="memory-media-open-hint">Tap to listen</span></a>
               <div id="<?= $escapeHtml($audioId) ?>" class="lightbox-inline-media"><div class="lightbox-inline-card"><span class="memory-media-icon"><i class="fa-solid fa-music"></i></span><strong><?= $escapeHtml($memoryCaption ?: 'Birthday audio memory') ?></strong><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="none"></audio></div></div>
-            <?php else: $imageLoading = $memoryImagePriority ? 'eager' : 'lazy'; $imageFetchPriority = $memoryImagePriority ? 'high' : 'auto'; $memoryImagePriority = false; ?>
+            <?php else: $imageLoading = 'eager'; $imageFetchPriority = $memoryImagePriority ? 'high' : 'auto'; $memoryImagePriority = false; ?>
               <a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memoryCaption ?: 'Vaibhav ki yaad') ?>" loading="<?= $imageLoading ?>" fetchpriority="<?= $imageFetchPriority ?>" decoding="async"></a>
             <?php endif; ?>
           </div>
@@ -869,15 +869,17 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
       } catch (error) {}
     };
     const memoryCarouselElement = document.querySelector(".featured-swiper");
-    let memoryCarouselInteracted = false;
+    let memoryResumeTimer = null;
     const memorySwiper = memoryCarouselElement ? new Swiper(memoryCarouselElement, {
-      // Original image-by-image carousel: one image at a time with a seamless loop.
+      // One image at a time; preload loop buffers to reduce visible wraparound flicker.
       effect: "slide",
       grabCursor: true,
       centeredSlides: true,
       slidesPerView: 1,
       loop: true,
-      // Never reject a finger gesture because an autoplay transition was in progress.
+      loopAdditionalSlides: 2,
+      loopPreventsSliding: false,
+      preloadImages: true,
       allowTouchMove: true,
       simulateTouch: true,
       followFinger: true,
@@ -890,26 +892,32 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
       resistance: true,
       resistanceRatio: 0.85,
       speed: 420,
-      autoplay: { delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true },
+      autoplay: { delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true, waitForTransition: true },
       pagination: { el: ".swiper-pagination", clickable: true },
       on: {
-        touchStart(swiper) { primeMemoryCardSound(); memoryCarouselInteracted = true; if (swiper.autoplay) swiper.autoplay.stop(); },
-        sliderFirstMove(swiper) { memoryCarouselInteracted = true; if (swiper.autoplay) swiper.autoplay.stop(); },
+        touchStart(swiper) {
+          primeMemoryCardSound();
+          if (memoryResumeTimer) clearTimeout(memoryResumeTimer);
+          if (swiper.autoplay) swiper.autoplay.stop();
+        },
+        touchEnd(swiper) {
+          if (memoryResumeTimer) clearTimeout(memoryResumeTimer);
+          memoryResumeTimer = setTimeout(() => {
+            if (!document.hidden && swiper.autoplay && swiper.initialized) swiper.autoplay.start();
+          }, 650);
+        },
         slideChangeTransitionStart() { stopBirthdayMedia(); playMemoryCardSound(); }
       }
     }) : null;
-    // Do not animate an off-screen carousel; resume only if the visitor has not taken control.
+    // Pause while the page is backgrounded, then resume automatic rotation on return.
     document.addEventListener("visibilitychange", () => {
       if (!memorySwiper || !memorySwiper.autoplay) return;
       if (document.hidden) memorySwiper.autoplay.stop();
-      else if (!memoryCarouselInteracted && memorySwiper.initialized) memorySwiper.autoplay.start();
+      else if (memorySwiper.initialized) memorySwiper.autoplay.start();
     });
     const memoryCarousel = document.querySelector(".featured-swiper");
     if (memoryCarousel) {
-      ["pointerdown", "focusin"].forEach(eventName => memoryCarousel.addEventListener(eventName, () => {
-        primeMemoryCardSound();
-        if (memorySwiper.autoplay) memorySwiper.autoplay.stop();
-      }, { passive: true }));
+      ["pointerdown", "focusin"].forEach(eventName => memoryCarousel.addEventListener(eventName, primeMemoryCardSound, { passive: true }));
       memoryCarousel.addEventListener("keydown", primeMemoryCardSound);
     }
 
