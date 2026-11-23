@@ -59,7 +59,7 @@ if ($shareImage === $publicBaseUrl . '/favicon.ico') {
         }
     }
 }
-$shareUrl = 'https://www.docsansar.com/birthday-wish/#wishSection';
+$shareUrl = 'https://www.docsansar.com/events/?event=vaibhav';
 $heroTitle = trim((string)($experienceSettings['title'] ?? '')) ?: "Happy Birthday {$displayName}!";
 $heroSubtitle = trim((string)($experienceSettings['subtitle'] ?? '')) ?: 'May your year ahead be full of success, peace, and unforgettable moments.';
 $modules = is_array($experienceConfig['modules'] ?? null) ? $experienceConfig['modules'] : [];
