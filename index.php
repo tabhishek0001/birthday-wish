@@ -864,7 +864,7 @@ function loadWishes() {
             $link.attr({href:"#"+inlineId,"data-type":"inline"}).append($("<span>").addClass("wish-media-label").html('<i class="fa-solid fa-music" aria-hidden="true"></i> Listen to audio'));
             $("<div>").attr("id",inlineId).addClass("lightbox-inline-media wish-inline-lightbox").append(
               $("<div>").addClass("lightbox-inline-card").append(
-                $("<span>").addClass("memory-media-icon").text("🎵"),
+                $("<span>").addClass("memory-media-icon").html('<i class="fa-solid fa-music" aria-hidden="true"></i>'),
                 $("<strong>").text("Voice / audio wish"),
                 $("<audio>").attr({src:url,controls:true,preload:"metadata"})
               )
