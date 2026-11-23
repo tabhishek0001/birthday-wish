@@ -143,14 +143,25 @@ unset($_SESSION['birthday_admin_notice']);
   <div class="eyebrow">Visitor experience</div>
   <h1>Experience</h1>
   <p class="lead">Control the words and interactive moments presented to visitors. Administrative labels remain in third-person context.</p>
-  <form method="post" action="save.php">
+  <form method="post" action="save.php" enctype="multipart/form-data">
     <input type="hidden" name="csrf" value="<?= admin_h($csrf) ?>"><input type="hidden" name="section" value="experience">
     <div class="admin-card"><h2>Hero</h2><div class="form-grid">
       <div class="field full"><label>Hero title</label><input name="experience[title]" maxlength="120" value="<?= admin_h(admin_v($experience,'title')) ?>"></div>
       <div class="field full"><label>Hero subtitle</label><textarea name="experience[subtitle]" maxlength="600"><?= admin_h(admin_v($experience,'subtitle')) ?></textarea></div>
       <div class="field full"><label>Scroll hint</label><input name="experience[scrollHint]" maxlength="140" value="<?= admin_h(admin_v($experience,'scrollHint')) ?>"></div>
       <div class="field full"><label>Meta description</label><textarea name="experience[metaDescription]" maxlength="220"><?= admin_h(admin_v($experience,'metaDescription')) ?></textarea></div>
-      <div class="field full"><label>WhatsApp / social preview image</label><select name="experience[ogImage]"><option value="">Auto: first uploaded photo</option><?php foreach($media as $ogItem): if(!is_array($ogItem)||($ogItem['type']??'video')==='video'||empty($ogItem['file'])) continue; $ogFile=basename((string)$ogItem['file']); if(!preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif)$/i',$ogFile)) continue; $ogValue='birthday-media/'.$ogFile; ?><option value="<?=admin_h($ogValue)?>" <?=admin_v($experience,'ogImage')===$ogValue?'selected':''?>><?=admin_h($ogItem['caption']??$ogItem['name']??$ogFile)?></option><?php endforeach; ?></select><small>Upload a photo in Memories first, then choose it here for WhatsApp and Facebook previews.</small></div>
+      <div class="field full"><label>WhatsApp / Facebook / social preview image (OG image)</label>
+        <input type="file" name="og_image_file" id="ogImageUpload" accept="image/jpeg,image/png,image/webp" style="padding:10px">
+        <small>Upload a dedicated image directly from your device. Recommended size: 1200 × 630 px; JPEG, PNG or WebP; maximum 8 MB.</small>
+        <div id="ogImagePreviewWrap" style="display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <?php $currentOg=admin_v($experience,'ogImage'); $currentOgUrl=''; if($currentOg!==''&&preg_match('#^birthday-media/[a-f0-9]{32}\\.(?:jpg|jpeg|png|webp|gif)$#i',$currentOg)&&is_file(dirname(__DIR__).'/'.$currentOg))$currentOgUrl='../'.admin_h($currentOg); elseif(filter_var($currentOg,FILTER_VALIDATE_URL)&&strtolower((string)(parse_url($currentOg,PHP_URL_SCHEME)?:''))==='https')$currentOgUrl=$currentOg; ?>
+          <img id="ogImagePreview" src="<?=admin_h($currentOgUrl)?>" alt="Current social preview image" style="<?= $currentOgUrl!==''?'':'display:none;' ?>width:min(100%,320px);aspect-ratio:1200/630;object-fit:cover;border:1px solid #e5dcd4;border-radius:12px;background:#f4eee8">
+          <span id="ogImagePreviewHint" class="section-note" style="margin:0"><?= $currentOgUrl!==''?'Current social preview image':'No dedicated image selected. The page will use its default image.' ?></span>
+        </div>
+        <label style="margin-top:16px">Or choose an image already in Memories</label>
+        <select name="experience[ogImage]" id="ogImageExisting"><option value="">Use uploaded image above / automatic default</option><?php foreach($media as $ogItem): if(!is_array($ogItem)||($ogItem['type']??'video')==='video'||empty($ogItem['file'])) continue; $ogFile=basename((string)$ogItem['file']); if(!preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif)$/i',$ogFile)) continue; $ogValue='birthday-media/'.$ogFile; ?><option value="<?=admin_h($ogValue)?>" <?=admin_v($experience,'ogImage')===$ogValue?'selected':''?>><?=admin_h($ogItem['caption']??$ogItem['name']??$ogFile)?></option><?php endforeach; ?></select>
+        <small>A newly uploaded image takes priority over the existing Memories selection. Leave both empty to use the automatic default.</small>
+      </div>
       <div class="field full"><label>Public share URL</label><input type="url" name="experience[shareUrl]" maxlength="250" value="<?= admin_h(admin_v($experience,'shareUrl')) ?>"></div>
     </div></div>
     <div class="admin-card"><h2>Wishes</h2><div class="form-grid">
@@ -336,6 +347,26 @@ unset($_SESSION['birthday_admin_notice']);
      const r=await fetch('../delete-media.php',{method:'POST',body:fd});const j=await r.json();
      if(j.success){location.reload();}else{alert(j.error||'Could not remove the memory.');}
    });
+ });
+})();
+</script>
+<script>
+(function(){
+ const input=document.getElementById('ogImageUpload'), preview=document.getElementById('ogImagePreview'), hint=document.getElementById('ogImagePreviewHint'), existing=document.getElementById('ogImageExisting');
+ if(!input||!preview)return;
+ let objectUrl='';
+ input.addEventListener('change',function(){
+   if(objectUrl){URL.revokeObjectURL(objectUrl);objectUrl='';}
+   const file=this.files&&this.files[0];
+   if(!file){return;}
+   if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>8*1024*1024){this.value='';hint.textContent='Choose a JPEG, PNG or WebP image up to 8 MB.';return;}
+   objectUrl=URL.createObjectURL(file);preview.src=objectUrl;preview.style.display='block';hint.textContent=file.name+' — will be used as the social preview image.';
+   if(existing)existing.value='';
+ });
+ if(existing)existing.addEventListener('change',function(){
+   if(input.files&&input.files.length){input.value='';}
+   const option=this.options[this.selectedIndex];
+   if(this.value){preview.src='../'+this.value;preview.style.display='block';hint.textContent='Selected from Memories: '+option.text;}
  });
 })();
 </script>
