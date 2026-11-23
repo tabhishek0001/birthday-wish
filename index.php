@@ -178,7 +178,7 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
 <?php if ($showLetter): ?>
 <section class="birthday-surprise-section" id="secretLetterSection" data-aos="fade-up">
   <div class="surprise-card letter-card">
-    <div class="surprise-kicker">A note from the heart</div>
+    <div class="surprise-kicker">Dil se ek chhota sa note</div>
     <h2><?= $escapeHtml($letterHeading); ?></h2>
     <button type="button" class="surprise-button" id="revealLetter" aria-expanded="false"><?= $escapeHtml($letterButton); ?></button>
     <div class="surprise-reveal" id="letterContent" hidden><p><?= nl2br($escapeHtml($letterMessage)); ?></p></div>
@@ -188,7 +188,7 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
 <?php if ($showCake): ?>
 <section class="birthday-surprise-section" id="interactiveCakeSection" data-aos="fade-up">
   <div class="surprise-card cake-card">
-    <div class="surprise-kicker">A moment just for you</div>
+    <div class="surprise-kicker">Kittu ke liye ek special moment</div>
     <h2><?= $escapeHtml($cakeHeading); ?></h2>
     <div class="cake-illustration" id="cakeIllustration" aria-hidden="true">🎂</div>
     <p id="cakeMessage" class="cake-message" hidden><?= $escapeHtml($cakeMessage); ?></p>
@@ -241,10 +241,10 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
 <?php if ($showFinal): ?>
 <section class="birthday-surprise-section" id="finalCelebrationSection" data-aos="fade-up">
   <div class="surprise-card final-card">
-    <div class="surprise-kicker">With all the good wishes</div>
+    <div class="surprise-kicker">Sabki taraf se dher saara pyaar</div>
     <h2><?= $escapeHtml($finalHeading); ?></h2>
     <p><?= $escapeHtml($finalMessage); ?></p>
-    <button type="button" class="surprise-button" id="celebrateAgain">A little more celebration ✨</button>
+    <button type="button" class="surprise-button" id="celebrateAgain">Chalo aur celebrate karein ✨</button>
   </div>
 </section>
 <?php endif; ?>
@@ -450,7 +450,7 @@ function loadWishes() {
   }).fail(function () {
     $("#wishBoard").html(`
       <div class="text-center text-red-500 p-4">
-        Please try again later 😁.
+        Abhi wishes load nahi ho paayi. Thodi der baad try kijiye 🙂.
       </div>
     `);
   });
@@ -479,7 +479,7 @@ function loadWishes() {
   if (makeWishBtn) makeWishBtn.addEventListener('click', () => {
     document.getElementById('cakeIllustration').classList.add('candles-out');
     document.getElementById('cakeMessage').hidden = false;
-    makeWishBtn.textContent = 'Your wish is on its way ✨';
+    makeWishBtn.textContent = 'Kittu ke liye dher saari wishes! ✨';
     makeWishBtn.disabled = true;
     if (typeof confettiInstance === 'function') confettiInstance({particleCount: 90, spread: 75, origin: {y: 0.68}});
   });
