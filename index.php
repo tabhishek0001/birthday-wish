@@ -905,22 +905,12 @@ function loadWishes() {
     wishAttachments.addEventListener("change",()=>{const files=Array.from(wishAttachments.files||[]);wishAttachmentList.innerHTML="";wishAttachmentList.classList.toggle("has-files",files.length>0);if(files.length>3||files.some(file=>file.size>10*1024*1024)){wishAttachmentList.textContent="Maximum 3 files choose karein; har file 10 MB se chhoti honi chahiye.";wishAttachmentList.classList.add("has-error");wishAttachments.value="";return;}wishAttachmentList.classList.remove("has-error");files.forEach(file=>{const tag=document.createElement("span");tag.className="wish-attachment-file";const icon=document.createElement("b");icon.innerHTML=file.type.startsWith("image/")?'<i class="fa-solid fa-image" aria-hidden="true"></i>':file.type.startsWith("video/")?'<i class="fa-solid fa-video" aria-hidden="true"></i>':file.type.startsWith("audio/")?'<i class="fa-solid fa-music" aria-hidden="true"></i>':'<i class="fa-solid fa-file" aria-hidden="true"></i>';const name=document.createElement("span");name.textContent=file.name;tag.append(icon,name);wishAttachmentList.appendChild(tag);});});
     document.querySelectorAll("[data-wish-suggestion]").forEach(button=>button.addEventListener("click",()=>{wishMessage.value=button.dataset.wishSuggestion||defaultWish;document.querySelectorAll("[data-wish-suggestion]").forEach(item=>item.classList.toggle("selected",item===button));}));
     document.querySelectorAll("[data-relation]").forEach(button=>{button.setAttribute("aria-pressed","false");button.addEventListener("click",()=>{const relation=button.dataset.relation||"";wishRelation.value=wishRelation.value===relation?"":relation;document.querySelectorAll("[data-relation]").forEach(item=>{const selected=item===button&&wishRelation.value!=="";item.classList.toggle("selected",selected);item.setAttribute("aria-pressed",selected?"true":"false");});});});
-    let allowPrefilledWishOnce=false;
     wishForm.on("submit",function(e){
-      if(allowPrefilledWishOnce){allowPrefilledWishOnce=false;return;}
       const senderName=wishName.value.trim();
-      const messageText=wishMessage.value.trim();
-      if(senderName.toLowerCase()==="guest"){
+      if(!senderName || ["guest","aapka naam","your name"].includes(senderName.toLowerCase())){
         e.preventDefault();e.stopImmediatePropagation();
-        Swal.fire({icon:"info",title:"Apna naam likhna na bhoolein",text:"Naam mein abhi sample “Guest” bhara hua hai. Kripya apna naam likhkar phir wish bhejein.",confirmButtonText:"Naam edit karein",confirmButtonColor:"#f47e70",customClass:{popup:"birthday-swal-popup"},buttonsStyling:true}).then(()=>wishName.focus());
+        Swal.fire({icon:"info",title:"Apna naam likhna na bhoolein",text:"Kripya apna naam likhkar phir wish bhejein.",confirmButtonText:"Naam edit karein",confirmButtonColor:"#f47e70",customClass:{popup:"birthday-swal-popup"},buttonsStyling:true}).then(()=>wishName.focus());
         return;
-      }
-      if(messageText===defaultWish){
-        e.preventDefault();e.stopImmediatePropagation();
-        Swal.fire({icon:"question",title:"Sample wish hi bhejni hai?",text:"Message mein abhi pre-filled birthday wish hai. Aap ise edit kar sakte hain, ya isi wish ko bhej sakte hain.",showCancelButton:true,confirmButtonText:"Edit wish",cancelButtonText:"Isi ko bhejein",confirmButtonColor:"#f47e70",cancelButtonColor:"#e5a84b",reverseButtons:true,customClass:{popup:"birthday-swal-popup"}}).then(result=>{
-          if(result.isConfirmed){wishMessage.focus();wishMessage.scrollIntoView({behavior:"smooth",block:"center"});return;}
-          if(result.dismiss===Swal.DismissReason.cancel){allowPrefilledWishOnce=true;wishForm.trigger("submit");}
-        });
       }
     });
     wishForm.on("submit",function(e){e.preventDefault();if(!wishName.value.trim()||wishName.value.trim().toLowerCase()==="aapka naam"){wishFeedback.textContent="Kripya ‘Aapka naam’ ki jagah apna naam likhein.";wishName.focus();return;}if(!wishMessage.value.trim()){wishFeedback.textContent="Ek chhoti si wish chuniye ya likh dijiye.";wishMessage.focus();return;}if(wishAttachments.files.length>3||Array.from(wishAttachments.files).some(file=>file.size>10*1024*1024)){wishFeedback.textContent="Maximum 3 attachments aur 10 MB per file allowed hai.";return;}
