@@ -509,6 +509,27 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
  .birthday-hero h1{margin-top:9px!important}
 }
 </style>
+
+<style id="vaibhav-playing-card-memories">
+.birthday-hero .birthday-gallery{width:min(100%,390px)!important;margin:0 auto 12px!important;padding:0!important;overflow:visible!important}
+.birthday-hero .birthday-section-heading{margin:0 auto 9px!important}
+.birthday-hero .birthday-section-heading h2{font-size:clamp(14px,2vw,17px)!important;letter-spacing:.02em!important}
+.birthday-hero .birthday-gallery__frame{position:relative!important;width:min(78vw,310px)!important;height:clamp(205px,28vw,270px)!important;min-height:205px!important;margin:0 auto!important;overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;isolation:isolate}
+.birthday-hero .birthday-gallery__frame:before,.birthday-hero .birthday-gallery__frame:after{content:"";position:absolute;inset:8px -7px -5px;z-index:-2;border-radius:23px;background:linear-gradient(145deg,#fffdf7,#f4e6d2);border:1px solid rgba(145,105,66,.18);box-shadow:0 8px 18px rgba(74,51,28,.10);transform:rotate(5deg)}
+.birthday-hero .birthday-gallery__frame:after{inset:4px -3px -3px;z-index:-1;transform:rotate(-3deg);background:linear-gradient(145deg,#fff,#f8efdf)}
+.birthday-hero .birthday-gallery__frame .swiper-wrapper{align-items:stretch}
+.birthday-hero .birthday-gallery__frame .swiper-slide{width:100%!important;height:100%!important;overflow:hidden;border:6px solid #fffdf8;border-radius:22px;background:#fffdf8;box-shadow:0 15px 34px rgba(74,51,28,.22);box-sizing:border-box}
+.birthday-hero .birthday-gallery__frame .swiper-slide>a.memory-lightbox-link{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:15px;background:#f5eadb}
+.birthday-hero .birthday-gallery__frame .swiper-slide img,.birthday-hero .birthday-gallery__frame .swiper-slide video{display:block;width:100%!important;height:100%!important;max-height:none!important;object-fit:cover!important;border-radius:0!important}
+.birthday-hero .birthday-gallery__frame .swiper-slide .memory-media-icon{font-size:42px}
+.birthday-hero .birthday-gallery__frame .swiper-pagination{bottom:-23px!important;top:auto!important}
+.birthday-hero .birthday-gallery__frame .swiper-pagination-bullet{width:6px;height:6px;margin:0 4px!important;background:#b58b63!important;opacity:.42;box-shadow:none}
+.birthday-hero .birthday-gallery__frame .swiper-pagination-bullet-active{width:17px;border-radius:8px;opacity:1;background:#94643d!important}
+.birthday-hero .birthday-gallery__frame .memory-caption-overlay{display:none!important}
+.birthday-hero .birthday-gallery__empty{width:min(100%,310px)!important}
+@media(max-width:640px){.birthday-hero .birthday-gallery{margin-bottom:9px!important}.birthday-hero .birthday-gallery__frame{width:min(72vw,255px)!important;height:clamp(190px,27svh,230px)!important;min-height:190px!important}.birthday-hero .birthday-gallery__frame .swiper-slide{border-width:5px;border-radius:19px}.birthday-hero .birthday-gallery__frame .swiper-slide>a.memory-lightbox-link{border-radius:14px}.birthday-hero .birthday-gallery__frame:before{border-radius:20px}}
+@media(prefers-reduced-motion:reduce){.birthday-hero .birthday-gallery__frame .swiper-slide{transition:none!important}}
+</style>
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" data-decor-enabled="<?= $floatingDecorEnabled ? 'true' : 'false' ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -532,7 +553,6 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
             <?php else: ?>
               <a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memoryCaption ?: 'Vaibhav ki yaad') ?>" loading="lazy"></a>
             <?php endif; ?>
-            <?php if ($memoryCaption !== ''): ?><div class="memory-caption-overlay"><?= $escapeHtml($memoryCaption); ?></div><?php endif; ?>
           </div>
         <?php endforeach; ?>
       </div><div class="swiper-pagination"></div></div>
@@ -789,21 +809,52 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
         }
       });
     };
+    let memorySoundContext = null, memorySoundBuffer = null, memorySoundReady = false;
+    const primeMemoryCardSound = () => {
+      if (memorySoundReady || memorySoundContext) return;
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+      try {
+        memorySoundContext = new AudioContextClass();
+        const count = Math.floor(memorySoundContext.sampleRate * 0.075);
+        memorySoundBuffer = memorySoundContext.createBuffer(1, count, memorySoundContext.sampleRate);
+        const data = memorySoundBuffer.getChannelData(0);
+        for (let i = 0; i < count; i++) { const fade = 1 - i / count; data[i] = (Math.random() * 2 - 1) * fade * fade; }
+        memorySoundContext.resume().then(() => { memorySoundReady = true; }).catch(() => {});
+      } catch (error) { memorySoundContext = null; }
+    };
+    const playMemoryCardSound = () => {
+      if (!memorySoundReady || !memorySoundContext || !memorySoundBuffer) return;
+      try {
+        const now = memorySoundContext.currentTime, source = memorySoundContext.createBufferSource();
+        const filter = memorySoundContext.createBiquadFilter(), gain = memorySoundContext.createGain();
+        source.buffer = memorySoundBuffer; filter.type = "lowpass";
+        filter.frequency.setValueAtTime(1500, now); filter.frequency.exponentialRampToValueAtTime(520, now + 0.065);
+        gain.gain.setValueAtTime(0.0001, now); gain.gain.exponentialRampToValueAtTime(0.075, now + 0.008);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.075);
+        source.connect(filter); filter.connect(gain); gain.connect(memorySoundContext.destination);
+        source.start(now); source.stop(now + 0.08);
+      } catch (error) {}
+    };
     const memorySwiper = new Swiper(".featured-swiper", {
-      loop: true,
-      autoplay: { delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true },
+      effect: "cards",
+      cardsEffect: { slideShadows: true, rotate: true, perSlideOffset: 9, perSlideRotate: 2 },
+      grabCursor: true, centeredSlides: true, slidesPerView: 1, loop: true,
+      autoplay: { delay: 3200, disableOnInteraction: true, pauseOnMouseEnter: true },
       pagination: { el: ".swiper-pagination", clickable: true },
       on: {
-        touchStart(swiper) { if (swiper.autoplay) swiper.autoplay.stop(); },
+        touchStart(swiper) { primeMemoryCardSound(); if (swiper.autoplay) swiper.autoplay.stop(); },
         sliderFirstMove(swiper) { if (swiper.autoplay) swiper.autoplay.stop(); },
-        slideChangeTransitionStart() { stopBirthdayMedia(); }
+        slideChangeTransitionStart() { stopBirthdayMedia(); playMemoryCardSound(); }
       }
     });
     const memoryCarousel = document.querySelector(".featured-swiper");
     if (memoryCarousel) {
       ["pointerdown", "focusin"].forEach(eventName => memoryCarousel.addEventListener(eventName, () => {
+        primeMemoryCardSound();
         if (memorySwiper.autoplay) memorySwiper.autoplay.stop();
       }, { passive: true }));
+      memoryCarousel.addEventListener("keydown", primeMemoryCardSound);
     }
 
     // Capture media play events, including media created inside GLightbox.
