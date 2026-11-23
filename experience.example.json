@@ -1,39 +1,39 @@
 {
   "person": {
-    "name": "Someone special",
-    "nickname": "",
-    "birthday": "",
-    "pronoun": "they"
+    "name": "Vaibhav",
+    "nickname": "Kittu",
+    "birthday": "2024-11-23",
+    "pronoun": "he"
   },
   "sender": {
-    "name": "Someone who cares"
+    "name": "Family"
   },
   "experience": {
-    "title": "A day made just for you",
-    "subtitle": "A little celebration filled with love, laughter and memories.",
-    "formHeading": "Leave a little happiness",
-    "formDescription": "Share a note, a memory or a wish.",
-    "shareUrl": "",
-    "wishBoardHeading": "A little love from everyone",
-    "namePlaceholder": "Your name",
-    "relationshipPlaceholder": "How do you know them? (optional)",
-    "messagePlaceholder": "Write a warm wish or a favourite memory…",
-    "submitLabel": "Send your wish",
-    "scrollHint": "Stay a little, leave a wish, and enjoy the memories.",
-    "metaDescription": "",
-    "letterHeading": "A little note for you",
-    "letterMessage": "Some people make ordinary days feel special. Today is a chance to celebrate everything that makes you wonderful.",
-    "letterButton": "Open your little letter",
-    "cakeHeading": "Make a little wish",
-    "cakeMessage": "Take a breath, make a wish, and keep a little room for magic.",
-    "cakeButton": "Blow out the candles",
-    "finalHeading": "Here is to everything ahead",
-    "finalMessage": "May the next chapter bring kind people, beautiful surprises and moments worth remembering.",
+    "title": "Happy 2nd Birthday, Vaibhav!",
+    "subtitle": "Hamare chhote superstar ke liye dher saara pyaar, masti aur khushiyan!",
+    "formHeading": "Vaibhav ke liye ek pyari si wish bhejein",
+    "formDescription": "Bas apna naam likhiye, ek wish chuniye aur bhej dijiye. ❤️",
+    "shareUrl": "https://www.docsansar.com/birthday-wish/",
+    "wishBoardHeading": "Kittu ke liye sabki pyaari wishes 💛",
+    "namePlaceholder": "Aapka naam",
+    "relationshipPlaceholder": "Aap Vaibhav ke kya lagte hain?",
+    "messagePlaceholder": "Vaibhav ke liye apni wish likhiye…",
+    "submitLabel": "Wish bhej dein ❤️",
+    "scrollHint": "Photos dekhiye, wish bhejiye aur khushiyan baantiye!",
+    "metaDescription": "Vaibhav ka 2nd birthday! Kittu ko Hinglish mein pyaari si birthday wish bhejein.",
+    "letterHeading": "Hamare Kittu ke naam ek pyara sa note",
+    "letterMessage": "Hamare pyare Vaibhav, tumhari hasi se ghar mein raunak aa jaati hai. Hamesha haste-khelte raho, khoob khelo aur sabka pyaar paate raho. Dher saara pyaar, Kittu!",
+    "letterButton": "Kittu ke liye note kholo 💌",
+    "cakeHeading": "Kittu ke liye cake time!",
+    "cakeMessage": "2 saal ke ho gaye hamare chhote champion! Chalo candles bujhaate hain aur dher saari taaliyan bajaate hain!",
+    "cakeButton": "Candles bujhao! 🎂",
+    "finalHeading": "Hamare chhote champion ke naam!",
+    "finalMessage": "Bhagwan tumhe sehat, khushiyan aur dher saara pyaar de. Aise hi muskurate raho, Vaibhav!",
     "musicUrl": ""
   },
   "theme": {
-    "preset": "rose",
-    "accent": "#b98990"
+    "preset": "sunshine",
+    "accent": "#ffb84d"
   },
   "modules": {
     "letter": true,
