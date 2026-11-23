@@ -345,6 +345,35 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 @media(prefers-reduced-motion:reduce){.wish-extra-options>summary,.wish-extra-options>summary::after{transition:none}.wish-extra-options[open]>.wish-field-label:first-of-type,.wish-extra-options[open] .wish-relationship-choices,.wish-extra-options[open] .wish-suggestions{animation:none}}
 </style>
 
+<style id="wish-choice-upload-visual-feedback">
+/* Make relationship choices visibly selected on touch screens and accessible to assistive technology. */
+.wish-relationship-choices{gap:9px!important}
+.wish-relationship-choices .wish-choice{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px!important;padding:10px 14px!important;border:1.5px solid #ead9c5!important;background:#fffaf2!important;color:#765c48!important;font-weight:800!important;box-shadow:0 2px 0 #f1e5d6!important;transition:background .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease,transform .16s ease!important;-webkit-tap-highlight-color:transparent}
+.wish-relationship-choices .wish-choice:active{transform:scale(.94)!important}
+.wish-relationship-choices .wish-choice.selected,.wish-relationship-choices .wish-choice[aria-pressed="true"]{background:linear-gradient(135deg,#ffcf70,#ffad67)!important;border:2px solid #dc813a!important;color:#573313!important;box-shadow:0 0 0 3px #ffcf704d,0 3px 0 #d88a45!important;transform:translateY(-1px)}
+.wish-relationship-choices .wish-choice.selected::after,.wish-relationship-choices .wish-choice[aria-pressed="true"]::after{content:"✓";display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#fff8e8;color:#9a5a1c;font-size:12px;font-weight:950}
+.wish-relationship-choices .wish-choice:focus-visible{outline:3px solid #ffb84d;outline-offset:3px}
+.wish-attachment-box{padding:15px!important;border:1px solid #eedcc6!important;border-radius:20px!important;background:linear-gradient(145deg,#fffaf2,#fff4e5)!important;box-shadow:0 7px 20px #805b3010}
+.wish-attachment-heading{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.wish-attachment-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:#ffebc9;font-size:19px}
+.wish-attachment-title{display:block;color:#70513b;font-size:14px;font-weight:900}
+.wish-attachment-heading small{display:block;margin-top:3px;color:#9b8877;font-size:11px}
+.wish-upload-trigger{display:flex;align-items:center;gap:12px;width:100%;min-height:68px;padding:11px 14px;border:1.5px dashed #dfa96e;border-radius:15px;background:#fffdf9;color:#805638;cursor:pointer;transition:border-color .18s ease,background .18s ease,transform .18s ease;-webkit-tap-highlight-color:transparent}
+.wish-upload-trigger:active{transform:scale(.985);background:#fff3df}
+.wish-upload-trigger:focus-within,.wish-upload-trigger:focus-visible{outline:3px solid #ffbf68;outline-offset:3px}
+.wish-upload-symbol{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border-radius:12px;background:#ffedce;color:#9c632c;font-size:25px;font-weight:500}
+.wish-upload-trigger strong{display:block;font-size:13px;font-weight:900}
+.wish-upload-trigger small{display:block;margin-top:3px;color:#a08b79;font-size:11px}
+.wish-attachment-input{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.wish-attachment-input:focus-visible+.wish-attachment-hint{outline:2px solid #ffb84d}
+.wish-attachment-hint{display:block;margin:9px 2px 0!important;color:#968372!important;font-size:10px!important;line-height:1.5}
+.wish-attachment-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.wish-attachment-file{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:7px 10px!important;border:1px solid #ead7bd;background:#fff!important;color:#76583e!important;border-radius:12px!important;font-size:11px!important;font-weight:750;box-shadow:0 2px 5px #805b300c}
+.wish-attachment-file span{overflow-wrap:anywhere}
+.wish-attachment-list.has-error{padding:9px 11px;border-radius:10px;background:#fff0ed;color:#b4473c;font-size:12px}
+@media(prefers-reduced-motion:reduce){.wish-relationship-choices .wish-choice,.wish-upload-trigger{transition:none!important}}
+</style>
+
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" data-decor-enabled="<?= $floatingDecorEnabled ? 'true' : 'false' ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -444,9 +473,16 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
         <textarea id="wishMessage" name="message" required maxlength="1200" rows="2" class="wish-input wish-message-input">Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️</textarea>
       </div>
       <div class="wish-attachment-box">
-        <label class="wish-field-label" for="wishAttachments">Photo, video ya voice wish (optional)</label>
-        <input id="wishAttachments" type="file" name="attachments[]" multiple accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/webm,application/pdf" class="wish-attachment-input">
-        <small id="wishAttachmentHint">Maximum 3 files • 10 MB each • Photos, videos, audio or PDF</small>
+        <div class="wish-attachment-heading">
+          <span class="wish-attachment-icon" aria-hidden="true">📎</span>
+          <span><span class="wish-attachment-title">Photo, video ya voice wish</span><small>Optional · Apni koi pyari memory share karein</small></span>
+        </div>
+        <label class="wish-upload-trigger" for="wishAttachments">
+          <span class="wish-upload-symbol" aria-hidden="true">＋</span>
+          <span><strong>Files choose karein</strong><small>Gallery, video ya audio select karein</small></span>
+        </label>
+        <input id="wishAttachments" type="file" name="attachments[]" multiple accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/webm,application/pdf" class="wish-attachment-input" aria-describedby="wishAttachmentHint">
+        <small id="wishAttachmentHint" class="wish-attachment-hint">Maximum 3 files · 10 MB each · Photo, video, audio or PDF</small>
         <div id="wishAttachmentList" class="wish-attachment-list" aria-live="polite"></div>
       </div>
       <p class="wish-privacy-note">Aapki wish aur attached media birthday page par dikh sakte hain. Sirf wahi share karein jo sabke saath share karna theek ho. ❤️</p>
@@ -747,9 +783,9 @@ function loadWishes() {
     const wishForm=$("#wishForm"), wishName=document.getElementById("wishSenderName"), wishMessage=document.getElementById("wishMessage"), wishRelation=document.getElementById("wishRelation"), wishFeedback=document.getElementById("wishFeedback"), wishSubmit=document.getElementById("wishSubmitButton");
     const wishAttachments=document.getElementById("wishAttachments"), wishAttachmentList=document.getElementById("wishAttachmentList"), defaultWish="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️";
     try{const saved=localStorage.getItem("vaibhavWishSenderName");if(saved&& !["aapka naam","guest","your name"].includes(saved.trim().toLowerCase())){wishName.value=saved;document.getElementById("wishNameHint").textContent="Your previous name is remembered on this device. You can change it anytime.";}}catch(e){}
-    wishAttachments.addEventListener("change",()=>{const files=Array.from(wishAttachments.files||[]);wishAttachmentList.innerHTML="";if(files.length>3||files.some(file=>file.size>10*1024*1024)){wishAttachmentList.textContent="Maximum 3 files choose karein; har file 10 MB se chhoti honi chahiye.";wishAttachments.value="";return;}files.forEach(file=>{const tag=document.createElement("span");tag.textContent="✓ "+file.name;wishAttachmentList.appendChild(tag);});});
+    wishAttachments.addEventListener("change",()=>{const files=Array.from(wishAttachments.files||[]);wishAttachmentList.innerHTML="";wishAttachmentList.classList.toggle("has-files",files.length>0);if(files.length>3||files.some(file=>file.size>10*1024*1024)){wishAttachmentList.textContent="Maximum 3 files choose karein; har file 10 MB se chhoti honi chahiye.";wishAttachmentList.classList.add("has-error");wishAttachments.value="";return;}wishAttachmentList.classList.remove("has-error");files.forEach(file=>{const tag=document.createElement("span");tag.className="wish-attachment-file";const icon=document.createElement("b");icon.textContent=file.type.startsWith("image/")?"🖼️":file.type.startsWith("video/")?"🎬":file.type.startsWith("audio/")?"🎵":"📄";const name=document.createElement("span");name.textContent=file.name;tag.append(icon,name);wishAttachmentList.appendChild(tag);});});
     document.querySelectorAll("[data-wish-suggestion]").forEach(button=>button.addEventListener("click",()=>{wishMessage.value=button.dataset.wishSuggestion||defaultWish;document.querySelectorAll("[data-wish-suggestion]").forEach(item=>item.classList.toggle("selected",item===button));}));
-    document.querySelectorAll("[data-relation]").forEach(button=>button.addEventListener("click",()=>{const relation=button.dataset.relation||"";wishRelation.value=wishRelation.value===relation?"":relation;document.querySelectorAll("[data-relation]").forEach(item=>item.classList.toggle("selected",item===button&&wishRelation.value!==""));}));
+    document.querySelectorAll("[data-relation]").forEach(button=>{button.setAttribute("aria-pressed","false");button.addEventListener("click",()=>{const relation=button.dataset.relation||"";wishRelation.value=wishRelation.value===relation?"":relation;document.querySelectorAll("[data-relation]").forEach(item=>{const selected=item===button&&wishRelation.value!=="";item.classList.toggle("selected",selected);item.setAttribute("aria-pressed",selected?"true":"false");});});});
     let allowPrefilledWishOnce=false;
     wishForm.on("submit",function(e){
       if(allowPrefilledWishOnce){allowPrefilledWishOnce=false;return;}
