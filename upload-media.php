@@ -13,9 +13,9 @@ $dir=__DIR__.'/birthday-media';if(!is_dir($dir)&&!mkdir($dir,0755,true)){http_re
 $guard="Options -Indexes\n<FilesMatch '(?i)^(\\.|.*\\.(php[0-9]?|phtml|phar|cgi|pl|py|sh|shtml))$'>\nRequire all denied\n</FilesMatch>\n";
 if(!is_file($dir.'/.htaccess'))file_put_contents($dir.'/.htaccess',$guard,LOCK_EX);
 $index=$dir.'/.media-index.json';$items=is_file($index)?json_decode((string)file_get_contents($index),true):[];if(!is_array($items))$items=[];
-if(count($items)>=30){$redirectAfterUpload('Memory collection full hai. Maximum 30 photos/videos hi add kar sakte hain.');}
-if(!isset($_FILES['media'])||!is_array($_FILES['media']['name'])||!count(array_filter($_FILES['media']['name'],static fn($name)=>is_string($name)&&$name!==''))){$redirectAfterUpload('Pehle kam se kam ek photo ya video choose kijiye.');}
-$finfo=new finfo(FILEINFO_MIME_TYPE);$allowed=['image/jpeg'=>['jpg','image'],'image/png'=>['png','image'],'image/webp'=>['webp','image'],'image/gif'=>['gif','image'],'video/mp4'=>['mp4','video'],'video/webm'=>['webm','video'],'video/quicktime'=>['mov','video']];
+if(count($items)>=30){$redirectAfterUpload('Memory collection full hai. Maximum 30 photos, videos ya audio memories hi add kar sakte hain.');}
+if(!isset($_FILES['media'])||!is_array($_FILES['media']['name'])||!count(array_filter($_FILES['media']['name'],static fn($name)=>is_string($name)&&$name!==''))){$redirectAfterUpload('Pehle photo, video ya audio file choose kijiye.');}
+$finfo=new finfo(FILEINFO_MIME_TYPE);$allowed=['image/jpeg'=>['jpg','image'],'image/png'=>['png','image'],'image/webp'=>['webp','image'],'image/gif'=>['gif','image'],'video/mp4'=>['mp4','video'],'video/webm'=>['webm','video'],'video/quicktime'=>['mov','video'],'audio/mpeg'=>['mp3','audio'],'audio/mp4'=>['m4a','audio'],'audio/x-m4a'=>['m4a','audio'],'audio/wav'=>['wav','audio'],'audio/x-wav'=>['wav','audio'],'audio/ogg'=>['ogg','audio'],'audio/webm'=>['weba','audio'],'audio/aac'=>['aac','audio'],'audio/flac'=>['flac','audio']];
 $added=[];$errors=[];$total=count($_FILES['media']['name']);
 for($i=0;$i<$total;$i++){
  if(count($items)+count($added)>=30){$errors[]='The 30-item limit has been reached.';break;}
