@@ -327,6 +327,24 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 @media(max-width:640px){.celebration-trail{gap:7px;padding:16px 10px 4px}.celebration-trail a{padding:9px 11px;font-size:11px}.birthday-control-dock{right:12px;bottom:12px}.birthday-dock-launcher{min-height:50px;padding:0 15px}.birthday-control-panel{width:min(290px,calc(100vw - 24px))}.birthday-balloon{width:39px;height:55px;font-size:32px}.birthday-balloon.balloon-one{left:1%;top:11%}.birthday-balloon.balloon-two{right:1%;top:10%}.birthday-balloon.balloon-three{left:2%;bottom:5%}.birthday-balloon.balloon-four{right:2%;bottom:4%}}
 @media(prefers-reduced-motion:reduce){.birthday-balloon,.dock-launcher-icon,.dock-launcher-pulse{animation:none!important}.birthday-control-panel{animation:none!important}.celebration-trail a,.dock-action,.birthday-dock-launcher{transition:none!important}}
 </style>
+
+<style id="wish-personal-toggle-interaction">
+/* Keep optional personalization immediately before the wish text and make it feel tappable. */
+.wish-extra-options{margin:12px 0 14px!important;padding:0!important;border:0!important;background:transparent!important}
+.wish-extra-options>summary{display:inline-flex;align-items:center;gap:9px;min-height:42px;padding:10px 15px!important;border:1.5px solid #efc98f;border-radius:999px;background:linear-gradient(135deg,#fff4d9,#fffaf0);color:#8b5d2f!important;font-size:12px!important;font-weight:850!important;box-shadow:0 3px 0 #f2dfc2,0 5px 14px #9b6c2b12;list-style:none;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:transform .18s ease,background .22s ease,border-color .22s ease,box-shadow .22s ease}
+.wish-extra-options>summary::-webkit-details-marker{display:none}
+.wish-extra-options>summary::after{content:"＋";display:grid;place-items:center;width:21px;height:21px;border-radius:50%;background:#ffe6b5;color:#9a642e;font-size:15px;line-height:1;transition:transform .22s ease,background .22s ease}
+.wish-extra-options>summary:hover{transform:translateY(-2px);box-shadow:0 5px 0 #f2dfc2,0 9px 18px #9b6c2b18}
+.wish-extra-options>summary:active{transform:scale(.96);box-shadow:0 1px 0 #f2dfc2,0 2px 8px #9b6c2b18}
+.wish-extra-options>summary:focus-visible{outline:3px solid #ffb84d;outline-offset:3px}
+.wish-extra-options[open]>summary{border-color:#e6a844;background:linear-gradient(135deg,#ffe9bd,#fff3d9);box-shadow:0 0 0 4px #ffb84d22,0 3px 0 #f2dfc2}
+.wish-extra-options[open]>summary::after{content:"−";transform:rotate(180deg);background:#ffd88f}
+.wish-extra-options[open]>.wish-field-label:first-of-type{animation:wishOptionsReveal .28s ease both}
+.wish-extra-options[open] .wish-relationship-choices,.wish-extra-options[open] .wish-suggestions{animation:wishOptionsReveal .32s ease both}
+@keyframes wishOptionsReveal{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.wish-extra-options>summary,.wish-extra-options>summary::after{transition:none}.wish-extra-options[open]>.wish-field-label:first-of-type,.wish-extra-options[open] .wish-relationship-choices,.wish-extra-options[open] .wish-suggestions{animation:none}}
+</style>
+
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" data-decor-enabled="<?= $floatingDecorEnabled ? 'true' : 'false' ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -404,27 +422,27 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
         <label class="wish-field-label" for="wishSenderName">Your name</label>
         <input id="wishSenderName" type="text" name="name" value="Guest" placeholder="Enter your name" required maxlength="80" autocomplete="name" class="wish-input" aria-describedby="wishNameHint" />
         <small id="wishNameHint" class="wish-name-hint">A sample name is filled in. Replace it with your own name before sending.</small>
+        <details class="wish-extra-options">
+          <summary>Wish ko aur personal banayein (optional)</summary>
+          <div class="wish-field-label">Aap Vaibhav ke kya lagte hain?</div>
+          <div class="wish-relationship-choices" role="group" aria-label="Aapka rishta">
+            <button type="button" class="wish-choice" data-relation="Mummy">Mummy</button><button type="button" class="wish-choice" data-relation="Papa">Papa</button>
+            <button type="button" class="wish-choice" data-relation="Dada-Dadi">Dada-Dadi</button><button type="button" class="wish-choice" data-relation="Nana-Nani">Nana-Nani</button>
+            <button type="button" class="wish-choice" data-relation="Mama-Mami">Mama-Mami</button><button type="button" class="wish-choice" data-relation="Chacha-Chachi">Chacha-Chachi</button>
+            <button type="button" class="wish-choice" data-relation="Bua-Fufa">Bua-Fufa</button><button type="button" class="wish-choice" data-relation="Friend">Friend</button>
+          </div>
+          <input type="hidden" name="pahchan" id="wishRelation" value="">
+          <div class="wish-field-label">Ready-made wishes</div>
+          <div class="wish-suggestions" role="group" aria-label="Ready-made birthday wishes">
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️">🎂 Simple wish</button>
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Janamdin mubarak ho hamare Kittu! Bhagwan tumhe hamesha khush rakhe. 🌟">🌟 Pyaar bhari wish</button>
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Happy 2nd Birthday, little champ! Khoob khelo, masti karo aur hamesha muskurate raho! 🧸🎈">🧸 Little champ</button>
+            <button type="button" class="wish-suggestion" data-wish-suggestion="Vaibhav beta, tumhari hasi hamesha aise hi chamakti rahe. Bahut saara aashirwad aur pyaar! 💛">💛 Aashirwad</button>
+          </div>
+        </details>
         <label class="wish-field-label" for="wishMessage">Vaibhav ke liye wish</label>
         <textarea id="wishMessage" name="message" required maxlength="1200" rows="2" class="wish-input wish-message-input">Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️</textarea>
       </div>
-      <details class="wish-extra-options">
-        <summary>Wish ko aur personal banayein (optional)</summary>
-        <div class="wish-field-label">Aap Vaibhav ke kya lagte hain?</div>
-        <div class="wish-relationship-choices" role="group" aria-label="Aapka rishta">
-          <button type="button" class="wish-choice" data-relation="Mummy">Mummy</button><button type="button" class="wish-choice" data-relation="Papa">Papa</button>
-          <button type="button" class="wish-choice" data-relation="Dada-Dadi">Dada-Dadi</button><button type="button" class="wish-choice" data-relation="Nana-Nani">Nana-Nani</button>
-          <button type="button" class="wish-choice" data-relation="Mama-Mami">Mama-Mami</button><button type="button" class="wish-choice" data-relation="Chacha-Chachi">Chacha-Chachi</button>
-          <button type="button" class="wish-choice" data-relation="Bua-Fufa">Bua-Fufa</button><button type="button" class="wish-choice" data-relation="Friend">Friend</button>
-        </div>
-        <input type="hidden" name="pahchan" id="wishRelation" value="">
-        <div class="wish-field-label">Ready-made wishes</div>
-        <div class="wish-suggestions" role="group" aria-label="Ready-made birthday wishes">
-          <button type="button" class="wish-suggestion" data-wish-suggestion="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️">🎂 Simple wish</button>
-          <button type="button" class="wish-suggestion" data-wish-suggestion="Janamdin mubarak ho hamare Kittu! Bhagwan tumhe hamesha khush rakhe. 🌟">🌟 Pyaar bhari wish</button>
-          <button type="button" class="wish-suggestion" data-wish-suggestion="Happy 2nd Birthday, little champ! Khoob khelo, masti karo aur hamesha muskurate raho! 🧸🎈">🧸 Little champ</button>
-          <button type="button" class="wish-suggestion" data-wish-suggestion="Vaibhav beta, tumhari hasi hamesha aise hi chamakti rahe. Bahut saara aashirwad aur pyaar! 💛">💛 Aashirwad</button>
-        </div>
-      </details>
       <div class="wish-attachment-box">
         <label class="wish-field-label" for="wishAttachments">Photo, video ya voice wish (optional)</label>
         <input id="wishAttachments" type="file" name="attachments[]" multiple accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/webm,application/pdf" class="wish-attachment-input">
