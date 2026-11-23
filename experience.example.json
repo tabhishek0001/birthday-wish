@@ -48,5 +48,11 @@
     "bcc": "",
     "fromName": "Birthday Bot",
     "fromEmail": ""
+  },
+  "celebration": {
+    "confetti": true,
+    "floatingDecor": true,
+    "celebrationTrail": true,
+    "controlsAutoHideSeconds": 5
   }
 }
