@@ -511,27 +511,26 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 </style>
 
 <style id="vaibhav-playing-card-memories">
-/* Reserve a visible stage around the deck so Swiper's stacked cards are never clipped. */
-.birthday-hero .birthday-gallery{width:min(100%,480px)!important;margin:0 auto 22px!important;padding:0!important;overflow:visible!important}
+/* Give the cards-effect deck its own paint area; never clip transformed neighboring slides. */
+.birthday-hero{overflow:visible!important}
+.birthday-hero .birthday-gallery{position:relative;z-index:2;width:min(100%,480px)!important;margin:0 auto 22px!important;padding:0!important;overflow:visible!important;contain:none!important}
 .birthday-hero .birthday-section-heading{margin:0 auto 9px!important}
 .birthday-hero .birthday-section-heading h2{font-size:clamp(14px,2vw,17px)!important;letter-spacing:.02em!important}
-.birthday-hero .birthday-gallery__stage{position:relative;width:min(100%,460px);height:405px;margin:0 auto;overflow:visible;isolation:isolate}
-.birthday-hero .birthday-gallery__frame{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:min(58vw,250px)!important;height:min(81.2vw,350px)!important;aspect-ratio:5 / 7!important;min-height:0!important;max-height:none!important;margin:0!important;overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;flex:none!important}
-.birthday-hero .birthday-gallery__frame:before,.birthday-hero .birthday-gallery__frame:after{content:"";position:absolute;inset:9px -8px -6px;z-index:-2;border-radius:24px;background:linear-gradient(145deg,#fffdf7,#f4e6d2);border:1px solid rgba(145,105,66,.2);box-shadow:0 9px 20px rgba(74,51,28,.12);transform:rotate(5deg)}
-.birthday-hero .birthday-gallery__frame:after{inset:4px -4px -3px;z-index:-1;transform:rotate(-3deg);background:linear-gradient(145deg,#fff,#f8efdf)}
-.birthday-hero .birthday-gallery__frame .swiper-wrapper{align-items:stretch}
+.birthday-hero .birthday-gallery__stage{position:relative;width:min(100%,460px);height:470px;margin:0 auto;overflow:visible!important;contain:none!important;isolation:isolate}
+.birthday-hero .birthday-gallery__frame{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:min(58vw,250px)!important;height:min(81.2vw,350px)!important;aspect-ratio:5 / 7!important;min-height:0!important;max-height:none!important;margin:0!important;padding:0!important;overflow:visible!important;contain:none!important;clip-path:none!important;mask:none!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;flex:none!important}
+.birthday-hero .birthday-gallery__frame .swiper-wrapper{align-items:stretch;overflow:visible!important}
 .birthday-hero .birthday-gallery__frame .swiper-slide{width:100%!important;height:100%!important;overflow:hidden;border:7px solid #fffdf8;border-radius:23px;background:#fffdf8;box-shadow:0 16px 36px rgba(74,51,28,.24);box-sizing:border-box}
 .birthday-hero .birthday-gallery__frame .swiper-slide>a.memory-lightbox-link{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0!important;border-radius:15px;background:#f4eadb;box-sizing:border-box}
 .birthday-hero .birthday-gallery__frame .swiper-slide img,.birthday-hero .birthday-gallery__frame .swiper-slide video{display:block;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:cover!important;object-position:center!important;border-radius:9px!important;background:#f4eadb}
 .birthday-hero .birthday-gallery__frame .swiper-slide .memory-media-icon{font-size:42px}
-.birthday-hero .birthday-gallery__frame .swiper-pagination{bottom:-24px!important;top:auto!important}
+.birthday-hero .birthday-gallery__frame .swiper-pagination{bottom:-30px!important;top:auto!important}
 .birthday-hero .birthday-gallery__frame .swiper-pagination-bullet{width:6px;height:6px;margin:0 4px!important;background:#b58b63!important;opacity:.42;box-shadow:none}
 .birthday-hero .birthday-gallery__frame .swiper-pagination-bullet-active{width:17px;border-radius:8px;opacity:1;background:#94643d!important}
 .birthday-hero .birthday-gallery__frame .memory-caption-overlay{display:none!important}
 .birthday-hero .birthday-gallery__empty{width:min(100%,270px)!important}
 @media(max-width:640px){
  .birthday-hero .birthday-gallery{margin-bottom:21px!important}
- .birthday-hero .birthday-gallery__stage{width:min(100%,360px);height:355px}
+ .birthday-hero .birthday-gallery__stage{width:min(100%,360px);height:420px}
  .birthday-hero .birthday-gallery__frame{width:min(64vw,220px)!important;height:min(89.6vw,308px)!important;aspect-ratio:5 / 7!important;min-height:0!important;flex:none!important}
  .birthday-hero .birthday-gallery__frame .swiper-slide{border-width:6px;border-radius:20px}
  .birthday-hero .birthday-gallery__frame .swiper-slide>a.memory-lightbox-link{border-radius:13px;padding:0!important}
