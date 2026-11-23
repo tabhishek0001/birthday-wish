@@ -63,6 +63,11 @@ $shareUrl = trim((string)($experienceSettings['shareUrl'] ?? '')) ?: 'https://ww
 $heroTitle = trim((string)($experienceSettings['title'] ?? '')) ?: "Happy Birthday {$displayName}!";
 $heroSubtitle = trim((string)($experienceSettings['subtitle'] ?? '')) ?: 'May your year ahead be full of success, peace, and unforgettable moments.';
 $modules = is_array($experienceConfig['modules'] ?? null) ? $experienceConfig['modules'] : [];
+$celebrationSettings = is_array($experienceConfig['celebration'] ?? null) ? $experienceConfig['celebration'] : [];
+$confettiEnabled = ($celebrationSettings['confetti'] ?? true) !== false;
+$floatingDecorEnabled = ($celebrationSettings['floatingDecor'] ?? true) !== false;
+$celebrationTrailEnabled = ($celebrationSettings['celebrationTrail'] ?? true) !== false;
+$controlsAutoHideSeconds = max(3, min(15, (int)($celebrationSettings['controlsAutoHideSeconds'] ?? 5)));
 $showLetter = ($modules['letter'] ?? true) !== false;
 $showCake = ($modules['cake'] ?? true) !== false;
 $showFinal = ($modules['final'] ?? true) !== false;
@@ -257,6 +262,39 @@ body.birthday-public:before{content:"";position:fixed;inset:0;z-index:0;pointer-
 @media(pointer:coarse){.lux-cursor,.lux-cursor-dot{display:none}.birthday-public button,.birthday-public a{touch-action:manipulation}.birthday-public button:active,.birthday-public a:active{filter:brightness(.97)}}
 @media(prefers-reduced-motion:reduce){.birthday-public *,.birthday-public *:before,.birthday-public *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.lux-cursor,.lux-cursor-dot,.lux-touch-ripple,.lux-sparkle{display:none!important}}
 </style>
+<style id="vaibhav-celebration-experience">
+.celebration-trail{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:9px;padding:20px 16px 8px;max-width:1040px;margin:0 auto}
+.trail-label{width:100%;text-align:center;color:#a17c67;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
+.celebration-trail a{display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border:1px solid #f0dfc9;border-radius:999px;background:#fffdf8;color:#7c6252;text-decoration:none;font-size:12px;font-weight:800;box-shadow:0 7px 20px #9e744010;transition:transform .22s,background .22s,border-color .22s}
+.celebration-trail a span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#fff0d6;color:#b87d4e;font-size:10px}
+.celebration-trail a:hover,.celebration-trail a.is-complete{transform:translateY(-3px);background:#fff1dc;border-color:#e9bd83}
+.celebration-trail a.is-complete span{background:#e8f3e9;color:#648b68}
+.birthday-control-dock{position:fixed;right:20px;bottom:18px;z-index:10010;display:flex;flex-direction:column;align-items:flex-end;gap:10px;max-width:calc(100vw - 24px);font-family:system-ui,-apple-system,sans-serif}
+.birthday-dock-launcher{position:relative;display:flex;align-items:center;gap:9px;min-height:54px;padding:0 19px;border:1px solid #fff;border-radius:999px;background:linear-gradient(120deg,#f4c76e,#ee9878);color:#62452e;font-size:13px;font-weight:900;box-shadow:0 12px 32px #9a65413d,0 4px 0 #d98a65;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.birthday-dock-launcher:hover{transform:translateY(-3px);box-shadow:0 17px 38px #9a65414a,0 5px 0 #d98a65}
+.dock-launcher-icon{font-size:22px;animation:luxBob 2.8s ease-in-out infinite}
+.dock-launcher-pulse{position:absolute;inset:-5px;border:1px solid #eaa57c;border-radius:999px;opacity:0;animation:dockPulse 3s ease-out infinite}
+.birthday-control-panel{width:min(310px,calc(100vw - 28px));padding:15px;border:1px solid #fff;border-radius:24px;background:rgba(255,252,245,.96);box-shadow:0 22px 65px #61462b35;backdrop-filter:blur(20px);transform-origin:bottom right;animation:dockOpen .22s ease-out}
+.birthday-control-panel[hidden]{display:none}
+.dock-panel-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;color:#735746;font-weight:900;font-size:13px}
+.dock-panel-heading button{width:30px;height:30px;border:0;border-radius:50%;background:#f7e8dc;color:#88624e;font-size:20px;cursor:pointer}
+.birthday-sound-control{position:static!important;display:flex!important;align-items:center;justify-content:space-between;gap:9px;width:100%;padding:10px!important;margin:0 0 9px;border:1px solid #f0e0d0!important;border-radius:16px!important;background:#fffaf2!important;box-shadow:none!important;backdrop-filter:none!important}
+.birthday-sound-control label{font-size:11px!important}
+#musicControlBtn{min-height:39px!important;padding:0 12px!important;font-size:12px!important}
+#musicVolume{width:82px!important}
+.dock-action{display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;margin-top:8px;padding:10px 13px;border:1px solid #f0dfc9;border-radius:14px;background:#fff4e4;color:#76543d;text-decoration:none;font-size:12px;font-weight:850;cursor:pointer;transition:transform .2s,background .2s}
+.dock-action:hover{transform:translateY(-2px);background:#ffebd1}
+.dock-auto-hide{margin:10px 2px 0;color:#a18c7d;text-align:center;font-size:10px}
+.birthday-balloon{position:absolute;z-index:2;display:grid;place-items:center;width:54px;height:74px;border:0;background:transparent;font-size:43px;cursor:pointer;filter:drop-shadow(0 9px 9px #946a3b25);animation:balloonFloat 5s ease-in-out infinite;transition:transform .2s,opacity .2s}
+.birthday-balloon:hover{transform:scale(1.16) rotate(7deg)}
+.birthday-balloon.popped{opacity:0;transform:scale(1.8) rotate(22deg);pointer-events:none}
+.birthday-balloon.balloon-one{left:4%;top:24%}.birthday-balloon.balloon-two{right:5%;top:18%;animation-delay:-1.5s}.birthday-balloon.balloon-three{left:9%;bottom:9%;animation-delay:-2.5s}.birthday-balloon.balloon-four{right:10%;bottom:7%;animation-delay:-3.4s}
+@keyframes dockOpen{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes dockPulse{0%{transform:scale(.95);opacity:.55}100%{transform:scale(1.2);opacity:0}}
+@keyframes balloonFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-18px) rotate(5deg)}}
+@media(max-width:640px){.celebration-trail{gap:7px;padding:16px 10px 4px}.celebration-trail a{padding:9px 11px;font-size:11px}.birthday-control-dock{right:12px;bottom:12px}.birthday-dock-launcher{min-height:50px;padding:0 15px}.birthday-control-panel{width:min(290px,calc(100vw - 24px))}.birthday-balloon{width:39px;height:55px;font-size:32px}.birthday-balloon.balloon-one{left:1%;top:11%}.birthday-balloon.balloon-two{right:1%;top:10%}.birthday-balloon.balloon-three{left:2%;bottom:5%}.birthday-balloon.balloon-four{right:2%;bottom:4%}}
+@media(prefers-reduced-motion:reduce){.birthday-balloon,.dock-launcher-icon,.dock-launcher-pulse{animation:none!important}.birthday-control-panel{animation:none!important}.celebration-trail a,.dock-action,.birthday-dock-launcher{transition:none!important}}
+</style>
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -270,9 +308,18 @@ body.birthday-public:before{content:"";position:fixed;inset:0;z-index:0;pointer-
     <a class="birthday-hero__button" href="#wishSection">💌 Vaibhav ko wish bhejein</a>
     <div class="birthday-hero__bottom" aria-hidden="true">⭐ 🎁 🥳 🎁 ⭐</div>
   </header>
+  <?php if ($celebrationTrailEnabled): ?>
+  <nav class="celebration-trail" aria-label="Celebration journey">
+    <span class="trail-label">A little birthday journey</span>
+    <a href="#birthdayMemories" data-trail-step="memories"><span>01</span> Memories</a>
+    <?php if ($showLetter): ?><a href="#secretLetterSection" data-trail-step="letter"><span>02</span> Love note</a><?php endif; ?>
+    <?php if ($showCake): ?><a href="#interactiveCakeSection" data-trail-step="cake"><span>03</span> Cake time</a><?php endif; ?>
+    <a href="#wishSection" data-trail-step="wish"><span>04</span> Send a wish</a>
+  </nav>
+  <?php endif; ?>
 
   <!-- Vaibhav's little memory gallery -->
-<section class="birthday-gallery" data-aos="fade-up" aria-label="Vaibhav ki yaadein">
+<section class="birthday-gallery" id="birthdayMemories" data-aos="fade-up" aria-label="Vaibhav ki yaadein">
   <div class="birthday-section-heading"><span>📸</span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
   <?php if ($featuredImages || $birthdayMedia): ?>
   <div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
@@ -438,12 +485,23 @@ body.birthday-public:before{content:"";position:fixed;inset:0;z-index:0;pointer-
   @media(max-width:480px){.birthday-sound-control{right:9px;bottom:9px;gap:7px;padding:7px 9px}#musicControlBtn{min-height:40px;padding:0 11px;font-size:12px}#musicVolume{width:62px}}
 </style>
 
-<?php if ($musicEnabled): ?>
-<div class="birthday-sound-control" role="group" aria-label="Sound controls">
-  <button id="musicControlBtn" type="button" aria-label="Turn birthday music on" aria-pressed="false">🔇 Sound off</button>
-  <label for="musicVolume">Volume <input id="musicVolume" type="range" min="0" max="30" value="12" step="1"></label>
+<div class="birthday-control-dock" id="birthdayControlDock">
+  <button type="button" class="birthday-dock-launcher" id="celebrationDockToggle" aria-expanded="false" aria-controls="celebrationControlPanel" aria-label="Open celebration controls">
+    <span class="dock-launcher-icon">🎉</span><span class="dock-launcher-label">Fun controls</span><span class="dock-launcher-pulse"></span>
+  </button>
+  <div class="birthday-control-panel" id="celebrationControlPanel" hidden role="group" aria-label="Celebration controls">
+    <div class="dock-panel-heading"><span>✨ Celebration corner</span><button type="button" id="celebrationDockClose" aria-label="Close controls">×</button></div>
+    <?php if ($musicEnabled): ?>
+    <div class="birthday-sound-control" role="group" aria-label="Sound controls">
+      <button id="musicControlBtn" type="button" aria-label="Turn birthday music on" aria-pressed="false">🔇 Sound off</button>
+      <label for="musicVolume">Volume <input id="musicVolume" type="range" min="0" max="30" value="12" step="1"></label>
+    </div>
+    <?php endif; ?>
+    <?php if ($confettiEnabled): ?><button type="button" class="dock-action" id="dockConfettiButton">🎊 Make it rain confetti</button><?php endif; ?>
+    <a class="dock-action" href="#wishSection" id="dockWishLink">💌 Send Vaibhav a wish</a>
+    <p class="dock-auto-hide">This little panel closes itself after a moment.</p>
+  </div>
 </div>
-<?php endif; ?>
 
 
 <footer class="bg-pink-50 text-center py-6 mt-10 border-t border-pink-100 text-sm text-gray-600">
@@ -616,6 +674,56 @@ function loadWishes() {
    document.addEventListener('pointerleave',()=>{ring.classList.remove('is-visible');dot.classList.remove('is-visible');});
  }
  document.addEventListener('pointerdown',e=>{if(reduce)return;const ripple=document.createElement('span');ripple.className='lux-touch-ripple';ripple.style.left=e.clientX+'px';ripple.style.top=e.clientY+'px';document.body.appendChild(ripple);ripple.addEventListener('animationend',()=>ripple.remove(),{once:true});},{passive:true});
+})();
+</script>
+<script id="vaibhav-celebration-interactions">
+(function(){
+ const config=<?= json_encode(['confetti'=>$confettiEnabled,'decor'=>$floatingDecorEnabled,'trail'=>$celebrationTrailEnabled,'autoHide'=>$controlsAutoHideSeconds], JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_AMP|JSON_HEX_QUOT) ?>;
+ const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const canCelebrate=!!config.confetti&&!reduce&&typeof window.confetti==='function';
+ let confettiBurst=()=>{};
+ if(canCelebrate){
+   confettiBurst=(originY=.58,heavy=false)=>{
+     const base={origin:{x:.5,y:originY},zIndex:10020,disableForReducedMotion:true};
+     window.confetti({...base,particleCount:heavy?150:75,spread:heavy?105:78,startVelocity:heavy?48:36,gravity:.9,scalar:heavy?1.05:.85});
+     if(heavy)setTimeout(()=>window.confetti({...base,particleCount:70,spread:125,startVelocity:30,gravity:1.05,origin:{x:.5,y:originY+.04}}),180);
+   };
+   setTimeout(()=>confettiBurst(.38,true),850);
+ }
+ window.vaibhavCelebrate=confettiBurst;
+ const dock=document.getElementById('birthdayControlDock'),panel=document.getElementById('celebrationControlPanel'),toggle=document.getElementById('celebrationDockToggle'),close=document.getElementById('celebrationDockClose');
+ let hideTimer=null;
+ function closeDock(){if(!panel||panel.hidden)return;panel.hidden=true;toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Open celebration controls');clearTimeout(hideTimer);}
+ function scheduleHide(){clearTimeout(hideTimer);hideTimer=setTimeout(()=>{if(panel&&!panel.contains(document.activeElement))closeDock();},Math.max(3,Math.min(15,Number(config.autoHide)||5))*1000);}
+ function openDock(){if(!panel)return;panel.hidden=false;toggle.setAttribute('aria-expanded','true');toggle.setAttribute('aria-label','Close celebration controls');scheduleHide();}
+ if(toggle&&panel){
+   toggle.addEventListener('click',()=>panel.hidden?openDock():closeDock());
+   if(close)close.addEventListener('click',closeDock);
+   panel.addEventListener('pointerdown',scheduleHide,{passive:true});
+   panel.addEventListener('input',scheduleHide);
+   panel.addEventListener('click',event=>{if(event.target.closest('a,button'))scheduleHide();});
+   panel.addEventListener('focusin',()=>clearTimeout(hideTimer));
+   panel.addEventListener('focusout',()=>setTimeout(()=>{if(!panel.contains(document.activeElement))scheduleHide();},80));
+   document.addEventListener('pointerdown',event=>{if(!dock.contains(event.target)&&!panel.hidden)scheduleHide();},{passive:true});
+   document.addEventListener('keydown',event=>{if(event.key==='Escape')closeDock();});
+ }
+ const confettiButton=document.getElementById('dockConfettiButton');
+ if(confettiButton)confettiButton.addEventListener('click',()=>{confettiBurst(.55,true);confettiButton.textContent='✨ More birthday magic!';});
+ const hero=document.querySelector('.birthday-hero');
+ if(hero&&config.decor&&!reduce){
+   ['balloon-one','balloon-two','balloon-three','balloon-four'].forEach(cls=>{const button=document.createElement('button');button.type='button';button.className='birthday-balloon '+cls;button.textContent='🎈';button.setAttribute('aria-label','Pop a birthday balloon');button.addEventListener('click',()=>{button.classList.add('popped');confettiBurst(.35,false);setTimeout(()=>button.remove(),350);});hero.appendChild(button);});
+ }
+ function completeStep(name){const item=document.querySelector('[data-trail-step="'+name+'"]');if(item&&!item.classList.contains('is-complete')){item.classList.add('is-complete');const n=item.querySelector('span');if(n)n.textContent='✓';}}
+ const gallery=document.getElementById('birthdayMemories');
+ if(gallery&&'IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){completeStep('memories');observer.disconnect();}}),{threshold:.2});observer.observe(gallery);}
+ const letter=document.getElementById('revealLetter');if(letter)letter.addEventListener('click',()=>{completeStep('letter');confettiBurst(.48,false);});
+ const cake=document.getElementById('makeWishBtn');if(cake)cake.addEventListener('click',()=>{completeStep('cake');confettiBurst(.62,true);});
+ const wishForm=document.getElementById('wishForm');if(wishForm)wishForm.addEventListener('submit',()=>{completeStep('wish');});
+ const wishFeedback=document.getElementById('wishFeedback');
+ if(wishFeedback&&window.MutationObserver){const observer=new MutationObserver(()=>{if(/pahunch gayi|thank/i.test(wishFeedback.textContent)){completeStep('wish');confettiBurst(.5,true);}});observer.observe(wishFeedback,{childList:true,subtree:true,characterData:true});}
+ const finalButton=document.getElementById('celebrateAgain');if(finalButton)finalButton.addEventListener('click',()=>confettiBurst(.56,true));
+ document.querySelectorAll('.birthday-hero__button').forEach(button=>button.addEventListener('click',()=>confettiBurst(.4,false)));
+ if(config.trail){const board=document.getElementById('wishBoard');if(board&&'IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)completeStep('wish');}),{threshold:.15});observer.observe(board);}}
 })();
 </script>
 </body>
