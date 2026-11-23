@@ -210,7 +210,7 @@ unset($_SESSION['birthday_admin_notice']);
 <section class="admin-section" data-section-panel="wishes">
   <div class="eyebrow">Visitor messages</div>
   <h1>Wishes</h1>
-  <p class="lead">Review the messages visitors have submitted for the birthday person. Existing public display behavior is preserved.</p>
+  <p class="lead">Review visitor wishes and play or open any photos, videos, voice messages and PDFs they attached.</p>
   <div class="admin-card">
   <?php if (!$wishes): ?><div class="section-note">No visitor wishes have been received yet.</div><?php else: ?>
     <?php foreach (array_reverse($wishes) as $wish): if (!is_array($wish)) continue; ?>
@@ -218,6 +218,14 @@ unset($_SESSION['birthday_admin_notice']);
         <strong style="font-size:13px"><?= admin_h($wish['name'] ?? 'Anonymous') ?></strong>
         <?php if (!empty($wish['pahchan'])): ?><span style="color:var(--admin-muted);font-size:10px"> • <?= admin_h($wish['pahchan']) ?></span><?php endif; ?>
         <p style="margin:6px 0;color:#6f655f;font-size:12px;line-height:1.6"><?= nl2br(admin_h($wish['message'] ?? '')) ?></p>
+        <?php if (!empty($wish['media']) && is_array($wish['media'])): ?><div style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0">
+          <?php foreach (array_slice($wish['media'],0,3) as $attachment): if (!is_array($attachment) || empty($attachment['file'])) continue; $attachmentFile=basename((string)$attachment['file']); if (!preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|pdf)$/i',$attachmentFile)) continue; $attachmentUrl='../wish-media/'.rawurlencode($attachmentFile); ?>
+            <?php if (($attachment['type'] ?? '') === 'image'): ?><a href="<?= admin_h($attachmentUrl) ?>" target="_blank" rel="noopener"><img src="<?= admin_h($attachmentUrl) ?>" alt="Wish attachment" style="width:130px;height:110px;object-fit:contain;border-radius:12px;background:#f2ece6"></a>
+            <?php elseif (($attachment['type'] ?? '') === 'video'): ?><video src="<?= admin_h($attachmentUrl) ?>" controls preload="metadata" style="width:180px;max-height:130px;border-radius:12px"></video>
+            <?php elseif (($attachment['type'] ?? '') === 'audio'): ?><audio src="<?= admin_h($attachmentUrl) ?>" controls preload="metadata" style="width:220px"></audio>
+            <?php elseif (($attachment['type'] ?? '') === 'document'): ?><a class="admin-btn" href="<?= admin_h($attachmentUrl) ?>" target="_blank" rel="noopener">📄 Open PDF attachment</a><?php endif; ?>
+          <?php endforeach; ?>
+        </div><?php endif; ?>
         <?php if (!empty($wish['timestamp'])): ?><small style="color:#9a8f88;font-size:9px"><?= admin_h(date('d M Y, h:i A',(int)$wish['timestamp'])) ?></small><?php endif; ?>
       </div>
     <?php endforeach; ?>
