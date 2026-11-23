@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../includes/bootstrap.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . "/includes/bootstrap.php";
 if (($_SESSION['user_type'] ?? '') !== 'developer') { http_response_code(403); exit('Developer access required.'); }
 if (empty($_SESSION['birthday_studio_csrf'])) $_SESSION['birthday_studio_csrf'] = bin2hex(random_bytes(32));
 $configPath=__DIR__.'/experience.json'; $samplePath=__DIR__.'/experience.example.json';
@@ -58,7 +58,7 @@ $mediaNotice=(string)($_SESSION['birthday_media_notice']??'');unset($_SESSION['b
 <option value="rose" <?=($theme['preset']??'rose')==='rose'?'selected':''?>>Soft rose</option>
 <option value="sage" <?=($theme['preset']??'')==='sage'?'selected':''?>>Quiet sage</option>
 <option value="lavender" <?=($theme['preset']??'')==='lavender'?'selected':''?>>Lavender dusk</option>
-<option value="sunset" <?=($theme['preset']??'')==='sunset'?'selected':''?>>Warm sunset</option>
+<option value="sunset" <?=($theme['preset']??'')==='sunset'?'selected':''?>>Warm sunset</option><option value="sunshine" <?=($theme['preset']??'')==='sunshine'?'selected':''?>>Sunshine party (kids)</option>
 </select></label>
 <label class="studio-field">Accent colour<input type="color" name="theme[accent]" value="<?=studio_h($theme['accent']??'#b98990')?>"></label>
 </div><section class="studio-panel"><h2>Add a little surprise</h2><p>Choose which moments appear on the public birthday page, then write the words behind each one.</p>
@@ -82,7 +82,7 @@ $mediaNotice=(string)($_SESSION['birthday_media_notice']??'');unset($_SESSION['b
 <section class="studio-panel" id="memories"><h2>Gather your memories</h2><p>Add photos and short videos. These appear in the birthday page's featured memory carousel. Up to 30 items, 25 MB each; JPG, PNG, WebP, GIF, MP4, WebM and MOV are supported.</p>
 <form id="mediaUploadForm" method="post" action="upload-media.php" enctype="multipart/form-data"><input type="hidden" name="csrf" value="<?=studio_h($csrf)?>">
 <label class="studio-drop" id="mediaDrop"><span style="font-size:28px">♡</span><strong>Drop your photos and videos here</strong><small>or choose files from your device</small><input id="mediaFiles" type="file" name="media[]" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" multiple></label>
-<div class="studio-actions" style="position:static;margin-top:13px"><span class="studio-muted" id="selectedFiles">No files selected</span><button class="primary" type="submit">Add memories</button></div></form>
+<div class="studio-actions" style="position:static;margin-top:13px"><span class="studio-muted" id="selectedFiles">Photos/videos choose karein (25 MB per file)</span><button class="primary" id="uploadSubmit" type="submit" disabled>Upload photos / videos</button></div></form>
 <div class="media-library" id="mediaLibrary">
 <?php foreach($media as $item): if(!is_array($item)||empty($item['file'])) continue; $file=basename((string)$item['file']); $url='birthday-media/'.rawurlencode($file); $isVideo=($item['type']??'')==='video'; ?>
 <article class="library-item" data-media-id="<?=studio_h($file)?>">
@@ -135,11 +135,12 @@ document.getElementById('autofillStory').addEventListener('click',()=>{
  form.dispatchEvent(new Event('input',{bubbles:true}));
 });
 const themeSelect=form.elements['theme[preset]'],accentInput=form.elements['theme[accent]'];
-const palette={rose:'#b98990',sage:'#849d86',lavender:'#a493bd',sunset:'#cf9879'};
+const palette={rose:'#b98990',sage:'#849d86',lavender:'#a493bd',sunset:'#cf9879',sunshine:'#ffb84d'};
 function syncPalette(usePreset){if(usePreset)accentInput.value=palette[themeSelect.value]||palette.rose;updateLivePreview();}
 themeSelect.addEventListener('change',()=>syncPalette(true));accentInput.addEventListener('input',()=>syncPalette(false));syncPalette(false);
 const input=document.getElementById('mediaFiles'),drop=document.getElementById('mediaDrop'),selected=document.getElementById('selectedFiles');
-input.addEventListener('change',()=>selected.textContent=input.files.length?input.files.length+' item(s) selected':'No files selected');
+input.addEventListener('change',()=>{const files=Array.from(input.files||[]);const tooLarge=files.filter(file=>file.size>25*1024*1024);selected.textContent=files.length?files.length+' file(s) selected'+(tooLarge.length?' · '+tooLarge.length+' file(s) 25 MB se bade hain':''):'Photos/videos choose karein (25 MB per file)';document.getElementById('uploadSubmit').disabled=!files.length||tooLarge.length>0;});
+document.getElementById('mediaUploadForm').addEventListener('submit',event=>{if(!input.files.length){event.preventDefault();selected.textContent='Pehle photos ya videos choose kijiye.';return;}if(Array.from(input.files).some(file=>file.size>25*1024*1024)){event.preventDefault();selected.textContent='Har file 25 MB se chhoti honi chahiye.';return;}const button=document.getElementById('uploadSubmit');button.disabled=true;button.textContent='Uploading…';});
 ['dragenter','dragover'].forEach(evt=>drop.addEventListener(evt,e=>{e.preventDefault();drop.classList.add('drag')}));
 ['dragleave','drop'].forEach(evt=>drop.addEventListener(evt,e=>{e.preventDefault();drop.classList.remove('drag')}));
 drop.addEventListener('drop',e=>{if(e.dataTransfer.files.length){input.files=e.dataTransfer.files;input.dispatchEvent(new Event('change'));}});

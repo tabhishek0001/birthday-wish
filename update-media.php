@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../includes/bootstrap.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . "/includes/bootstrap.php";
 header('Content-Type: application/json; charset=utf-8');
 if(($_SESSION['user_type']??'')!=='developer'){http_response_code(403);echo json_encode(['success'=>false,'error'=>'Access denied.']);exit;}
 $csrf=(string)($_POST['csrf']??'');

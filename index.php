@@ -2,7 +2,7 @@
 
 ini_set('log_errors', 1);
 ini_set('error_log', $_SERVER['DOCUMENT_ROOT'] . '/auxiliaries/errors.log');
-require_once $_SERVER['DOCUMENT_ROOT']. "/includes/bootstrap.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/includes/bootstrap.php";
 
 update_user_activity();
 $featuredImages = glob('featured/*.{jpg,jpeg,png}', GLOB_BRACE) ?: [];
@@ -23,10 +23,14 @@ $displayName = trim((string) ($personConfig['nickname'] ?? '')) ?: $name;
 $pronoun = in_array(($personConfig['pronoun'] ?? 'they'), ['he','she','they'], true) ? $personConfig['pronoun'] : 'they';
 $pronouns = ['he'=>['subject'=>'he','object'=>'him','possessive'=>'his'],'she'=>['subject'=>'she','object'=>'her','possessive'=>'her'],'they'=>['subject'=>'they','object'=>'them','possessive'=>'their']];
 $personPronouns = $pronouns[$pronoun];
+$birthdayDate = trim((string)($personConfig['birthday'] ?? ''));
+$birthdayAge = null;
+if ($birthdayDate !== '') { try { $birth = new DateTimeImmutable($birthdayDate); $today = new DateTimeImmutable('today'); if ($birth <= $today) $birthdayAge = $birth->diff($today)->y; } catch (Throwable $e) { $birthdayAge = null; } }
+$birthdayLabel = $birthdayAge !== null ? $birthdayAge . ' saal ka ho gaya!' : 'Aaj ka din sirf Vaibhav ke naam!';
 $experienceSettings = is_array($experienceConfig['experience'] ?? null) ? $experienceConfig['experience'] : [];
 $themeSettings = is_array($experienceConfig['theme'] ?? null) ? $experienceConfig['theme'] : [];
-$themePreset = in_array(($themeSettings['preset'] ?? 'rose'), ['rose','sage','lavender','sunset'], true) ? $themeSettings['preset'] : 'rose';
-$themeAccent = preg_match('/^#[0-9a-fA-F]{6}$/', (string)($themeSettings['accent'] ?? '')) ? $themeSettings['accent'] : '#b98990';
+$themePreset = in_array(($themeSettings['preset'] ?? 'rose'), ['rose','sage','lavender','sunset','sunshine'], true) ? $themeSettings['preset'] : 'sunshine';
+$themeAccent = preg_match('/^#[0-9a-fA-F]{6}$/', (string)($themeSettings['accent'] ?? '')) ? $themeSettings['accent'] : '#ffb84d';
 $wishBoardHeading = trim((string)($experienceSettings['wishBoardHeading'] ?? '')) ?: 'A little love from everyone';
 $namePlaceholder = trim((string)($experienceSettings['namePlaceholder'] ?? '')) ?: 'Your name';
 $relationshipPlaceholder = trim((string)($experienceSettings['relationshipPlaceholder'] ?? '')) ?: 'How do you know them? (optional)';
@@ -63,11 +67,11 @@ if ($customMusic !== '') {
 if ($musicSource === '') $musicSource = 'happy-birthday-song.mp3';
 $wishFormHeading = trim((string)($experienceSettings['formHeading'] ?? '')) ?: 'Leave a little happiness';
 $wishFormDescription = trim((string)($experienceSettings['formDescription'] ?? '')) ?: 'Share a note, a memory or a wish. It will mean more than you know.';
-$shareMessage = "🎉 {$name}’s Birthday Celebration! 🎂\n\nWish {$name} a very happy birthday and be part of the celebration! 🎈\nDrop your wish here 👉 {$shareUrl}\n\nLet’s make {$personPronouns['possessive']} day extra special ❤️";
+$shareMessage = "🎈 Vaibhav ka 2nd Birthday! 🎂\n\nHamare chhote Kittu ko birthday wish bhejiye! ❤️\nApni pyari si wish yahan bhejein 👉 {$shareUrl}\n\nPhotos dekhein, wish bhejein aur celebration ka hissa banein! 🎉";
 $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi-Latn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -131,47 +135,50 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
 }
 
   </style>
+<style>
+:root{--kid-ink:#51433c;--kid-muted:#81736a;--kid-accent:#ffb84d;--kid-coral:#ff806f}
+body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e8,#fffdf8 45%,#fff4e8)!important;color:var(--kid-ink)!important;font-family:system-ui,-apple-system,'Segoe UI',sans-serif!important;overflow-x:hidden}
+.birthday-hero{text-align:center;padding:clamp(30px,7vw,72px) 18px 42px;background:linear-gradient(145deg,#ffe5a9,#fff0d6 48%,#dff4fb);border-radius:0 0 38px 38px;position:relative;overflow:hidden}.birthday-hero__top{font-size:clamp(13px,2.4vw,17px);font-weight:800;color:#98672e}.birthday-hero__toys{font-size:clamp(25px,5vw,42px);letter-spacing:8px;margin:16px 0 8px}
+.birthday-hero h1{font-size:clamp(36px,8vw,72px)!important;line-height:1.12;font-weight:900;color:#e66d55!important;margin:8px auto 12px;max-width:900px;text-shadow:0 3px #fff}.birthday-hero p{font-size:clamp(16px,3vw,21px);line-height:1.6;color:#66574b;max-width:660px;margin:0 auto}.birthday-age{display:inline-flex;margin:18px auto 0;padding:10px 18px;border-radius:999px;background:#fff;color:#a65e37;font-weight:800;box-shadow:0 5px 16px #b7793420}.birthday-hero__button{display:table;margin:22px auto 0;padding:15px 24px;border-radius:999px;background:#ff806f;color:#fff!important;text-decoration:none;font-size:17px;font-weight:850;box-shadow:0 7px #e56d5f;min-height:52px}.birthday-hero__bottom{font-size:24px;letter-spacing:9px;margin-top:24px}
+.birthday-gallery{padding:30px 16px 18px}.birthday-section-heading{text-align:center;margin:0 auto 20px}.birthday-section-heading>span{font-size:30px}.birthday-section-heading h2{font-size:clamp(25px,5vw,34px);font-weight:850;color:#80543f;margin:5px 0}.birthday-section-heading p{margin:0;color:#81736a}.birthday-gallery__frame{max-width:560px;height:min(68vh,620px);min-height:280px;margin:0 auto;border-radius:28px;overflow:hidden;background:#f7e8d3;box-shadow:0 12px 35px #76533318}.birthday-gallery__frame .swiper-slide{height:100%;position:relative}.birthday-gallery__frame img,.birthday-gallery__frame video{width:100%;height:100%;object-fit:cover}.birthday-gallery__empty{max-width:560px;margin:auto;padding:40px 18px;border:2px dashed #f0d5ae;border-radius:26px;text-align:center;background:#fffdf8}.birthday-gallery__empty span{display:block;font-size:60px}.birthday-gallery__empty strong,.birthday-gallery__empty small{display:block}.birthday-gallery__empty strong{font-size:17px;color:#76563e}.birthday-gallery__empty small{margin-top:7px;color:#998777}
+.birthday-surprise-section{padding:22px 15px}.surprise-card{max-width:650px;margin:auto;padding:28px 20px;border:1px solid #f1dfc7;border-radius:26px;background:#fffdf8;color:#51433c;box-shadow:0 10px 28px #8b643012;text-align:center}.surprise-card h2{font-size:clamp(24px,5vw,34px);font-weight:850;color:#80543f}.surprise-card p{color:#76685d;line-height:1.7}.surprise-kicker{color:#d47b53;font-size:12px;font-weight:850}.surprise-button{background:#ffb84d;color:#5d3d20;border-radius:999px;padding:14px 20px;min-height:48px;font-weight:850}.cake-illustration{font-size:72px}
+.wish-invite-section{padding:30px 15px 44px;background:linear-gradient(180deg,#fff5e7,#fffdf8)}.wish-invite-card{max-width:620px;margin:auto;padding:clamp(20px,5vw,36px);border-radius:30px;background:#fff;border:2px solid #f3dfc4;box-shadow:0 16px 42px #9a704014}.wish-invite-kicker{text-align:center;color:#d17a4f;font-weight:850}.wish-invite-card h2{text-align:center;font-size:clamp(26px,5vw,38px);font-weight:900;color:#82543d;margin:8px 0}.wish-invite-description{text-align:center;color:#83756b;line-height:1.6;margin:0 auto 24px;max-width:480px}.wish-field-label{display:block;color:#655348;font-weight:850;font-size:15px;margin:18px 0 9px}.wish-field-label span{font-size:12px;color:#9a8c81;font-weight:500}.wish-input{display:block;width:100%;min-height:54px;padding:15px 17px;border:2px solid #f0dfca;border-radius:16px;background:#fffdf9;color:#4e4038;font-size:17px;outline:none;box-shadow:none}.wish-input:focus{border-color:#ffb84d;box-shadow:0 0 0 4px #ffb84d2b}.wish-message-input{min-height:116px;resize:vertical;line-height:1.55}
+.wish-relationship-choices,.wish-suggestions{display:flex;flex-wrap:wrap;gap:9px}.wish-choice,.wish-suggestion{min-height:44px;padding:10px 14px;border:1.5px solid #f0dfca;border-radius:999px;background:#fffaf1;color:#765c48;font-size:14px;font-weight:750}.wish-choice.selected,.wish-suggestion.selected{background:#ffedc8;border-color:#e6a844;color:#69451e;box-shadow:0 0 0 2px #ffe4ad}.wish-suggestions{display:grid;grid-template-columns:1fr 1fr}.wish-suggestion{text-align:left;border-radius:15px;min-height:58px;line-height:1.35}.wish-privacy-note{text-align:center;color:#95867b;font-size:13px;line-height:1.5;margin:14px 0}.wish-send-button{display:block;width:100%;min-height:58px;padding:14px 20px;border-radius:17px;background:#ff806f;color:#fff;font-size:18px;font-weight:900;box-shadow:0 5px #e56d5f}.wish-send-button:disabled{opacity:.65;box-shadow:none}.wish-feedback{text-align:center;min-height:22px;margin:14px 0 0;color:#8a5b32;font-weight:750}
+.birthday-public #wishBoard{gap:14px}.birthday-public #wishBoard article{background:#fffdf8!important;border:1px solid #f1dfc7;box-shadow:0 8px 22px #805b3010!important;border-radius:20px!important}.birthday-public #wishBoard article p{color:#64554a!important}.birthday-public footer{background:#fff3df!important;color:#806d5d!important;border-color:#f1dfc7!important}.birthday-public .btn{min-height:44px}.birthday-public .swiper-pagination-bullet-active{background:#ff806f!important}
+@media(max-width:520px){.birthday-hero{padding-top:34px}.birthday-gallery__frame{height:58vh;min-height:260px}.wish-suggestions{grid-template-columns:1fr}.wish-invite-card{border-radius:23px}.birthday-hero__toys{letter-spacing:3px}.birthday-public .mt-6.flex{padding:0 12px 18px}.birthday-public .btn{flex:1 1 42%;font-size:13px}}
+</style>
 </head>
-<body class="text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
+<body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <!-- 🎉 Interactive Heading -->
   
-  <header class="text-center py-16 bg-gradient-to-br from-pink-200 via-pink-50 to-white p-5" data-aos="zoom-in">
-    <h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-red-400 heading-glow">
-      🎂 <?= $escapeHtml($heroTitle); ?> 🎉
-    </h1>
-    <p class="mt-4 text-xl md:text-2xl text-gray-700 italic"><?= $escapeHtml($heroSubtitle); ?></p>
-    <div class="mt-3 text-pink-500 animate-bounce"><?= $escapeHtml($scrollHint); ?></div>
+  <header class="birthday-hero" data-aos="zoom-in">
+    <div class="birthday-hero__top">🎈 &nbsp; Aaj ka din hai hamare Kittu ke naam! &nbsp; 🎈</div>
+    <div class="birthday-hero__toys" aria-hidden="true">🧸 🦁 🚗 🦕</div>
+    <h1><?= $escapeHtml($heroTitle); ?></h1><p><?= $escapeHtml($heroSubtitle); ?></p>
+    <div class="birthday-age">🎂 <?= $escapeHtml($birthdayLabel); ?> 🎉</div>
+    <a class="birthday-hero__button" href="#wishSection">💌 Vaibhav ko wish bhejein</a>
+    <div class="birthday-hero__bottom" aria-hidden="true">⭐ 🎁 🥳 🎁 ⭐</div>
   </header>
 
-  <!-- 🎞️ Featured Carousel -->
-<section class="h-[90vh] px-4 py-10" data-aos="fade-up">
-  <div class="swiper featured-swiper h-full max-w-md mx-auto rounded-2xl overflow-hidden shadow-xl">
-    <div class="swiper-wrapper">
-      <?php foreach ($featuredImages as $img): ?>
-        <div class="swiper-slide border">
-          <img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover rounded-xl" alt="Featured memory" loading="lazy">
-        </div>
-      <?php endforeach; ?>
-      <?php foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); ?>
-        <div class="swiper-slide border">
-          <?php if (($memory['type'] ?? '') === 'video'): ?>
-            <video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover rounded-xl" controls muted playsinline preload="metadata"></video>
-          <?php else: ?>
-            <img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover rounded-xl" alt="<?= $escapeHtml($memory['caption'] ?? $memory['name'] ?? 'Birthday memory') ?>" loading="lazy">
-          <?php endif; ?>
-          <?php if (trim((string)($memory['caption'] ?? '')) !== ''): ?><div class="memory-caption-overlay"><?= $escapeHtml($memory['caption']); ?></div><?php endif; ?>
-        </div>
-      <?php endforeach; ?>
-    </div>
-    <div class="swiper-pagination mt-4"></div>
-  </div>
+  <!-- Vaibhav's little memory gallery -->
+<section class="birthday-gallery" data-aos="fade-up" aria-label="Vaibhav ki yaadein">
+  <div class="birthday-section-heading"><span>📸</span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
+  <?php if ($featuredImages || $birthdayMedia): ?>
+  <div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
+    <?php foreach ($featuredImages as $img): ?><div class="swiper-slide"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="lazy"></div><?php endforeach; ?>
+    <?php foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); ?>
+      <div class="swiper-slide"><?php if (($memory['type'] ?? '') === 'video'): ?><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" controls muted playsinline preload="metadata"></video><?php else: ?><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memory['caption'] ?? 'Vaibhav ki yaad') ?>" loading="lazy"><?php endif; ?>
+      <?php if (trim((string)($memory['caption'] ?? '')) !== ''): ?><div class="memory-caption-overlay"><?= $escapeHtml($memory['caption']); ?></div><?php endif; ?></div>
+    <?php endforeach; ?>
+  </div><div class="swiper-pagination"></div></div>
+  <?php else: ?><div class="birthday-gallery__empty"><span>🧸</span><strong>Vaibhav ki photos jald hi yahan aayengi!</strong><small>Birthday Studio se photos aur videos add kar sakte hain.</small></div><?php endif; ?>
 </section>
 
 <?php if ($showLetter): ?>
 <section class="birthday-surprise-section" id="secretLetterSection" data-aos="fade-up">
   <div class="surprise-card letter-card">
-    <div class="surprise-kicker">A note from the heart</div>
+    <div class="surprise-kicker">Dil se ek chhota sa note</div>
     <h2><?= $escapeHtml($letterHeading); ?></h2>
     <button type="button" class="surprise-button" id="revealLetter" aria-expanded="false"><?= $escapeHtml($letterButton); ?></button>
     <div class="surprise-reveal" id="letterContent" hidden><p><?= nl2br($escapeHtml($letterMessage)); ?></p></div>
@@ -181,7 +188,7 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
 <?php if ($showCake): ?>
 <section class="birthday-surprise-section" id="interactiveCakeSection" data-aos="fade-up">
   <div class="surprise-card cake-card">
-    <div class="surprise-kicker">A moment just for you</div>
+    <div class="surprise-kicker">Kittu ke liye ek special moment</div>
     <h2><?= $escapeHtml($cakeHeading); ?></h2>
     <div class="cake-illustration" id="cakeIllustration" aria-hidden="true">🎂</div>
     <p id="cakeMessage" class="cake-message" hidden><?= $escapeHtml($cakeMessage); ?></p>
@@ -190,39 +197,35 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
 </section>
 <?php endif; ?>
 
- <!-- 😂 Funny Birthday Wish Form -->
-<section class="px-4 py-16 bg-white shadow-inner" data-aos="fade-up">
-  <div class="max-w-xl mx-auto text-center">
-    <h2 class="text-3xl font-extrabold text-pink-600 mb-6"><?= $escapeHtml($wishFormHeading); ?></h2>
-    <form id="wishForm" class="space-y-4">
-      
-      <p class="mb-6 text-sm text-gray-600"><?= $escapeHtml($wishFormDescription); ?></p>
-      <!-- Name -->
-      <input type="text" name="name" required maxlength="80"
-        placeholder="<?= $escapeHtml($namePlaceholder); ?>" 
-        class="w-full px-5 py-3 border border-pink-300 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-pink-400" />
-
-      <!-- Pahchan -->
-      <input type="text" name="pahchan" maxlength="100"
-        placeholder="<?= $escapeHtml($relationshipPlaceholder); ?>" 
-        class="w-full px-5 py-3 border border-pink-100 rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-pink-300" />
-
-      <!-- Message -->
-      <textarea name="message" required maxlength="1200"
-        placeholder="<?= $escapeHtml($messagePlaceholder); ?>" 
-        class="w-full px-5 py-3 border border-pink-300 rounded-3xl shadow focus:outline-none focus:ring-2 focus:ring-pink-400 resize-none"></textarea>
-
-      <!-- Submit Button -->
-      
-<small><?= $escapeHtml($name); ?> ko aapki wish bhej di jayegi — chaliye <?= $escapeHtml($personPronouns["possessive"]); ?> din banate hain! 🎂</small>
-
-      <button type="submit"
-        class="bg-pink-600 hover:bg-pink-700 text-white font-bold px-8 py-3 rounded-full shadow-lg transform hover:scale-105 transition">
-        <?= $escapeHtml($submitLabel); ?>
-      </button>
+<section class="wish-invite-section" id="wishSection" data-aos="fade-up">
+  <div class="wish-invite-card">
+    <div class="wish-invite-kicker">💛 Chhote Kittu ke liye</div>
+    <h2><?= $escapeHtml($wishFormHeading); ?></h2><p class="wish-invite-description"><?= $escapeHtml($wishFormDescription); ?></p>
+    <form id="wishForm" autocomplete="on">
+      <label class="wish-field-label" for="wishSenderName">Aapka naam</label>
+      <input id="wishSenderName" type="text" name="name" required maxlength="80" autocomplete="name" placeholder="<?= $escapeHtml($namePlaceholder); ?>" class="wish-input" />
+      <div class="wish-field-label">Aap Vaibhav ke kya lagte hain? <span>(optional)</span></div>
+      <div class="wish-relationship-choices" role="group" aria-label="Aapka rishta">
+        <button type="button" class="wish-choice" data-relation="Mummy">Mummy</button><button type="button" class="wish-choice" data-relation="Papa">Papa</button>
+        <button type="button" class="wish-choice" data-relation="Dada-Dadi">Dada-Dadi</button><button type="button" class="wish-choice" data-relation="Nana-Nani">Nana-Nani</button>
+        <button type="button" class="wish-choice" data-relation="Mama-Mami">Mama-Mami</button><button type="button" class="wish-choice" data-relation="Chacha-Chachi">Chacha-Chachi</button>
+        <button type="button" class="wish-choice" data-relation="Bua-Fufa">Bua-Fufa</button><button type="button" class="wish-choice" data-relation="Friend">Friend</button>
+      </div>
+      <input type="hidden" name="pahchan" id="wishRelation" value="">
+      <div class="wish-field-label">Wish likhna mushkil hai? Neeche se ek chuniye 👇</div>
+      <div class="wish-suggestions" role="group" aria-label="Ready-made birthday wishes">
+        <button type="button" class="wish-suggestion" data-wish-suggestion="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️">🎂 Simple wish</button>
+        <button type="button" class="wish-suggestion" data-wish-suggestion="Janamdin mubarak ho hamare Kittu! Bhagwan tumhe hamesha khush rakhe. 🌟">🌟 Pyaar bhari wish</button>
+        <button type="button" class="wish-suggestion" data-wish-suggestion="Happy 2nd Birthday, little champ! Khoob khelo, masti karo aur hamesha muskurate raho! 🧸🎈">🧸 Little champ</button>
+        <button type="button" class="wish-suggestion" data-wish-suggestion="Vaibhav beta, tumhari hasi hamesha aise hi chamakti rahe. Bahut saara aashirwad aur pyaar! 💛">💛 Aashirwad</button>
+      </div>
+      <label class="wish-field-label" for="wishMessage">Aapki wish</label>
+      <textarea id="wishMessage" name="message" required maxlength="1200" rows="3" class="wish-input wish-message-input">Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️</textarea>
+      <p class="wish-privacy-note">Bas itna hi! Aapki wish Vaibhav ke birthday page par dikhai degi. ❤️</p>
+      <button id="wishSubmitButton" type="submit" class="wish-send-button">💌 <?= $escapeHtml($submitLabel); ?></button>
+      <p id="wishFeedback" class="wish-feedback" role="status" aria-live="polite"></p>
     </form>
   </div>
-
 </section>
 
   
@@ -238,10 +241,10 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
 <?php if ($showFinal): ?>
 <section class="birthday-surprise-section" id="finalCelebrationSection" data-aos="fade-up">
   <div class="surprise-card final-card">
-    <div class="surprise-kicker">With all the good wishes</div>
+    <div class="surprise-kicker">Sabki taraf se dher saara pyaar</div>
     <h2><?= $escapeHtml($finalHeading); ?></h2>
     <p><?= $escapeHtml($finalMessage); ?></p>
-    <button type="button" class="surprise-button" id="celebrateAgain">A little more celebration ✨</button>
+    <button type="button" class="surprise-button" id="celebrateAgain">Chalo aur celebrate karein ✨</button>
   </div>
 </section>
 <?php endif; ?>
@@ -265,7 +268,7 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
   const shareText = <?= json_encode($shareMessage, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
 
   function copyBirthdayLink() {
-    navigator.clipboard.writeText(shareText).then(() => {
+    navigator.clipboard.writeText(<?= json_encode($shareUrl, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>).then(() => {
       alert("🎉 Link copied to clipboard! Share it with your friends!");
     }).catch(() => {
       alert("❌ Failed to copy. Please copy manually.");
@@ -447,7 +450,7 @@ function loadWishes() {
   }).fail(function () {
     $("#wishBoard").html(`
       <div class="text-center text-red-500 p-4">
-        Please try again later 😁.
+        Abhi wishes load nahi ho paayi. Thodi der baad try kijiye 🙂.
       </div>
     `);
   });
@@ -455,18 +458,14 @@ function loadWishes() {
 
 
 
-    $("#wishForm").on("submit", function (e) {
-      e.preventDefault();
-      const formData = $(this).serialize();
-      $.post("submit_wish.php", formData, function (res) {
-        if (res.success) {
-          $("#wishForm")[0].reset();
-          loadWishes();
-          confettiInstance({ particleCount: 120, spread: 160 });
-        } else {
-          alert("Error: " + res.error);
-        }
-      }, "json");
+    const wishForm=$("#wishForm"), wishName=document.getElementById("wishSenderName"), wishMessage=document.getElementById("wishMessage"), wishRelation=document.getElementById("wishRelation"), wishFeedback=document.getElementById("wishFeedback"), wishSubmit=document.getElementById("wishSubmitButton");
+    const defaultWish="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️";
+    try{const saved=localStorage.getItem("vaibhavWishSenderName");if(saved&&!wishName.value)wishName.value=saved;}catch(e){}
+    document.querySelectorAll("[data-wish-suggestion]").forEach(button=>button.addEventListener("click",()=>{wishMessage.value=button.dataset.wishSuggestion||defaultWish;document.querySelectorAll("[data-wish-suggestion]").forEach(item=>item.classList.toggle("selected",item===button));}));
+    document.querySelectorAll("[data-relation]").forEach(button=>button.addEventListener("click",()=>{const relation=button.dataset.relation||"";wishRelation.value=wishRelation.value===relation?"":relation;document.querySelectorAll("[data-relation]").forEach(item=>item.classList.toggle("selected",item===button&&wishRelation.value!==""));}));
+    wishForm.on("submit",function(e){e.preventDefault();if(!wishName.value.trim()){wishFeedback.textContent="Pehle apna naam likh dijiye.";wishName.focus();return;}if(!wishMessage.value.trim()){wishFeedback.textContent="Ek chhoti si wish chuniye ya likh dijiye.";wishMessage.focus();return;}
+      wishSubmit.disabled=true;wishSubmit.textContent="⏳ Wish bheji ja rahi hai...";wishFeedback.textContent="Bas ek pal...";
+      $.ajax({url:"submit_wish.php",method:"POST",data:wishForm.serialize(),dataType:"json"}).done(function(res){if(res.success){try{localStorage.setItem("vaibhavWishSenderName",wishName.value.trim());}catch(e){}wishMessage.value=defaultWish;wishRelation.value="";document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>item.classList.remove("selected"));wishFeedback.textContent="🎉 Aapki wish Vaibhav tak pahunch gayi! Shukriya ❤️";loadWishes();if(typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});}else{wishFeedback.textContent=res.error||"Wish send nahi ho paayi. Dobara try kijiye.";}}).fail(function(xhr){wishFeedback.textContent=xhr.responseJSON&&xhr.responseJSON.error?xhr.responseJSON.error:"Internet ya server mein dikkat hai. Ek baar phir try kijiye.";}).always(function(){wishSubmit.disabled=false;wishSubmit.textContent="💌 <?= $escapeHtml($submitLabel); ?>";});
     });
     loadWishes();
   const revealLetter = document.getElementById('revealLetter');
@@ -480,7 +479,7 @@ function loadWishes() {
   if (makeWishBtn) makeWishBtn.addEventListener('click', () => {
     document.getElementById('cakeIllustration').classList.add('candles-out');
     document.getElementById('cakeMessage').hidden = false;
-    makeWishBtn.textContent = 'Your wish is on its way ✨';
+    makeWishBtn.textContent = 'Kittu ke liye dher saari wishes! ✨';
     makeWishBtn.disabled = true;
     if (typeof confettiInstance === 'function') confettiInstance({particleCount: 90, spread: 75, origin: {y: 0.68}});
   });

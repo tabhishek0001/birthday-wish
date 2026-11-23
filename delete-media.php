@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../includes/bootstrap.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . "/includes/bootstrap.php";
 header('Content-Type: application/json; charset=utf-8');
 if(($_SESSION['user_type']??'')!=='developer'){http_response_code(403);echo json_encode(['success'=>false,'error'=>'Access denied.']);exit;}
 $csrf=(string)($_POST['csrf']??'');if(empty($_SESSION['birthday_studio_csrf'])||!hash_equals($_SESSION['birthday_studio_csrf'],$csrf)){http_response_code(419);echo json_encode(['success'=>false,'error'=>'Session expired.']);exit;}
