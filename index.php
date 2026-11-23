@@ -1635,6 +1635,7 @@ body.birthday-public .birthday-sound-control {
     if(!parent||parent.closest(skipSelector))return;
     const original=node.nodeValue,trimmed=original.trim();
     if(trimmed&&dictionary[trimmed])node.nodeValue=original.replace(trimmed,dictionary[trimmed]);
+    else if(trimmed&&/['’]s Birthday$/i.test(trimmed))node.nodeValue=original.replace(trimmed,trimmed.replace(/['’]s Birthday$/i,' का जन्मदिन'));
   }
   function translateTree(root){
     const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
