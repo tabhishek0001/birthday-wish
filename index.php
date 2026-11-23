@@ -323,10 +323,19 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 .celebration-trail a:hover,.celebration-trail a.is-complete{transform:translateY(-3px);background:#fff1dc;border-color:#e9bd83}
 .celebration-trail a.is-complete span{background:#e8f3e9;color:#648b68}
 .birthday-control-dock{position:fixed;right:20px;bottom:18px;z-index:10010;display:flex;flex-direction:column;align-items:flex-end;gap:10px;max-width:calc(100vw - 24px);font-family:system-ui,-apple-system,sans-serif}
-.birthday-confetti-trigger{position:fixed;left:20px;bottom:18px;z-index:10011;display:grid;place-items:center;width:56px;height:56px;border:2px solid #fff;border-radius:50%;background:linear-gradient(145deg,#ffe08a,#ffad80);color:#70452d;font-size:27px;line-height:1;box-shadow:0 10px 28px #8d5d3c35,0 4px 0 #dc956d;cursor:pointer;transition:transform .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
-.birthday-confetti-trigger:hover{transform:translateY(-4px) rotate(-8deg);box-shadow:0 15px 34px #8d5d3c45,0 5px 0 #dc956d}
-.birthday-confetti-trigger:active{transform:scale(.91)}
-.birthday-confetti-trigger:focus-visible{outline:3px solid #f0a94d;outline-offset:4px}
+.birthday-confetti-trigger{position:fixed;left:20px;bottom:18px;z-index:10011;display:grid;place-items:center;width:60px;height:60px;border:2px solid #fff;border-radius:50%;background:linear-gradient(145deg,#fff0a8 0%,#ffc17d 52%,#ff9d91 100%);color:#70452d;font-size:29px;line-height:1;box-shadow:0 12px 30px #8d5d3c3d,0 4px 0 #dc956d;cursor:pointer;transition:transform .22s ease,box-shadow .22s ease;isolation:isolate;-webkit-tap-highlight-color:transparent;animation:birthdayButtonBounce 2.5s ease-in-out infinite}
+.birthday-confetti-trigger:before{content:"";position:absolute;inset:-6px;border:1.5px solid #f4b67e;border-radius:50%;opacity:0;animation:birthdayButtonHalo 2.5s ease-out infinite;pointer-events:none}
+.birthday-confetti-trigger span{display:grid;place-items:center;filter:drop-shadow(0 2px 1px #9d613c25);animation:birthdayIconWiggle 2.5s ease-in-out infinite}
+.birthday-confetti-trigger:hover{transform:translateY(-5px) rotate(-9deg) scale(1.06);box-shadow:0 17px 36px #8d5d3c50,0 5px 0 #dc956d;animation-play-state:paused}
+.birthday-confetti-trigger:active{transform:scale(.9);animation:none}
+.birthday-confetti-trigger:focus-visible{outline:3px solid #f0a94d;outline-offset:5px}
+.birthday-surprise-particle{position:fixed;z-index:10030;left:0;bottom:0;pointer-events:none;user-select:none;line-height:1;will-change:transform,opacity;animation:birthdaySurpriseFloat var(--float-duration,2.1s) cubic-bezier(.15,.65,.25,1) forwards}
+@keyframes birthdayButtonBounce{0%,100%{transform:translateY(0) rotate(0)}12%{transform:translateY(-7px) rotate(-7deg)}24%{transform:translateY(0) rotate(5deg)}34%{transform:translateY(-3px) rotate(-3deg)}46%{transform:translateY(0) rotate(0)}}
+@keyframes birthdayButtonHalo{0%{transform:scale(.9);opacity:.65}75%,100%{transform:scale(1.55);opacity:0}}
+@keyframes birthdayIconWiggle{0%,75%,100%{transform:rotate(0) scale(1)}82%{transform:rotate(-14deg) scale(1.13)}90%{transform:rotate(12deg) scale(1.08)}}
+@keyframes birthdaySurpriseFloat{0%{opacity:0;transform:translate3d(var(--start-x,0),0,0) rotate(0) scale(.45)}12%{opacity:1}100%{opacity:0;transform:translate3d(calc(var(--start-x,0) + var(--drift,0px)),-78vh,0) rotate(var(--spin,240deg)) scale(1.25)}}
+@media(max-width:640px){.birthday-confetti-trigger{left:12px;bottom:12px;width:54px;height:54px;font-size:26px}}
+@media(prefers-reduced-motion:reduce){.birthday-confetti-trigger,.birthday-confetti-trigger:before,.birthday-confetti-trigger span{animation:none!important}.birthday-surprise-particle{animation:none!important;opacity:0!important}}
 .birthday-dock-launcher{position:relative;display:flex;align-items:center;gap:9px;min-height:54px;padding:0 19px;border:1px solid #fff;border-radius:999px;background:linear-gradient(120deg,#f4c76e,#ee9878);color:#62452e;font-size:13px;font-weight:900;box-shadow:0 12px 32px #9a65413d,0 4px 0 #d98a65;cursor:pointer;transition:transform .2s,box-shadow .2s}
 .birthday-dock-launcher:hover{transform:translateY(-3px);box-shadow:0 17px 38px #9a65414a,0 5px 0 #d98a65}
 .dock-launcher-icon{font-size:22px;animation:luxBob 2.8s ease-in-out infinite}
@@ -567,6 +576,41 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
  .birthday-hero .birthday-gallery__frame .swiper-slide>a.memory-lightbox-link{border-radius:13px;padding:0!important}
 }
 @media(prefers-reduced-motion:reduce){.birthday-hero .birthday-gallery__frame .swiper-slide{transition:none!important}}
+</style>
+<style id="birthday-elegant-finish">
+/* A unified, warm editorial finish for the public birthday experience. */
+body.birthday-public{background:linear-gradient(180deg,#faf7f1 0%,#fffdf9 46%,#f7f2ec 100%)!important;color:#514842!important}
+body.birthday-public .birthday-hero{isolation:isolate;box-shadow:0 18px 55px rgba(105,78,54,.08);background:radial-gradient(circle at 14% 18%,rgba(255,255,255,.85),transparent 27%),radial-gradient(circle at 88% 12%,rgba(255,255,255,.65),transparent 25%),linear-gradient(135deg,#f8e7c9 0%,#f8eee2 48%,#e8efea 100%)!important}
+body.birthday-public .birthday-hero:after{content:"";position:absolute;inset:14px;border:1px solid rgba(255,255,255,.65);border-radius:26px;pointer-events:none;z-index:-1}
+body.birthday-public .birthday-hero__top{letter-spacing:.13em;text-transform:uppercase;color:#9a7658}
+body.birthday-public .birthday-hero h1{background:linear-gradient(110deg,#bd786b,#b8898c 48%,#819783);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none!important}
+body.birthday-public .birthday-hero p{color:#74675c}
+body.birthday-public .birthday-age{border:1px solid #f1dfc8;background:rgba(255,255,255,.82);box-shadow:0 8px 22px rgba(117,83,52,.08)}
+body.birthday-public .birthday-hero__button{background:linear-gradient(120deg,#c88980,#d79d83)!important;box-shadow:0 5px 0 #ad706a,0 12px 25px rgba(165,105,91,.18)!important;transition:transform .2s,box-shadow .2s}
+body.birthday-public .birthday-hero__button:hover{transform:translateY(-3px);box-shadow:0 7px 0 #ad706a,0 17px 30px rgba(165,105,91,.22)!important}
+body.birthday-public .birthday-section-heading h2,body.birthday-public .surprise-card h2,body.birthday-public .wish-invite-card h2{font-family:Georgia,"Times New Roman",serif!important;letter-spacing:-.035em!important;color:#66504b!important}
+body.birthday-public .birthday-gallery{padding-top:clamp(34px,6vw,58px)!important;padding-bottom:clamp(28px,5vw,48px)!important}
+body.birthday-public .birthday-gallery__frame{box-shadow:0 22px 58px rgba(81,59,43,.13)!important;border:5px solid rgba(255,255,255,.82)}
+body.birthday-public .birthday-surprise-section{background:transparent!important;padding-block:clamp(24px,4vw,42px)!important}
+body.birthday-public .surprise-card{position:relative;overflow:hidden;border:1px solid #e9ded3!important;border-radius:30px!important;background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(250,242,233,.96))!important;box-shadow:0 18px 48px rgba(91,68,49,.075)!important}
+body.birthday-public .surprise-card:before{content:"";position:absolute;left:50%;top:0;width:110px;height:3px;transform:translateX(-50%);border-radius:0 0 8px 8px;background:linear-gradient(90deg,#d5a58b,#c18c92,#a8b9a3)}
+body.birthday-public .surprise-kicker{letter-spacing:.16em;color:#ad8277}
+body.birthday-public .surprise-button{background:linear-gradient(120deg,#bc8990,#d39b82)!important;color:#fff!important;box-shadow:0 9px 22px rgba(163,112,111,.2)!important}
+body.birthday-public .surprise-button:hover{transform:translateY(-2px);box-shadow:0 13px 27px rgba(163,112,111,.25)!important}
+body.birthday-public .wish-invite-section{background:linear-gradient(180deg,transparent,#f8f1e9 35%,#fffaf5)!important}
+body.birthday-public .wish-invite-card{border:1px solid #e9ded4!important;border-radius:30px!important;background:rgba(255,253,249,.96)!important;box-shadow:0 20px 55px rgba(88,66,48,.075)!important}
+body.birthday-public #wishBoard article{padding:22px!important;border-radius:23px!important;background:linear-gradient(145deg,#fffefa,#fbf5ed)!important;border:1px solid #ece1d7!important;box-shadow:0 12px 30px rgba(88,66,48,.055)!important}
+body.birthday-public #wishBoard article p:first-child{font-family:Georgia,"Times New Roman",serif!important;font-size:17px!important;line-height:1.65!important;color:#5e514a!important}
+body.birthday-public .birthday-public footer,body.birthday-public footer{border-top:1px solid #e9ded4!important;background:#f2ece4!important}
+body.birthday-public .birthday-control-panel{border:1px solid rgba(255,255,255,.95)!important;box-shadow:0 24px 70px rgba(73,54,39,.22)!important}
+body.birthday-public .birthday-dock-launcher{background:linear-gradient(120deg,#f0d18d,#e6a18d)!important}
+@media(max-width:640px){
+ body.birthday-public .birthday-hero:after{inset:9px;border-radius:20px}
+ body.birthday-public .birthday-gallery__frame{border-width:4px}
+ body.birthday-public .surprise-card,body.birthday-public .wish-invite-card{border-radius:24px!important}
+ body.birthday-public #wishBoard article{padding:18px!important}
+}
+@media(prefers-reduced-motion:reduce){body.birthday-public .birthday-hero__button,body.birthday-public .surprise-button{transition:none!important}}
 </style>
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" data-decor-enabled="<?= $floatingDecorEnabled ? 'true' : 'false' ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
@@ -1343,10 +1387,48 @@ function loadWishes() {
    document.addEventListener('pointerdown',event=>{if(!dock.contains(event.target)&&!panel.hidden)scheduleHide();},{passive:true});
    document.addEventListener('keydown',event=>{if(event.key==='Escape')closeDock();});
  }
+ const surpriseModes=[
+   {name:'cake and candles',items:['🎂','🕯️','✨','🎉','🍰']},
+   {name:'hearts and love',items:['💖','💕','❤️','💗','💝']},
+   {name:'balloon shower',items:['🎈','🎈','🎈','🎊','✨']},
+   {name:'stars and sparkle',items:['🌟','⭐','✨','💫','🌠']},
+   {name:'birthday gifts',items:['🎁','🎀','🎉','🥳','✨']},
+   {name:'flowers and wishes',items:['🌸','🌼','🌷','💐','💖']},
+   {name:'party time',items:['🥳','🎊','🎉','🪅','✨']}
+ ];
+ let surpriseIndex=-1;
+ function playBirthdaySurprise(button){
+   surpriseIndex=(surpriseIndex+1)%surpriseModes.length;
+   const mode=surpriseModes[surpriseIndex],reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+   const rect=button?button.getBoundingClientRect():{left:18,bottom:18,width:56,height:56};
+   const originX=Math.max(24,Math.min(window.innerWidth-24,rect.left+rect.width/2));
+   const originY=Math.max(24,Math.min(window.innerHeight-24,window.innerHeight-(rect.bottom+rect.height/2)));
+   if(!reduceMotion){
+     const layer=document.createDocumentFragment();
+     for(let i=0;i<19;i++){
+       const particle=document.createElement('span'),symbol=mode.items[i%mode.items.length];
+       particle.className='birthday-surprise-particle';particle.textContent=symbol;
+       particle.setAttribute('aria-hidden','true');
+       const startX=(Math.random()-.5)*Math.min(150,window.innerWidth*.42);
+       particle.style.left=originX+'px';particle.style.bottom=originY+'px';
+       particle.style.fontSize=(19+Math.random()*22)+'px';
+       particle.style.setProperty('--start-x',startX+'px');
+       particle.style.setProperty('--drift',((Math.random()-.5)*190)+'px');
+       particle.style.setProperty('--spin',((Math.random()>.5?1:-1)*(120+Math.random()*520))+'deg');
+       particle.style.setProperty('--float-duration',(1.55+Math.random()*1.25)+'s');
+       particle.style.animationDelay=(Math.random()*.22)+'s';
+       layer.appendChild(particle);
+       particle.addEventListener('animationend',()=>particle.remove(),{once:true});
+     }
+     document.body.appendChild(layer);
+   }
+   if(canCelebrate&&(surpriseIndex===0||surpriseIndex===2||surpriseIndex===4||surpriseIndex===6))confettiBurst(.58,true);
+   if(button){button.title='Next surprise: '+surpriseModes[(surpriseIndex+1)%surpriseModes.length].name;button.setAttribute('aria-label','Birthday surprise: '+mode.name+'. Activate for another surprise.');}
+ }
  const confettiButton=document.getElementById('dockConfettiButton');
- if(confettiButton)confettiButton.addEventListener('click',()=>{confettiBurst(.55,true);confettiButton.innerHTML='<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> More birthday magic!';});
+ if(confettiButton)confettiButton.addEventListener('click',()=>{playBirthdaySurprise(confettiButton);confettiButton.innerHTML='<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> More birthday magic!';});
  const floatingConfettiButton=document.getElementById('floatingConfettiButton');
- if(floatingConfettiButton)floatingConfettiButton.addEventListener('click',()=>confettiBurst(.55,true));
+ if(floatingConfettiButton)floatingConfettiButton.addEventListener('click',()=>playBirthdaySurprise(floatingConfettiButton));
  const hero=document.querySelector('.birthday-hero');
  if(hero&&config.decor&&!reduce){
    ['balloon-one','balloon-two','balloon-three','balloon-four'].forEach(cls=>{const button=document.createElement('button');button.type='button';button.className='birthday-balloon '+cls;button.innerHTML='<i class="fa-solid fa-cake-candles" aria-hidden="true"></i>';button.setAttribute('aria-label','Pop a birthday balloon');button.addEventListener('click',()=>{button.classList.add('popped');confettiBurst(.35,false);setTimeout(()=>button.remove(),350);});hero.appendChild(button);});
