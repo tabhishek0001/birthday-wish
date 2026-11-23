@@ -185,8 +185,22 @@ body.birthday-public>.glightbox-container .gprev{z-index:30002!important;opacity
 @media(max-width:600px){body.birthday-public>.glightbox-container .gslide-media{max-width:96vw!important;max-height:78vh!important}body.birthday-public>.glightbox-container .gslide-image img{max-width:96vw!important;max-height:78vh!important}}
 </style>
 <style id="vaibhav-memory-lightbox">
-.birthday-gallery__frame .memory-lightbox-link{display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-width:0;min-height:0;cursor:zoom-in}
-.birthday-gallery__frame .memory-lightbox-link img{width:100%;height:100%;object-fit:contain}
+.birthday-gallery__frame .memory-lightbox-link{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-width:0;min-height:0;cursor:zoom-in}
+.birthday-gallery__frame .memory-lightbox-link img,.birthday-gallery__frame .memory-lightbox-link video{width:100%;height:100%;object-fit:contain}
+.memory-media-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;place-items:center;width:68px;height:68px;border-radius:50%;background:#ffffffdf;color:#c85e4f;font-size:27px;box-shadow:0 8px 30px #0002;pointer-events:none}
+.memory-media-icon{font-size:clamp(42px,9vw,72px);line-height:1}
+.memory-media-open-hint{font-size:13px;opacity:.75}
+.birthday-gallery__frame .memory-media-trigger:not(:has(video)){flex-direction:column;gap:12px;padding:22px;background:linear-gradient(145deg,#fff0d7,#e8f3e8);color:#76543d;font-weight:850;text-decoration:none}
+.lightbox-inline-media{display:none!important}
+.lightbox-inline-card{width:min(560px,88vw);padding:clamp(22px,5vw,42px);border-radius:22px;background:#fffaf2;color:#76543d;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.lightbox-inline-card audio{width:100%;max-width:100%}
+.lightbox-inline-card iframe{width:min(850px,85vw);height:min(78vh,850px);border:0;background:#fff}
+.wish-board-attachments{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.wish-board-attachments .wish-media-trigger{position:relative;display:flex;align-items:center;justify-content:center;min-width:112px;min-height:92px;max-width:220px;padding:10px;border-radius:14px;background:#fff3e2;color:#80543f;text-decoration:none;overflow:hidden}
+.wish-board-attachments .wish-media-trigger img,.wish-board-attachments .wish-media-trigger video{display:block;width:100%;max-height:190px;object-fit:contain;border-radius:10px}
+.wish-board-attachments .wish-media-trigger .wish-media-label{font-size:12px;font-weight:800}
+.wish-board-attachments .wish-media-trigger:has(img),.wish-board-attachments .wish-media-trigger:has(video){padding:0;background:#f5eadc}
+.wish-board-attachments .wish-media-trigger:has(img) img{max-height:220px}
 </style>
 <style id="vaibhav-premium-experience">
 :root{--lux-ink:#49372f;--lux-muted:#88766b;--lux-cream:#fffaf0;--lux-peach:#ffe2c8;--lux-coral:#f47e70;--lux-gold:#f4bd61;--lux-shadow:0 24px 70px rgba(105,70,46,.12);scroll-behavior:smooth}
@@ -341,10 +355,19 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <div class="birthday-section-heading"><span>📸</span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
   <?php if ($featuredImages || $birthdayMedia): ?>
   <div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
-    <?php foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="lazy"></a></div><?php endforeach; ?>
-    <?php foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); ?>
-      <div class="swiper-slide"><?php if (($memory['type'] ?? '') === 'video'): ?><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" controls muted playsinline preload="metadata"></video><?php elseif (($memory['type'] ?? '') === 'audio'): ?><div class="birthday-audio-memory"><span>🎵 Audio memory</span><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="metadata"></audio></div><?php else: ?><a class="glightbox memory-lightbox-link" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memory['caption'] ?? 'Vaibhav ki yaad') ?>" loading="lazy"></a><?php endif; ?>
-      <?php if (trim((string)($memory['caption'] ?? '')) !== ''): ?><div class="memory-caption-overlay"><?= $escapeHtml($memory['caption']); ?></div><?php endif; ?></div>
+    <?php foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="lazy"></a></div><?php endforeach; ?>
+    <?php $memoryAudioIndex = 0; foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); if (!preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|flac)$/i', $mediaFile)) continue; $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); $memoryType = (string)($memory['type'] ?? 'image'); $memoryCaption = trim((string)($memory['caption'] ?? '')); ?>
+      <div class="swiper-slide">
+        <?php if ($memoryType === 'video'): ?>
+          <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="video" aria-label="Video memory ko full screen mein dekhein"><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" muted playsinline preload="metadata" tabindex="-1"></video><span class="memory-media-play" aria-hidden="true">▶</span></a>
+        <?php elseif ($memoryType === 'audio'): $memoryAudioIndex++; $audioId = 'birthday-memory-audio-' . $memoryAudioIndex; ?>
+          <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="#<?= $escapeHtml($audioId) ?>" data-type="inline" data-gallery="vaibhav-memories" aria-label="Audio memory sunne ke liye kholein"><span class="memory-media-icon" aria-hidden="true">🎵</span><strong>Audio memory</strong><span class="memory-media-open-hint">Tap to listen</span></a>
+          <div id="<?= $escapeHtml($audioId) ?>" class="lightbox-inline-media"><div class="lightbox-inline-card"><span class="memory-media-icon">🎵</span><strong><?= $escapeHtml($memoryCaption ?: 'Birthday audio memory') ?></strong><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="metadata"></audio></div></div>
+        <?php else: ?>
+          <a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memoryCaption ?: 'Vaibhav ki yaad') ?>" loading="lazy"></a>
+        <?php endif; ?>
+        <?php if ($memoryCaption !== ''): ?><div class="memory-caption-overlay"><?= $escapeHtml($memoryCaption); ?></div><?php endif; ?>
+      </div>
     <?php endforeach; ?>
   </div><div class="swiper-pagination"></div></div>
   <?php else: ?><div class="birthday-gallery__empty"><span>🧸</span><strong>Vaibhav ki photos jald hi yahan aayengi!</strong><small>Birthday Studio se photos, videos aur audio memories add kar sakte hain.</small></div><?php endif; ?>
@@ -555,8 +578,8 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     const confettiCanvas = document.getElementById("confetti-canvas");
     const confettiInstance = confetti.create(confettiCanvas, { resize: true });
 
-    const stopMemoryMedia = (except = null) => {
-      document.querySelectorAll("#birthdayMemories video, #birthdayMemories audio").forEach(media => {
+    const stopBirthdayMedia = (except = null) => {
+      document.querySelectorAll("video, audio").forEach(media => {
         if (media === except) return;
         media.pause();
         if (media.tagName === "VIDEO") {
@@ -566,55 +589,68 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     };
     const memorySwiper = new Swiper(".featured-swiper", {
       loop: true,
-      autoplay: { delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true },
+      autoplay: { delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true },
       pagination: { el: ".swiper-pagination", clickable: true },
-      on: { slideChangeTransitionStart() { stopMemoryMedia(); } }
+      on: {
+        touchStart(swiper) { if (swiper.autoplay) swiper.autoplay.stop(); },
+        sliderFirstMove(swiper) { if (swiper.autoplay) swiper.autoplay.stop(); },
+        slideChangeTransitionStart() { stopBirthdayMedia(); }
+      }
     });
+    const memoryCarousel = document.querySelector(".featured-swiper");
+    if (memoryCarousel) {
+      ["pointerdown", "focusin"].forEach(eventName => memoryCarousel.addEventListener(eventName, () => {
+        if (memorySwiper.autoplay) memorySwiper.autoplay.stop();
+      }, { passive: true }));
+    }
 
-    document.querySelectorAll("#birthdayMemories video").forEach(video => {
-      video.addEventListener("play", () => {
-        stopMemoryMedia(video);
-        video.muted = false;
-        video.removeAttribute("muted");
-        video.volume = 1;
-      });
-      video.addEventListener("ended", () => video.pause());
-    });
+    // Capture media play events, including media created inside GLightbox.
+    document.addEventListener("play", event => {
+      const media = event.target;
+      if (!(media instanceof HTMLMediaElement)) return;
+      stopBirthdayMedia(media);
+      if (media.tagName === "VIDEO") {
+        media.muted = false;
+        media.removeAttribute("muted");
+        media.volume = 1;
+      }
+    }, true);
+    document.addEventListener("ended", event => {
+      if (event.target instanceof HTMLMediaElement) event.target.pause();
+    }, true);
 
-    // GLightbox handles the full-screen photo viewer, navigation, keyboard and touch gestures.
+    // One library-powered viewer for every memory and every visitor-wish attachment.
     const memoryLightbox = GLightbox({
-      selector: '#birthdayMemories a.glightbox',
+      selector: "a.birthday-lightbox",
       touchNavigation: true,
       loop: true,
       zoomable: true,
       draggable: true,
       closeOnOutsideClick: true,
-      openEffect: 'zoom',
-      closeEffect: 'fade',
-      slideEffect: 'slide'
+      autoplayVideos: false,
+      openEffect: "zoom",
+      closeEffect: "fade",
+      slideEffect: "slide"
     });
-    memoryLightbox.on('open', () => {
-      stopMemoryMedia();
+    memoryLightbox.on("open", () => {
+      stopBirthdayMedia();
       if (memorySwiper.autoplay) memorySwiper.autoplay.stop();
     });
-    memoryLightbox.on('slide_changed', () => {
-      stopMemoryMedia();
-    });
-    memoryLightbox.on('close', () => {
-      stopMemoryMedia();
-      if (memorySwiper.autoplay) memorySwiper.autoplay.start();
-    });
+    memoryLightbox.on("slide_changed", () => stopBirthdayMedia());
+    memoryLightbox.on("close", () => stopBirthdayMedia());
 
     $('img.lazy').each(function () {
       const img = $(this);
       img.on('load', () => img.addClass('loaded')).attr('src', img.attr('src'));
     });
 
+let wishMediaInlineSequence = 0;
 function loadWishes() {
   $.getJSON("wishes.json?ts=" + new Date().getTime(), function (data) {
     $("#wishBoard").html("");
 
-    data.reverse().forEach((wish) => {
+    $(".wish-inline-lightbox").remove();
+    data.reverse().forEach((wish, wishIndex) => {
       const name = wish.name?.trim() || "Anonymous";
       const message = wish.message?.trim() || "🎉 Sent you best wishes!";
       const pahchan = wish.pahchan?.trim();
@@ -639,10 +675,45 @@ function loadWishes() {
         $("<span>").addClass("text-gray-500 font-medium").text(" (" + pahchan + ")").appendTo($byline);
       }
       const $date = $("<p>").addClass("text-xs text-gray-400 mt-1").text(time);$card.append($wishText,$byline,$date);
-      if(Array.isArray(wish.media)&&wish.media.length){const $attachments=$("<div>").addClass("wish-board-attachments");wish.media.slice(0,3).forEach(item=>{if(!item||typeof item.file!=="string"||!/^[a-f0-9]{32}\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|pdf)$/i.test(item.file))return;const url="wish-media/"+encodeURIComponent(item.file);if(item.type==="image")$('<img>').attr({src:url,alt:"Wish attachment",loading:"lazy"}).appendTo($attachments);else if(item.type==="video")$('<video>').attr({src:url,controls:true,playsinline:true,preload:"metadata"}).appendTo($attachments);else if(item.type==="audio")$('<audio>').attr({src:url,controls:true,preload:"metadata"}).appendTo($attachments);else if(item.type==="document")$('<a>').attr({href:url,target:"_blank",rel:"noopener"}).text("📄 Open attached PDF").appendTo($attachments);});if($attachments.children().length)$card.append($attachments);}
+      if(Array.isArray(wish.media)&&wish.media.length){
+        const $attachments=$("<div>").addClass("wish-board-attachments");
+        const wishGallery="birthday-wish-"+String(wishIndex)+"-"+String(wish.timestamp||Date.now());
+        wish.media.slice(0,3).forEach(item=>{
+          if(!item||typeof item.file!=="string"||!/^[a-f0-9]{32}\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|pdf)$/i.test(item.file))return;
+          const url="wish-media/"+encodeURIComponent(item.file);
+          const $link=$("<a>").addClass("birthday-lightbox wish-media-trigger").attr({"data-gallery":wishGallery,"aria-label":"Open wish attachment"});
+          if(item.type==="image"){
+            $link.attr({href:url,"data-type":"image"}).append($("<img>").attr({src:url,alt:"Wish photo",loading:"lazy"}));
+          }else if(item.type==="video"){
+            $link.attr({href:url,"data-type":"video"}).append($("<video>").attr({src:url,muted:true,playsinline:true,preload:"metadata"}),$("<span>").addClass("wish-media-label").text("▶ Play video"));
+          }else if(item.type==="audio"){
+            const inlineId="wish-audio-"+(++wishMediaInlineSequence);
+            $link.attr({href:"#"+inlineId,"data-type":"inline"}).append($("<span>").addClass("wish-media-label").text("🎵 Listen to audio"));
+            $("<div>").attr("id",inlineId).addClass("lightbox-inline-media wish-inline-lightbox").append(
+              $("<div>").addClass("lightbox-inline-card").append(
+                $("<span>").addClass("memory-media-icon").text("🎵"),
+                $("<strong>").text("Voice / audio wish"),
+                $("<audio>").attr({src:url,controls:true,preload:"metadata"})
+              )
+            ).appendTo(document.body);
+          }else if(item.type==="document"){
+            const inlineId="wish-pdf-"+(++wishMediaInlineSequence);
+            $link.attr({href:"#"+inlineId,"data-type":"inline"}).append($("<span>").addClass("wish-media-label").text("📄 View PDF"));
+            $("<div>").attr("id",inlineId).addClass("lightbox-inline-media").append(
+              $("<div>").addClass("lightbox-inline-card").append(
+                $("<strong>").text("Attached PDF"),
+                $("<iframe>").attr({src:url,title:"Wish PDF attachment",loading:"lazy"})
+              )
+            ).appendTo(document.body);
+          }
+          if($link.attr("href"))$attachments.append($link);
+        });
+        if($attachments.children().length)$card.append($attachments);
+      }
       $("#wishBoard").append($card);
     });
 
+    memoryLightbox.reload();
     AOS.refresh();
   }).fail(function () {
     $("#wishBoard").html(`
