@@ -25,6 +25,10 @@ if ($isHindi) {
         if (is_array($hindiConfig) && is_array($hindiConfig['experience'] ?? null)) {
             $baseExperience = is_array($experienceConfig['experience'] ?? null) ? $experienceConfig['experience'] : [];
             $experienceConfig['experience'] = array_replace($baseExperience, $hindiConfig['experience']);
+            // Keep social previews consistent across languages unless the admin opts out.
+            if (($baseExperience['ogImageSameForHindi'] ?? true) !== false) {
+                $experienceConfig['experience']['ogImage'] = (string)($baseExperience['ogImage'] ?? '');
+            }
         }
     }
 }
