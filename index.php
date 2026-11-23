@@ -1988,11 +1988,11 @@ body.birthday-public{
 @keyframes birthdayHeartDrift{
   0%{transform:translate3d(0,0,0) rotate(-12deg) scale(.72);opacity:0}
   12%{opacity:var(--heart-opacity)}
-  78%{opacity:calc(var(--heart-opacity)*.7)}
+  78%{opacity:var(--heart-opacity)}
   100%{transform:translate3d(var(--heart-drift),-118vh,0) rotate(24deg) scale(1.18);opacity:0}
 }
 @media(max-width:640px){
-  .birthday-floating-hearts span{font-size:calc(var(--heart-size)*.78)}
+  .birthday-floating-hearts span{font-size:var(--heart-size)}
   .birthday-public .birthday-hero{background:linear-gradient(145deg,#ffe3ef,#fff0cc 48%,#dff5f0 78%,#eae3ff)!important}
 }
 @media(prefers-reduced-motion:reduce){
