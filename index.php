@@ -639,6 +639,8 @@ function loadWishes() {
       musicVolume.value = String(Math.round(music.volume * 100));
     };
     const startMusicOnFirstInteraction = (event) => {
+      document.removeEventListener("pointerdown", startMusicOnFirstInteraction, true);
+      document.removeEventListener("keydown", startMusicOnFirstInteraction, true);
       if (!music.paused && !music.muted && music.volume > 0) return;
       music.muted = false;
       if (music.volume <= 0) music.volume = 0.12;
@@ -648,8 +650,6 @@ function loadWishes() {
         musicBtn.textContent = "▶ Tap to play";
         musicBtn.setAttribute("aria-label", "Tap to play birthday music");
       });
-      document.removeEventListener("pointerdown", startMusicOnFirstInteraction, true);
-      document.removeEventListener("keydown", startMusicOnFirstInteraction, true);
     };
     document.addEventListener("pointerdown", startMusicOnFirstInteraction, {capture:true, once:true});
     document.addEventListener("keydown", startMusicOnFirstInteraction, {capture:true, once:true});
