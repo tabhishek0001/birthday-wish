@@ -123,9 +123,7 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
-  
-  
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
   <style>
   @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
@@ -539,26 +537,26 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 </style>
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" data-decor-enabled="<?= $floatingDecorEnabled ? 'true' : 'false' ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
- <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
   <!-- Interactive Heading -->
   
-  <header class="birthday-hero" data-aos="zoom-in">
+  <header class="birthday-hero">
     <div class="birthday-hero__top"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> &nbsp; Aaj ka din hai hamare Kittu ke naam! &nbsp; <i class="fa-solid fa-cake-candles" aria-hidden="true"></i></div>
     <div class="birthday-hero__toys" aria-hidden="true"><i class="fa-solid fa-child" aria-hidden="true"></i> <i class="fa-solid fa-paw" aria-hidden="true"></i> <i class="fa-solid fa-car" aria-hidden="true"></i> <i class="fa-solid fa-star" aria-hidden="true"></i></div>
-        <section class="birthday-gallery" id="birthdayMemories" data-aos="fade-up" aria-label="Vaibhav ki yaadein">
+        <section class="birthday-gallery" id="birthdayMemories" aria-label="Vaibhav ki yaadein">
       <div class="birthday-section-heading"><span><i class="fa-solid fa-images" aria-hidden="true"></i></span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
       <?php if ($featuredImages || $birthdayMedia): ?>
       <div class="birthday-gallery__stage"><div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
-        <?php foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="lazy"></a></div><?php endforeach; ?>
+        <?php foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="lazy" decoding="async"></a></div><?php endforeach; ?>
         <?php $memoryAudioIndex = 0; foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); if (!preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|flac)$/i', $mediaFile)) continue; $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); $memoryType = (string)($memory['type'] ?? 'image'); $memoryCaption = trim((string)($memory['caption'] ?? '')); ?>
           <div class="swiper-slide">
             <?php if ($memoryType === 'video'): ?>
-              <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="video" aria-label="Video memory ko full screen mein dekhein"><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" muted playsinline preload="metadata" tabindex="-1"></video><span class="memory-media-play" aria-hidden="true"><i class="fa-solid fa-circle-play"></i></span></a>
+              <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="video" aria-label="Video memory ko full screen mein dekhein"><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" muted playsinline preload="none" tabindex="-1"></video><span class="memory-media-play" aria-hidden="true"><i class="fa-solid fa-circle-play"></i></span></a>
             <?php elseif ($memoryType === 'audio'): $memoryAudioIndex++; $audioId = 'birthday-memory-audio-' . $memoryAudioIndex; ?>
               <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="#<?= $escapeHtml($audioId) ?>" data-type="inline" data-gallery="vaibhav-memories" aria-label="Audio memory sunne ke liye kholein"><span class="memory-media-icon" aria-hidden="true"><i class="fa-solid fa-music"></i></span><strong>Audio memory</strong><span class="memory-media-open-hint">Tap to listen</span></a>
-              <div id="<?= $escapeHtml($audioId) ?>" class="lightbox-inline-media"><div class="lightbox-inline-card"><span class="memory-media-icon"><i class="fa-solid fa-music"></i></span><strong><?= $escapeHtml($memoryCaption ?: 'Birthday audio memory') ?></strong><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="metadata"></audio></div></div>
+              <div id="<?= $escapeHtml($audioId) ?>" class="lightbox-inline-media"><div class="lightbox-inline-card"><span class="memory-media-icon"><i class="fa-solid fa-music"></i></span><strong><?= $escapeHtml($memoryCaption ?: 'Birthday audio memory') ?></strong><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="none"></audio></div></div>
             <?php else: ?>
-              <a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memoryCaption ?: 'Vaibhav ki yaad') ?>" loading="lazy"></a>
+              <a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memoryCaption ?: 'Vaibhav ki yaad') ?>" loading="lazy" decoding="async"></a>
             <?php endif; ?>
           </div>
         <?php endforeach; ?>
@@ -585,7 +583,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
 
 <?php if ($showLetter): ?>
-<section class="birthday-surprise-section" id="secretLetterSection" data-aos="fade-up">
+<section class="birthday-surprise-section" id="secretLetterSection">
   <div class="surprise-card letter-card">
     <div class="surprise-kicker">Dil se ek chhota sa note</div>
     <h2><?= $escapeHtml($letterHeading); ?></h2>
@@ -595,7 +593,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 </section>
 <?php endif; ?>
 <?php if ($showCake): ?>
-<section class="birthday-surprise-section" id="interactiveCakeSection" data-aos="fade-up">
+<section class="birthday-surprise-section" id="interactiveCakeSection">
   <div class="surprise-card cake-card">
     <div class="surprise-kicker">Kittu ke liye ek special moment</div>
     <h2><?= $escapeHtml($cakeHeading); ?></h2>
@@ -606,7 +604,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 </section>
 <?php endif; ?>
 
-<section class="wish-invite-section" id="wishSection" data-aos="fade-up">
+<section class="wish-invite-section" id="wishSection">
   <div class="wish-invite-card">
     <div class="wish-invite-kicker"><i class="fa-solid fa-heart" aria-hidden="true"></i> Chhote Kittu ke liye</div>
     <h2><?= $escapeHtml($wishFormHeading); ?></h2><p class="wish-invite-description"><?= $escapeHtml($wishFormDescription); ?></p>
@@ -658,7 +656,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   
 
   <!-- Wishes -->
-  <section class="px-4 py-16 bg-gradient-to-br from-pink-50 to-pink-100" data-aos="fade-up">
+  <section class="px-4 py-16 bg-gradient-to-br from-pink-50 to-pink-100">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-3xl font-extrabold text-center text-pink-700 mb-10"><?= $escapeHtml($wishBoardHeading); ?></h2>
       <div id="wishBoard" class="grid sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
@@ -666,7 +664,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   </section>
 
 <?php if ($showFinal): ?>
-<section class="birthday-surprise-section" id="finalCelebrationSection" data-aos="fade-up">
+<section class="birthday-surprise-section" id="finalCelebrationSection">
   <div class="surprise-card final-card">
     <div class="surprise-kicker">Sabki taraf se dher saara pyaar</div>
     <h2><?= $escapeHtml($finalHeading); ?></h2>
@@ -678,7 +676,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
   <!-- Background Music -->
   <?php if ($musicEnabled): ?>
-  <audio id="bgMusic" loop preload="auto" volume="0.12"><source src="<?= $escapeHtml($musicSource); ?>" type="audio/mpeg"></audio>
+  <audio id="bgMusic" loop preload="none" volume="0.12"><source src="<?= $escapeHtml($musicSource); ?>" type="audio/mpeg"></audio>
   <?php endif; ?>
 <!-- Share Buttons Section -->
 <div class="mt-6 flex flex-wrap gap-3 justify-center items-center">
@@ -798,12 +796,11 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  
+
   <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-      AOS.init();
+
     const confettiCanvas = document.getElementById("confetti-canvas");
     const confettiInstance = confetti.create(confettiCanvas, { resize: true });
 
@@ -1198,23 +1195,21 @@ function loadWishes() {
 
 <script id="vaibhav-premium-interactions">
 (function(){
- const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- const progress=document.createElement('div');progress.className='lux-scroll-progress';document.body.appendChild(progress);
- const updateProgress=()=>{const max=document.documentElement.scrollHeight-window.innerHeight;progress.style.width=(max>0?window.scrollY/max*100:0)+'%';};
- window.addEventListener('scroll',updateProgress,{passive:true});updateProgress();
- if(!reduce){
-   const symbols=['✦','✧','♡','·'];for(let i=0;i<9;i++){const s=document.createElement('span');s.className='lux-sparkle';s.textContent=symbols[i%symbols.length];s.style.left=(5+(i*11)%91)+'%';s.style.top=(12+(i*17)%78)+'%';s.style.fontSize=(12+(i%3)*8)+'px';s.style.animationDelay=(-i*.8)+'s';document.body.appendChild(s);}
- }
- const fine=window.matchMedia&&window.matchMedia('(pointer: fine)').matches;
- if(fine&&!reduce){
-   const ring=document.createElement('span'),dot=document.createElement('span');ring.className='lux-cursor';dot.className='lux-cursor-dot';document.body.append(ring,dot);
-   let x=-50,y=-50,dx=-50,dy=-50,raf=0;
-   document.addEventListener('pointermove',e=>{x=e.clientX;y=e.clientY;ring.classList.add('is-visible');dot.classList.add('is-visible');dot.style.transform='translate('+x+'px,'+y+'px) translate(-50%,-50%)';if(!raf)raf=requestAnimationFrame(function move(){dx+=(x-dx)*.22;dy+=(y-dy)*.22;ring.style.transform='translate('+dx+'px,'+dy+'px) translate(-50%,-50%)';if(Math.abs(x-dx)+Math.abs(y-dy)>.3)raf=requestAnimationFrame(move);else raf=0;});},{passive:true});
-   document.addEventListener('pointerover',e=>{if(e.target.closest('a,button,input,textarea,select,[role=button]'))ring.classList.add('is-hover');});
-   document.addEventListener('pointerout',e=>{if(e.target.closest('a,button,input,textarea,select,[role=button]'))ring.classList.remove('is-hover');});
-   document.addEventListener('pointerleave',()=>{ring.classList.remove('is-visible');dot.classList.remove('is-visible');});
- }
- document.addEventListener('pointerdown',e=>{if(reduce)return;const ripple=document.createElement('span');ripple.className='lux-touch-ripple';ripple.style.left=e.clientX+'px';ripple.style.top=e.clientY+'px';document.body.appendChild(ripple);ripple.addEventListener('animationend',()=>ripple.remove(),{once:true});},{passive:true});
+  const progress=document.createElement('div');
+  progress.className='lux-scroll-progress';
+  document.body.appendChild(progress);
+  let frame=0;
+  const updateProgress=()=>{
+    if(frame)return;
+    frame=requestAnimationFrame(()=>{
+      frame=0;
+      const max=document.documentElement.scrollHeight-window.innerHeight;
+      progress.style.width=(max>0?window.scrollY/max*100:0)+'%';
+    });
+  };
+  window.addEventListener('scroll',updateProgress,{passive:true});
+  window.addEventListener('resize',updateProgress,{passive:true});
+  updateProgress();
 })();
 </script>
 <script id="vaibhav-celebration-interactions">
