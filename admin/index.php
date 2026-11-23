@@ -316,13 +316,14 @@ unset($_SESSION['birthday_admin_notice']);
  if(initial && panels.some(p=>p.dataset.sectionPanel===initial)) show(initial);
 
  const csrf=<?= json_encode($csrf) ?>;
+ const studioCsrf=<?= json_encode($studioCsrf) ?>;
  const mediaInput=document.getElementById('adminMediaFiles');
  if(mediaInput){const info=document.getElementById('adminUploadSelection');const form=mediaInput.closest('form');const submit=form.querySelector('button[type=submit]');submit.disabled=true;mediaInput.addEventListener('change',()=>{const chosen=Array.from(mediaInput.files||[]);const tooLarge=chosen.some(file=>file.size>25*1024*1024);info.textContent=chosen.length?chosen.length+' file(s) selected'+(tooLarge?' · Har file 25 MB se chhoti honi chahiye':''):'Abhi koi file select nahi hai';submit.disabled=!chosen.length||tooLarge;});form.addEventListener('submit',event=>{if(!mediaInput.files.length||Array.from(mediaInput.files).some(file=>file.size>25*1024*1024)){event.preventDefault();info.textContent='Photos/videos choose karein; har file 25 MB se chhoti honi chahiye.';return;}submit.disabled=true;submit.textContent='Uploading…';});}
  document.querySelectorAll('.edit-caption').forEach(btn=>{
    btn.addEventListener('click',async()=>{
      const caption=prompt('Memory caption:',btn.dataset.caption||'');
      if(caption===null)return;
-     const fd=new FormData();fd.append('csrf',csrf);fd.append('file',btn.dataset.file);fd.append('caption',caption);
+     const fd=new FormData();fd.append('csrf',studioCsrf);fd.append('file',btn.dataset.file);fd.append('caption',caption);
      const r=await fetch('../update-media.php',{method:'POST',body:fd});const j=await r.json();
      if(j.success){location.reload();}else{alert(j.error||'Could not update the caption.');}
    });
@@ -330,7 +331,7 @@ unset($_SESSION['birthday_admin_notice']);
  document.querySelectorAll('.delete-memory').forEach(btn=>{
    btn.addEventListener('click',async()=>{
      if(!confirm('Remove this memory from the birthday experience?'))return;
-     const fd=new FormData();fd.append('csrf',csrf);fd.append('file',btn.dataset.file);
+     const fd=new FormData();fd.append('csrf',studioCsrf);fd.append('file',btn.dataset.file);
      const r=await fetch('../delete-media.php',{method:'POST',body:fd});const j=await r.json();
      if(j.success){location.reload();}else{alert(j.error||'Could not remove the memory.');}
    });
