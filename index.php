@@ -59,7 +59,8 @@ if ($shareImage === $publicBaseUrl . '/favicon.ico') {
         }
     }
 }
-$shareUrl = 'https://www.docsansar.com/events/?event=vaibhav';
+$shareUrl = 'https://www.docsansar.com/birthday-wish/#wishSection';
+$eventsUrl = 'https://www.docsansar.com/events/?event=vaibhav';
 $heroTitle = trim((string)($experienceSettings['title'] ?? '')) ?: "Happy Birthday {$displayName}!";
 $heroSubtitle = trim((string)($experienceSettings['subtitle'] ?? '')) ?: 'May your year ahead be full of success, peace, and unforgettable moments.';
 $modules = is_array($experienceConfig['modules'] ?? null) ? $experienceConfig['modules'] : [];
@@ -89,7 +90,7 @@ if ($customMusic !== '') {
 if ($musicSource === '') $musicSource = 'happy-birthday-song.mp3';
 $wishFormHeading = trim((string)($experienceSettings['formHeading'] ?? '')) ?: 'Leave a little happiness';
 $wishFormDescription = trim((string)($experienceSettings['formDescription'] ?? '')) ?: 'Share a note, a memory or a wish. It will mean more than you know.';
-$shareMessage = "🎈 Vaibhav ka 2nd Birthday! 🎂\n\nHamare chhote Kittu ko birthday wish bhejiye! ❤️\n\nApni pyari si wish yahan bhejein:\n{$shareUrl}\n\nPage kholkar wish form mein apna message bhejein. Photos dekhein aur celebration ka hissa banein! 🎉";
+$shareMessage = "🎈 Vaibhav ka 2nd Birthday! 🎂\n\nHamare chhote Kittu ko birthday wish bhejiye! ❤️\nApni pyari si wish yahan bhejein 👉 {$shareUrl}\n\nPhotos dekhein, wish bhejein aur celebration ka hissa banein! 🎉\n\n📸 Vaibhav ki aur photos aur yaadein yahan dekhein:\n{$eventsUrl}";
 $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 ?>
 <!DOCTYPE html>
