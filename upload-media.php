@@ -20,7 +20,7 @@ $added=[];$errors=[];$total=count($_FILES['media']['name']);
 for($i=0;$i<$total;$i++){
  if(count($items)+count($added)>=30){$errors[]='The 30-item limit has been reached.';break;}
  $error=$_FILES['media']['error'][$i]??UPLOAD_ERR_NO_FILE;if($error===UPLOAD_ERR_NO_FILE)continue;
- if($error!==UPLOAD_ERR_OK){$errors[]='One file could not be uploaded (upload error '.$error.').';continue;}
+ if($error!==UPLOAD_ERR_OK){$errors[]=in_array($error,[UPLOAD_ERR_INI_SIZE,UPLOAD_ERR_FORM_SIZE],true)?'File hosting ki upload limit se badi hai. Chhoti photo/video choose karein.':($error===UPLOAD_ERR_PARTIAL?'File poori upload nahi hui. Dobara try karein.':'File upload nahi ho paayi. Dobara try karein.');continue;}
  $tmp=$_FILES['media']['tmp_name'][$i]??'';$size=(int)($_FILES['media']['size'][$i]??0);
  if($size<1||$size>25*1024*1024){$errors[]='Each file must be smaller than 25 MB.';continue;}
  $mime=$finfo->file($tmp);if(!isset($allowed[$mime])){$errors[]='Unsupported file type: '.basename((string)$_FILES['media']['name'][$i]);continue;}
