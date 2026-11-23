@@ -5,7 +5,7 @@ if(($_SESSION['user_type']??'')!=='developer'){http_response_code(403);echo json
 $csrf=(string)($_POST['csrf']??'');
 if(empty($_SESSION['birthday_studio_csrf'])||!hash_equals($_SESSION['birthday_studio_csrf'],$csrf)){http_response_code(419);echo json_encode(['success'=>false,'error'=>'Session expired.']);exit;}
 $file=basename((string)($_POST['file']??''));
-if(!preg_match('/^[a-f0-9]{32}\.(jpg|png|webp|gif|mp4|webm|mov)$/',$file)){http_response_code(400);echo json_encode(['success'=>false,'error'=>'Invalid memory reference.']);exit;}
+if(!preg_match('/^[a-f0-9]{32}\.(jpg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|flac)$/',$file)){http_response_code(400);echo json_encode(['success'=>false,'error'=>'Invalid memory reference.']);exit;}
 $caption=$_POST['caption']??'';
 if(!is_string($caption)){http_response_code(422);echo json_encode(['success'=>false,'error'=>'Invalid caption.']);exit;}
 $caption=mb_substr(trim($caption),0,120,'UTF-8');

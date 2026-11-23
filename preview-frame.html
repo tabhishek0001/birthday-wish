@@ -21,9 +21,9 @@ function text(id,value){document.getElementById(id).textContent=value||'';}
 function renderMedia(items){
  const box=document.getElementById('memory');box.replaceChildren();
  const item=Array.isArray(items)?items[0]:null;
- if(!item||typeof item.url!=='string'||!/^birthday-media\/[a-f0-9]{32}\.(jpg|png|webp|gif|mp4|webm|mov)$/.test(item.url)){const label=document.createElement('span');label.textContent='Your memories will appear here';box.appendChild(label);return;}
- const media=item.type==='video'?document.createElement('video'):document.createElement('img');
- media.src=item.url;if(media.tagName==='VIDEO'){media.muted=true;media.playsInline=true;media.controls=true;}else media.alt=item.caption||'Birthday memory';box.appendChild(media);if(item.caption){const caption=document.createElement('div');caption.className='memory-caption';caption.textContent=item.caption;box.appendChild(caption);}
+ if(!item||typeof item.url!=='string'||!/^birthday-media\/[a-f0-9]{32}\.(jpg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|flac)$/.test(item.url)){const label=document.createElement('span');label.textContent='Your memories will appear here';box.appendChild(label);return;}
+ const media=item.type==='video'?document.createElement('video'):item.type==='audio'?document.createElement('audio'):document.createElement('img');
+ media.src=item.url;if(media.tagName==='VIDEO'){media.muted=true;media.playsInline=true;media.controls=true;}else if(media.tagName==='AUDIO'){media.controls=true;media.preload='metadata';}else media.alt=item.caption||'Birthday memory';box.appendChild(media);if(item.caption){const caption=document.createElement('div');caption.className='memory-caption';caption.textContent=item.caption;box.appendChild(caption);}
 }
 window.addEventListener('message',event=>{
  if(event.source!==window.parent||!event.data||event.data.type!=='birthday-studio-preview')return;

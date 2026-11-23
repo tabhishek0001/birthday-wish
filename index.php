@@ -169,6 +169,7 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
 .wish-relationship-choices,.wish-suggestions{display:flex;flex-wrap:wrap;gap:9px}.wish-choice,.wish-suggestion{min-height:44px;padding:10px 14px;border:1.5px solid #f0dfca;border-radius:999px;background:#fffaf1;color:#765c48;font-size:14px;font-weight:750}.wish-choice.selected,.wish-suggestion.selected{background:#ffedc8;border-color:#e6a844;color:#69451e;box-shadow:0 0 0 2px #ffe4ad}.wish-suggestions{display:grid;grid-template-columns:1fr 1fr}.wish-suggestion{text-align:left;border-radius:15px;min-height:58px;line-height:1.35}.wish-privacy-note{text-align:center;color:#95867b;font-size:13px;line-height:1.5;margin:14px 0}.wish-send-button{display:block;width:100%;min-height:58px;padding:14px 20px;border-radius:17px;background:#ff806f;color:#fff;font-size:18px;font-weight:900;box-shadow:0 5px #e56d5f}.wish-send-button:disabled{opacity:.65;box-shadow:none}.wish-feedback{text-align:center;min-height:22px;margin:14px 0 0;color:#8a5b32;font-weight:750}
 .birthday-public #wishBoard{gap:14px}.birthday-public #wishBoard article{background:#fffdf8!important;border:1px solid #f1dfc7;box-shadow:0 8px 22px #805b3010!important;border-radius:20px!important}.birthday-public #wishBoard article p{color:#64554a!important}.birthday-public footer{background:#fff3df!important;color:#806d5d!important;border-color:#f1dfc7!important}.birthday-public .btn{min-height:44px}.birthday-public .swiper-pagination-bullet-active{background:#ff806f!important}
 @media(max-width:520px){.birthday-hero{padding-top:34px}.birthday-gallery__frame{height:min(64vh,560px);height:clamp(260px,64svh,560px);min-height:260px}.wish-suggestions{grid-template-columns:1fr}.wish-invite-card{border-radius:23px}.birthday-hero__toys{letter-spacing:3px}.birthday-public .mt-6.flex{padding:0 12px 18px}.birthday-public .btn{flex:1 1 42%;font-size:13px}}
+.wish-invite-card{max-width:650px!important;padding:clamp(18px,3vw,28px)!important}.wish-invite-description{margin-bottom:14px!important}.wish-field-label{font-size:13px!important;margin:10px 0 6px!important}.wish-input{min-height:48px!important;padding:11px 14px!important;font-size:15px!important}.wish-message-input{min-height:78px!important;resize:vertical}.wish-name-hint{display:block;margin:5px 2px 8px;color:#a16f45;font-size:11px}.wish-extra-options{margin:10px 0;padding:10px 13px;border:1px solid #f0e1d0;border-radius:15px;background:#fffaf2}.wish-extra-options summary{cursor:pointer;color:#8b654b;font-size:12px;font-weight:800}.wish-extra-options[open] summary{margin-bottom:10px}.wish-extra-options .wish-choice{min-height:36px;padding:7px 11px;font-size:12px}.wish-suggestions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}.wish-suggestion{min-height:44px!important;padding:9px 11px!important;font-size:12px!important}.wish-attachment-box{padding:12px;border:1px dashed #e8d4bd;border-radius:16px;background:#fffaf2}.wish-attachment-input{display:block;width:100%;font-size:12px;color:#766254}.wish-attachment-box small{display:block;margin-top:6px;color:#958477;font-size:10px}.wish-attachment-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.wish-attachment-list span{padding:5px 9px;border-radius:999px;background:#f5eadc;color:#806044;font-size:10px}.wish-send-button{min-height:52px!important;font-size:16px!important}.birthday-audio-memory{width:100%;min-height:180px;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:22px;background:linear-gradient(145deg,#fff0d7,#e8f3e8);color:#76543d;font-weight:850}.birthday-audio-memory audio{width:100%;max-width:100%}.wish-board-attachments{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.wish-board-attachments img,.wish-board-attachments video{width:min(100%,230px);max-height:240px;object-fit:contain;border-radius:13px;background:#f5eadc}.wish-board-attachments audio{width:min(100%,280px)}.wish-board-attachments a{display:inline-block;padding:8px 12px;border-radius:999px;background:#fff0d9;color:#80543f;font-size:12px;font-weight:800}@media(max-width:520px){.wish-invite-card{padding:18px!important}.wish-suggestions{grid-template-columns:1fr!important}.wish-attachment-box{padding:10px}}
 </style>
 
 <style id="vaibhav-premium-experience">
@@ -326,11 +327,11 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
     <?php foreach ($featuredImages as $img): ?><div class="swiper-slide"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="lazy"></div><?php endforeach; ?>
     <?php foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); ?>
-      <div class="swiper-slide"><?php if (($memory['type'] ?? '') === 'video'): ?><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" controls muted playsinline preload="metadata"></video><?php else: ?><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memory['caption'] ?? 'Vaibhav ki yaad') ?>" loading="lazy"><?php endif; ?>
+      <div class="swiper-slide"><?php if (($memory['type'] ?? '') === 'video'): ?><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" controls muted playsinline preload="metadata"></video><?php elseif (($memory['type'] ?? '') === 'audio'): ?><div class="birthday-audio-memory"><span>🎵 Audio memory</span><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="metadata"></audio></div><?php else: ?><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memory['caption'] ?? 'Vaibhav ki yaad') ?>" loading="lazy"><?php endif; ?>
       <?php if (trim((string)($memory['caption'] ?? '')) !== ''): ?><div class="memory-caption-overlay"><?= $escapeHtml($memory['caption']); ?></div><?php endif; ?></div>
     <?php endforeach; ?>
   </div><div class="swiper-pagination"></div></div>
-  <?php else: ?><div class="birthday-gallery__empty"><span>🧸</span><strong>Vaibhav ki photos jald hi yahan aayengi!</strong><small>Birthday Studio se photos aur videos add kar sakte hain.</small></div><?php endif; ?>
+  <?php else: ?><div class="birthday-gallery__empty"><span>🧸</span><strong>Vaibhav ki photos jald hi yahan aayengi!</strong><small>Birthday Studio se photos, videos aur audio memories add kar sakte hain.</small></div><?php endif; ?>
 </section>
 
 <?php if ($showLetter): ?>
@@ -359,31 +360,42 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <div class="wish-invite-card">
     <div class="wish-invite-kicker">💛 Chhote Kittu ke liye</div>
     <h2><?= $escapeHtml($wishFormHeading); ?></h2><p class="wish-invite-description"><?= $escapeHtml($wishFormDescription); ?></p>
-    <form id="wishForm" autocomplete="on">
-      <label class="wish-field-label" for="wishSenderName">Aapka naam</label>
-      <input id="wishSenderName" type="text" name="name" required maxlength="80" autocomplete="name" placeholder="<?= $escapeHtml($namePlaceholder); ?>" class="wish-input" />
-      <div class="wish-field-label">Aap Vaibhav ke kya lagte hain? <span>(optional)</span></div>
-      <div class="wish-relationship-choices" role="group" aria-label="Aapka rishta">
-        <button type="button" class="wish-choice" data-relation="Mummy">Mummy</button><button type="button" class="wish-choice" data-relation="Papa">Papa</button>
-        <button type="button" class="wish-choice" data-relation="Dada-Dadi">Dada-Dadi</button><button type="button" class="wish-choice" data-relation="Nana-Nani">Nana-Nani</button>
-        <button type="button" class="wish-choice" data-relation="Mama-Mami">Mama-Mami</button><button type="button" class="wish-choice" data-relation="Chacha-Chachi">Chacha-Chachi</button>
-        <button type="button" class="wish-choice" data-relation="Bua-Fufa">Bua-Fufa</button><button type="button" class="wish-choice" data-relation="Friend">Friend</button>
+    <form id="wishForm" autocomplete="on" enctype="multipart/form-data">
+      <div class="wish-compact-fields">
+        <label class="wish-field-label" for="wishSenderName">Aapka naam</label>
+        <input id="wishSenderName" type="text" name="name" value="Aapka naam" required maxlength="80" autocomplete="name" class="wish-input" aria-describedby="wishNameHint" />
+        <small id="wishNameHint" class="wish-name-hint">Naam pehle se bhara hai — bhejne se pehle apna naam zaroor likhein.</small>
+        <label class="wish-field-label" for="wishMessage">Vaibhav ke liye wish</label>
+        <textarea id="wishMessage" name="message" required maxlength="1200" rows="2" class="wish-input wish-message-input">Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️</textarea>
       </div>
-      <input type="hidden" name="pahchan" id="wishRelation" value="">
-      <div class="wish-field-label">Wish likhna mushkil hai? Neeche se ek chuniye 👇</div>
-      <div class="wish-suggestions" role="group" aria-label="Ready-made birthday wishes">
-        <button type="button" class="wish-suggestion" data-wish-suggestion="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️">🎂 Simple wish</button>
-        <button type="button" class="wish-suggestion" data-wish-suggestion="Janamdin mubarak ho hamare Kittu! Bhagwan tumhe hamesha khush rakhe. 🌟">🌟 Pyaar bhari wish</button>
-        <button type="button" class="wish-suggestion" data-wish-suggestion="Happy 2nd Birthday, little champ! Khoob khelo, masti karo aur hamesha muskurate raho! 🧸🎈">🧸 Little champ</button>
-        <button type="button" class="wish-suggestion" data-wish-suggestion="Vaibhav beta, tumhari hasi hamesha aise hi chamakti rahe. Bahut saara aashirwad aur pyaar! 💛">💛 Aashirwad</button>
+      <details class="wish-extra-options">
+        <summary>Wish ko aur personal banayein (optional)</summary>
+        <div class="wish-field-label">Aap Vaibhav ke kya lagte hain?</div>
+        <div class="wish-relationship-choices" role="group" aria-label="Aapka rishta">
+          <button type="button" class="wish-choice" data-relation="Mummy">Mummy</button><button type="button" class="wish-choice" data-relation="Papa">Papa</button>
+          <button type="button" class="wish-choice" data-relation="Dada-Dadi">Dada-Dadi</button><button type="button" class="wish-choice" data-relation="Nana-Nani">Nana-Nani</button>
+          <button type="button" class="wish-choice" data-relation="Mama-Mami">Mama-Mami</button><button type="button" class="wish-choice" data-relation="Chacha-Chachi">Chacha-Chachi</button>
+          <button type="button" class="wish-choice" data-relation="Bua-Fufa">Bua-Fufa</button><button type="button" class="wish-choice" data-relation="Friend">Friend</button>
+        </div>
+        <input type="hidden" name="pahchan" id="wishRelation" value="">
+        <div class="wish-field-label">Ready-made wishes</div>
+        <div class="wish-suggestions" role="group" aria-label="Ready-made birthday wishes">
+          <button type="button" class="wish-suggestion" data-wish-suggestion="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️">🎂 Simple wish</button>
+          <button type="button" class="wish-suggestion" data-wish-suggestion="Janamdin mubarak ho hamare Kittu! Bhagwan tumhe hamesha khush rakhe. 🌟">🌟 Pyaar bhari wish</button>
+          <button type="button" class="wish-suggestion" data-wish-suggestion="Happy 2nd Birthday, little champ! Khoob khelo, masti karo aur hamesha muskurate raho! 🧸🎈">🧸 Little champ</button>
+          <button type="button" class="wish-suggestion" data-wish-suggestion="Vaibhav beta, tumhari hasi hamesha aise hi chamakti rahe. Bahut saara aashirwad aur pyaar! 💛">💛 Aashirwad</button>
+        </div>
+      </details>
+      <div class="wish-attachment-box">
+        <label class="wish-field-label" for="wishAttachments">Photo, video ya voice wish (optional)</label>
+        <input id="wishAttachments" type="file" name="attachments[]" multiple accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/webm,application/pdf" class="wish-attachment-input">
+        <small id="wishAttachmentHint">Maximum 3 files • 10 MB each • Photos, videos, audio or PDF</small>
+        <div id="wishAttachmentList" class="wish-attachment-list" aria-live="polite"></div>
       </div>
-      <label class="wish-field-label" for="wishMessage">Aapki wish</label>
-      <textarea id="wishMessage" name="message" required maxlength="1200" rows="3" class="wish-input wish-message-input">Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️</textarea>
-      <p class="wish-privacy-note">Bas itna hi! Aapki wish Vaibhav ke birthday page par dikhai degi. ❤️</p>
+      <p class="wish-privacy-note">Aapki wish aur attached media birthday page par dikh sakte hain. Sirf wahi share karein jo sabke saath share karna theek ho. ❤️</p>
       <button id="wishSubmitButton" type="submit" class="wish-send-button">💌 <?= $escapeHtml($submitLabel); ?></button>
       <p id="wishFeedback" class="wish-feedback" role="status" aria-live="polite"></p>
-    </form>
-  </div>
+    </form>  </div>
 </section>
 
   
@@ -566,8 +578,8 @@ function loadWishes() {
       if (pahchan) {
         $("<span>").addClass("text-gray-500 font-medium").text(" (" + pahchan + ")").appendTo($byline);
       }
-      const $date = $("<p>").addClass("text-xs text-gray-400 mt-1").text(time);
-      $card.append($wishText, $byline, $date);
+      const $date = $("<p>").addClass("text-xs text-gray-400 mt-1").text(time);$card.append($wishText,$byline,$date);
+      if(Array.isArray(wish.media)&&wish.media.length){const $attachments=$("<div>").addClass("wish-board-attachments");wish.media.slice(0,3).forEach(item=>{if(!item||typeof item.file!=="string"||!/^[a-f0-9]{32}\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|pdf)$/i.test(item.file))return;const url="wish-media/"+encodeURIComponent(item.file);if(item.type==="image")$('<img>').attr({src:url,alt:"Wish attachment",loading:"lazy"}).appendTo($attachments);else if(item.type==="video")$('<video>').attr({src:url,controls:true,playsinline:true,preload:"metadata"}).appendTo($attachments);else if(item.type==="audio")$('<audio>').attr({src:url,controls:true,preload:"metadata"}).appendTo($attachments);else if(item.type==="document")$('<a>').attr({href:url,target:"_blank",rel:"noopener"}).text("📄 Open attached PDF").appendTo($attachments);});if($attachments.children().length)$card.append($attachments);}
       $("#wishBoard").append($card);
     });
 
@@ -584,13 +596,14 @@ function loadWishes() {
 
 
     const wishForm=$("#wishForm"), wishName=document.getElementById("wishSenderName"), wishMessage=document.getElementById("wishMessage"), wishRelation=document.getElementById("wishRelation"), wishFeedback=document.getElementById("wishFeedback"), wishSubmit=document.getElementById("wishSubmitButton");
-    const defaultWish="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️";
-    try{const saved=localStorage.getItem("vaibhavWishSenderName");if(saved&&!wishName.value)wishName.value=saved;}catch(e){}
+    const wishAttachments=document.getElementById("wishAttachments"), wishAttachmentList=document.getElementById("wishAttachmentList"), defaultWish="Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️";
+    try{const saved=localStorage.getItem("vaibhavWishSenderName");if(saved){wishName.value=saved;document.getElementById("wishNameHint").textContent="Aapka pichhla naam yaad rakha gaya hai. Zarurat ho to badal sakte hain.";}else if(!localStorage.getItem("vaibhavWishNamePromptShown")){alert("Naam pehle se bhara hua hai. Wish bhejne se pehle ‘Aapka naam’ ko apne naam se badal dein.");localStorage.setItem("vaibhavWishNamePromptShown","1");}}catch(e){}
+    wishAttachments.addEventListener("change",()=>{const files=Array.from(wishAttachments.files||[]);wishAttachmentList.innerHTML="";if(files.length>3||files.some(file=>file.size>10*1024*1024)){wishAttachmentList.textContent="Maximum 3 files choose karein; har file 10 MB se chhoti honi chahiye.";wishAttachments.value="";return;}files.forEach(file=>{const tag=document.createElement("span");tag.textContent="✓ "+file.name;wishAttachmentList.appendChild(tag);});});
     document.querySelectorAll("[data-wish-suggestion]").forEach(button=>button.addEventListener("click",()=>{wishMessage.value=button.dataset.wishSuggestion||defaultWish;document.querySelectorAll("[data-wish-suggestion]").forEach(item=>item.classList.toggle("selected",item===button));}));
     document.querySelectorAll("[data-relation]").forEach(button=>button.addEventListener("click",()=>{const relation=button.dataset.relation||"";wishRelation.value=wishRelation.value===relation?"":relation;document.querySelectorAll("[data-relation]").forEach(item=>item.classList.toggle("selected",item===button&&wishRelation.value!==""));}));
-    wishForm.on("submit",function(e){e.preventDefault();if(!wishName.value.trim()){wishFeedback.textContent="Pehle apna naam likh dijiye.";wishName.focus();return;}if(!wishMessage.value.trim()){wishFeedback.textContent="Ek chhoti si wish chuniye ya likh dijiye.";wishMessage.focus();return;}
-      wishSubmit.disabled=true;wishSubmit.textContent="⏳ Wish bheji ja rahi hai...";wishFeedback.textContent="Bas ek pal...";
-      $.ajax({url:"submit_wish.php",method:"POST",data:wishForm.serialize(),dataType:"json"}).done(function(res){if(res.success){try{localStorage.setItem("vaibhavWishSenderName",wishName.value.trim());}catch(e){}wishMessage.value=defaultWish;wishRelation.value="";document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>item.classList.remove("selected"));wishFeedback.textContent="🎉 Aapki wish Vaibhav tak pahunch gayi! Shukriya ❤️";loadWishes();if(<?= $confettiEnabled ? 'true' : 'false' ?> && typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});}else{wishFeedback.textContent=res.error||"Wish send nahi ho paayi. Dobara try kijiye.";}}).fail(function(xhr){wishFeedback.textContent=xhr.responseJSON&&xhr.responseJSON.error?xhr.responseJSON.error:"Internet ya server mein dikkat hai. Ek baar phir try kijiye.";}).always(function(){wishSubmit.disabled=false;wishSubmit.textContent="💌 <?= $escapeHtml($submitLabel); ?>";});
+    wishForm.on("submit",function(e){e.preventDefault();if(!wishName.value.trim()||wishName.value.trim().toLowerCase()==="aapka naam"){wishFeedback.textContent="Kripya ‘Aapka naam’ ki jagah apna naam likhein.";wishName.focus();return;}if(!wishMessage.value.trim()){wishFeedback.textContent="Ek chhoti si wish chuniye ya likh dijiye.";wishMessage.focus();return;}if(wishAttachments.files.length>3||Array.from(wishAttachments.files).some(file=>file.size>10*1024*1024)){wishFeedback.textContent="Maximum 3 attachments aur 10 MB per file allowed hai.";return;}
+      wishSubmit.disabled=true;wishSubmit.textContent="⏳ Wish bheji ja rahi hai...";wishFeedback.textContent="Bas ek pal...";const formData=new FormData(wishForm[0]);
+      $.ajax({url:"submit_wish.php",method:"POST",data:formData,dataType:"json",processData:false,contentType:false}).done(function(res){if(res.success){try{localStorage.setItem("vaibhavWishSenderName",wishName.value.trim());}catch(e){}wishMessage.value=defaultWish;wishAttachments.value="";wishAttachmentList.innerHTML="";wishRelation.value="";document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>item.classList.remove("selected"));wishFeedback.textContent="🎉 Aapki wish Vaibhav tak pahunch gayi! Shukriya ❤️";loadWishes();if(typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});}else{wishFeedback.textContent=res.error||"Wish send nahi ho paayi. Dobara try kijiye.";}}).fail(function(xhr){wishFeedback.textContent=xhr.responseJSON&&xhr.responseJSON.error?xhr.responseJSON.error:"Internet ya server mein dikkat hai. Ek baar phir try kijiye.";}).always(function(){wishSubmit.disabled=false;wishSubmit.textContent="💌 <?= $escapeHtml($submitLabel); ?>";});
     });
     loadWishes();
   const revealLetter = document.getElementById('revealLetter');

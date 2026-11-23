@@ -185,18 +185,18 @@ unset($_SESSION['birthday_admin_notice']);
 <section class="admin-section" data-section-panel="memories">
   <div class="eyebrow">Media library</div>
   <h1>Memories</h1>
-  <p class="lead">Manage the photos and videos displayed in the birthday experience. The existing 30-item limit and media validation remain in place.</p>
+  <p class="lead">Manage photos, videos and audio recordings displayed in the birthday experience. Up to 30 memories, 25 MB per file.</p>
   <div class="admin-card">
     <form method="post" action="../upload-media.php" enctype="multipart/form-data">
       <input type="hidden" name="csrf" value="<?= admin_h($studioCsrf) ?>"><input type="hidden" name="return_to" value="admin">
-      <label class="dropzone"><input id="adminMediaFiles" type="file" name="media[]" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" multiple><strong>📸 Photos ya videos choose karein</strong><small>Ek saath multiple files • har file 25 MB tak • total 30 memories</small><span id="adminUploadSelection" class="section-note">Abhi koi file select nahi hai</span></label>
+      <label class="dropzone"><input id="adminMediaFiles" type="file" name="media[]" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/x-wav,audio/ogg,audio/webm,audio/aac,audio/flac" multiple><strong>📸 Photos, videos ya audio choose karein</strong><small>Ek saath multiple files • har file 25 MB tak • total 30 memories</small><span id="adminUploadSelection" class="section-note">Abhi koi file select nahi hai</span></label>
       <div class="save-row"><button class="admin-btn primary" type="submit">Upload memories</button></div>
     </form>
-    <?php if (!$media): ?><div class="section-note">No memories have been uploaded yet. Add the first photos or videos for visitors to discover.</div><?php else: ?>
+    <?php if (!$media): ?><div class="section-note">No memories have been uploaded yet. Add the first photos, videos or audio memories for visitors to discover.</div><?php else: ?>
     <div class="media-grid">
       <?php foreach ($media as $item): if (!is_array($item) || empty($item['file'])) continue; $file=basename((string)$item['file']); ?>
       <article class="media-item">
-        <?php if (($item['type'] ?? '') === 'video'): ?><video src="../birthday-media/<?= admin_h(rawurlencode($file)) ?>" controls muted preload="metadata"></video><?php else: ?><img src="../birthday-media/<?= admin_h(rawurlencode($file)) ?>" alt="<?= admin_h($item['caption'] ?? $item['name'] ?? 'Birthday memory') ?>" loading="lazy"><?php endif; ?>
+        <?php if (($item['type'] ?? '') === 'video'): ?><video src="../birthday-media/<?= admin_h(rawurlencode($file)) ?>" controls muted preload="metadata"></video><?php elseif (($item['type'] ?? '') === 'audio'): ?><div style="padding:14px;background:#f5eadc"><strong>🎵 Audio memory</strong><audio src="../birthday-media/<?= admin_h(rawurlencode($file)) ?>" controls preload="metadata" style="display:block;width:100%;margin-top:10px"></audio></div><?php else: ?><img src="../birthday-media/<?= admin_h(rawurlencode($file)) ?>" alt="<?= admin_h($item['caption'] ?? $item['name'] ?? 'Birthday memory') ?>" loading="lazy"><?php endif; ?>
         <div class="media-meta"><strong><?= admin_h($item['caption'] ?? $item['name'] ?? 'Birthday memory') ?></strong><small><?= admin_h($item['type'] ?? 'image') ?></small>
           <div class="media-tools"><button type="button" class="edit-caption" data-file="<?= admin_h($file) ?>" data-caption="<?= admin_h($item['caption'] ?? '') ?>">Edit caption</button><button type="button" class="delete-memory" data-file="<?= admin_h($file) ?>">Remove</button></div>
         </div>
@@ -210,7 +210,7 @@ unset($_SESSION['birthday_admin_notice']);
 <section class="admin-section" data-section-panel="wishes">
   <div class="eyebrow">Visitor messages</div>
   <h1>Wishes</h1>
-  <p class="lead">Review the messages visitors have submitted for the birthday person. Existing public display behavior is preserved.</p>
+  <p class="lead">Review visitor wishes and play or open any photos, videos, voice messages and PDFs they attached.</p>
   <div class="admin-card">
   <?php if (!$wishes): ?><div class="section-note">No visitor wishes have been received yet.</div><?php else: ?>
     <?php foreach (array_reverse($wishes) as $wish): if (!is_array($wish)) continue; ?>
@@ -218,6 +218,14 @@ unset($_SESSION['birthday_admin_notice']);
         <strong style="font-size:13px"><?= admin_h($wish['name'] ?? 'Anonymous') ?></strong>
         <?php if (!empty($wish['pahchan'])): ?><span style="color:var(--admin-muted);font-size:10px"> • <?= admin_h($wish['pahchan']) ?></span><?php endif; ?>
         <p style="margin:6px 0;color:#6f655f;font-size:12px;line-height:1.6"><?= nl2br(admin_h($wish['message'] ?? '')) ?></p>
+        <?php if (!empty($wish['media']) && is_array($wish['media'])): ?><div style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0">
+          <?php foreach (array_slice($wish['media'],0,3) as $attachment): if (!is_array($attachment) || empty($attachment['file'])) continue; $attachmentFile=basename((string)$attachment['file']); if (!preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|pdf)$/i',$attachmentFile)) continue; $attachmentUrl='../wish-media/'.rawurlencode($attachmentFile); ?>
+            <?php if (($attachment['type'] ?? '') === 'image'): ?><a href="<?= admin_h($attachmentUrl) ?>" target="_blank" rel="noopener"><img src="<?= admin_h($attachmentUrl) ?>" alt="Wish attachment" style="width:130px;height:110px;object-fit:contain;border-radius:12px;background:#f2ece6"></a>
+            <?php elseif (($attachment['type'] ?? '') === 'video'): ?><video src="<?= admin_h($attachmentUrl) ?>" controls preload="metadata" style="width:180px;max-height:130px;border-radius:12px"></video>
+            <?php elseif (($attachment['type'] ?? '') === 'audio'): ?><audio src="<?= admin_h($attachmentUrl) ?>" controls preload="metadata" style="width:220px"></audio>
+            <?php elseif (($attachment['type'] ?? '') === 'document'): ?><a class="admin-btn" href="<?= admin_h($attachmentUrl) ?>" target="_blank" rel="noopener">📄 Open PDF attachment</a><?php endif; ?>
+          <?php endforeach; ?>
+        </div><?php endif; ?>
         <?php if (!empty($wish['timestamp'])): ?><small style="color:#9a8f88;font-size:9px"><?= admin_h(date('d M Y, h:i A',(int)$wish['timestamp'])) ?></small><?php endif; ?>
       </div>
     <?php endforeach; ?>
