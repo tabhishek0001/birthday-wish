@@ -49,10 +49,14 @@ if ($configuredOgImage !== '') {
         $shareImage = $publicBaseUrl . '/' . $configuredOgImage;
     }
 }
-if ($shareImage === $publicBaseUrl . '/favicon.ico' && !empty($birthdayMedia[0]['file'])) {
-    $firstMemory = 'birthday-media/' . basename((string)$birthdayMedia[0]['file']);
-    if (preg_match('#^birthday-media/[a-f0-9]{32}\\.(?:jpg|jpeg|png|webp|gif)$#i', $firstMemory) && is_file(__DIR__ . '/' . $firstMemory)) {
-        $shareImage = $publicBaseUrl . '/' . $firstMemory;
+if ($shareImage === $publicBaseUrl . '/favicon.ico') {
+    foreach ($birthdayMedia as $memoryForOg) {
+        if (!is_array($memoryForOg) || ($memoryForOg['type'] ?? 'image') === 'video' || empty($memoryForOg['file'])) continue;
+        $firstMemory = 'birthday-media/' . basename((string)$memoryForOg['file']);
+        if (preg_match('#^birthday-media/[a-f0-9]{32}\\.(?:jpg|jpeg|png|webp|gif)$#i', $firstMemory) && is_file(__DIR__ . '/' . $firstMemory)) {
+            $shareImage = $publicBaseUrl . '/' . $firstMemory;
+            break;
+        }
     }
 }
 $shareUrl = trim((string)($experienceSettings['shareUrl'] ?? '')) ?: 'https://www.docsansar.com/birthday';
