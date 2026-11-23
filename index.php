@@ -871,10 +871,11 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     const memoryCarouselElement = document.querySelector(".featured-swiper");
     let memoryCarouselInteracted = false;
     const memorySwiper = memoryCarouselElement ? new Swiper(memoryCarouselElement, {
-      effect: "cards",
-      // Smaller transforms and no per-slide shadow layers reduce compositing work on phones.
-      cardsEffect: { slideShadows: false, rotate: true, perSlideOffset: 6, perSlideRotate: 1.2 },
+      // Use a standard slide transition so every card follows the same swipe direction.
+      // The slide artwork keeps its card appearance without the Cards effect's opposing rotations.
+      effect: "slide",
       grabCursor: true, centeredSlides: true, slidesPerView: 1, loop: true,
+      allowTouchMove: true, followFinger: true, threshold: 6,
       speed: 420, preventInteractionOnTransition: true, resistanceRatio: 0.75,
       autoplay: { delay: 4200, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true },
       pagination: { el: ".swiper-pagination", clickable: true },
