@@ -173,6 +173,10 @@ body.birthday-public{margin:0!important;background:linear-gradient(180deg,#fff8e
   .birthday-swal-popup{border-radius:26px!important;font-family:system-ui,-apple-system,'Segoe UI',sans-serif!important;padding:1.5rem!important}.birthday-swal-popup .swal2-title{color:#80543f;font-weight:900}.birthday-swal-popup .swal2-html-container{color:#76685d;line-height:1.65}.birthday-swal-popup .swal2-confirm,.birthday-swal-popup .swal2-cancel{border-radius:14px!important;font-weight:800!important;padding:12px 20px!important}
 </style>
 
+<style id="vaibhav-memory-lightbox">
+.birthday-gallery__frame .memory-lightbox-link{display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-width:0;min-height:0;cursor:zoom-in}
+.birthday-gallery__frame .memory-lightbox-link img{width:100%;height:100%;object-fit:contain}
+</style>
 <style id="vaibhav-premium-experience">
 :root{--lux-ink:#49372f;--lux-muted:#88766b;--lux-cream:#fffaf0;--lux-peach:#ffe2c8;--lux-coral:#f47e70;--lux-gold:#f4bd61;--lux-shadow:0 24px 70px rgba(105,70,46,.12);scroll-behavior:smooth}
 body.birthday-public{background:radial-gradient(ellipse at 8% 4%,#fff0d8 0,transparent 34%),radial-gradient(ellipse at 92% 24%,#e5f5f0 0,transparent 32%),linear-gradient(180deg,#fffaf2 0%,#fffdf9 48%,#fff3e8 100%)!important;color:var(--lux-ink)!important}
@@ -326,9 +330,9 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <div class="birthday-section-heading"><span>📸</span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
   <?php if ($featuredImages || $birthdayMedia): ?>
   <div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
-    <?php foreach ($featuredImages as $img): ?><div class="swiper-slide"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="lazy"></div><?php endforeach; ?>
+    <?php foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="lazy"></a></div><?php endforeach; ?>
     <?php foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); ?>
-      <div class="swiper-slide"><?php if (($memory['type'] ?? '') === 'video'): ?><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" controls muted playsinline preload="metadata"></video><?php elseif (($memory['type'] ?? '') === 'audio'): ?><div class="birthday-audio-memory"><span>🎵 Audio memory</span><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="metadata"></audio></div><?php else: ?><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memory['caption'] ?? 'Vaibhav ki yaad') ?>" loading="lazy"><?php endif; ?>
+      <div class="swiper-slide"><?php if (($memory['type'] ?? '') === 'video'): ?><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" controls muted playsinline preload="metadata"></video><?php elseif (($memory['type'] ?? '') === 'audio'): ?><div class="birthday-audio-memory"><span>🎵 Audio memory</span><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="metadata"></audio></div><?php else: ?><a class="glightbox memory-lightbox-link" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memory['caption'] ?? 'Vaibhav ki yaad') ?>" loading="lazy"></a><?php endif; ?>
       <?php if (trim((string)($memory['caption'] ?? '')) !== ''): ?><div class="memory-caption-overlay"><?= $escapeHtml($memory['caption']); ?></div><?php endif; ?></div>
     <?php endforeach; ?>
   </div><div class="swiper-pagination"></div></div>
@@ -537,14 +541,48 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
       AOS.init();
-    const lightbox = GLightbox({ selector: '.glightbox' });
     const confettiCanvas = document.getElementById("confetti-canvas");
     const confettiInstance = confetti.create(confettiCanvas, { resize: true });
 
-    new Swiper(".featured-swiper", {
+    const stopMemoryMedia = (except = null) => {
+      document.querySelectorAll("#birthdayMemories video, #birthdayMemories audio").forEach(media => {
+        if (media === except) return;
+        media.pause();
+        if (media.tagName === "VIDEO") {
+          try { media.currentTime = 0; } catch (error) {}
+        }
+      });
+    };
+    const memorySwiper = new Swiper(".featured-swiper", {
       loop: true,
-      autoplay: { delay: 3000 },
+      autoplay: { delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true },
       pagination: { el: ".swiper-pagination", clickable: true },
+      on: { slideChangeTransitionStart() { stopMemoryMedia(); } }
+    });
+
+    document.querySelectorAll("#birthdayMemories video").forEach(video => {
+      video.addEventListener("play", () => {
+        stopMemoryMedia(video);
+        video.muted = false;
+        video.removeAttribute("muted");
+        video.volume = 1;
+      });
+      video.addEventListener("ended", () => video.pause());
+    });
+
+    const lightbox = GLightbox({
+      selector: "#birthdayMemories .glightbox",
+      touchNavigation: true,
+      loop: true,
+      zoomable: true,
+      onOpen: () => {
+        if (memorySwiper.autoplay) memorySwiper.autoplay.stop();
+        stopMemoryMedia();
+      },
+      onClose: () => {
+        stopMemoryMedia();
+        if (memorySwiper.autoplay) memorySwiper.autoplay.start();
+      }
     });
 
     $('img.lazy').each(function () {
