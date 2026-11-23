@@ -545,6 +545,29 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     <div class="birthday-hero__toys" aria-hidden="true"><i class="fa-solid fa-child" aria-hidden="true"></i> <i class="fa-solid fa-paw" aria-hidden="true"></i> <i class="fa-solid fa-car" aria-hidden="true"></i> <i class="fa-solid fa-star" aria-hidden="true"></i></div>
         <section class="birthday-gallery" id="birthdayMemories" aria-label="Vaibhav ki yaadein">
       <div class="birthday-section-heading"><span><i class="fa-solid fa-images" aria-hidden="true"></i></span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
+      <?php
+      $allMemoriesUrl = 'https://www.docsansar.com/events?event=vaibhav';
+      $allMemoriesImage = '';
+      foreach ($birthdayMedia as $memoryPreview) {
+          if (!is_array($memoryPreview) || ($memoryPreview['type'] ?? '') !== 'image') continue;
+          $candidate = basename((string)($memoryPreview['file'] ?? ''));
+          if (preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif)$/i', $candidate) && is_file(__DIR__ . '/birthday-media/' . $candidate)) {
+              $allMemoriesImage = 'birthday-media/' . rawurlencode($candidate);
+              break;
+          }
+      }
+      if ($allMemoriesImage === '' && !empty($featuredImages[0]) && is_file(__DIR__ . '/' . $featuredImages[0])) {
+          $allMemoriesImage = $featuredImages[0];
+      }
+      ?>
+      <div class="birthday-all-memories-wrap">
+        <a class="birthday-all-memories-card" href="<?= $escapeHtml($allMemoriesUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="Doc Sansar par Vaibhav ki saari yaadein dekhein">
+          <?php if ($allMemoriesImage !== ''): ?><img src="<?= $escapeHtml($allMemoriesImage) ?>" alt="Vaibhav ki ek pyari yaad" loading="lazy" decoding="async"><?php else: ?><span class="birthday-all-memories-card__placeholder" aria-hidden="true"><i class="fa-solid fa-images"></i></span><?php endif; ?>
+          <span class="birthday-all-memories-card__shade"></span>
+          <span class="birthday-all-memories-card__content"><strong>Saari Photos dekhein</strong><small>Vaibhav ke aur bhi pyare pal</small></span>
+          <span class="birthday-all-memories-card__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+        </a>
+      </div>
       <?php if ($featuredImages || $birthdayMedia): ?>
       <div class="birthday-gallery__stage"><div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
         <?php $featuredImageIndex = 0; foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="<?= $featuredImageIndex++ === 0 ? 'eager' : 'lazy' ?>" fetchpriority="<?= $featuredImageIndex === 1 ? 'high' : 'auto' ?>" decoding="async"></a></div><?php endforeach; ?>
