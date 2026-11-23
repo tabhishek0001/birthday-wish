@@ -112,21 +112,21 @@ $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES |
 <!-- Primary Meta Tags -->
 <title><?= $isHindi ? 'वैभव का जन्मदिन 🎉 | अपनी शुभकामनाएँ भेजें' : 'Happy Birthday ' . $escapeHtml($name) . ' 🎉 | Send Your Wishes!' ?></title>
 <meta name="title" content="<?= $isHindi ? 'वैभव का जन्मदिन 🎉 | अपनी शुभकामनाएँ भेजें' : 'Happy Birthday ' . $escapeHtml($name) . ' 🎉 | Send Your Wishes!' ?>">
-<meta name="description" content="<?= $escapeHtml($metaDescription); ?>">
+<meta name="description" content="<?= $escapeHtml($isHindi && $metaDescription === "Celebrate {$name}'s special day. Share a personal wish and a favourite memory." ? 'आज वैभव के जन्मदिन की खुशियों में शामिल हों। अपनी प्यारी-सी विश और यादें शेयर करें।' : $metaDescription); ?>">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="<?= $escapeHtml($shareUrl); ?>">
-<meta property="og:title" content="Happy Birthday <?= $escapeHtml($name); ?> 🎉 | Send Your Wishes!">
-<meta property="og:description" content="<?= $escapeHtml($metaDescription); ?>">
+<meta property="og:title" content="<?= $isHindi ? 'वैभव का जन्मदिन 🎉 | अपनी शुभकामनाएँ भेजें' : 'Happy Birthday ' . $escapeHtml($name) . ' 🎉 | Send Your Wishes!' ?>">
+<meta property="og:description" content="<?= $escapeHtml($isHindi && $metaDescription === "Celebrate {$name}'s special day. Share a personal wish and a favourite memory." ? 'आज वैभव के जन्मदिन की खुशियों में शामिल हों। अपनी प्यारी-सी विश और यादें शेयर करें।' : $metaDescription); ?>">
 <meta property="og:image" content="<?= $escapeHtml($shareImage); ?>">
 <meta property="og:image:alt" content="<?= $escapeHtml($name); ?> birthday celebration">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="<?= $escapeHtml($shareUrl); ?>">
-<meta name="twitter:title" content="Happy Birthday <?= $escapeHtml($name); ?> 🎉 | Send Your Wishes!">
-<meta name="twitter:description" content="<?= $escapeHtml($metaDescription); ?>">
+<meta name="twitter:title" content="<?= $isHindi ? 'वैभव का जन्मदिन 🎉 | अपनी शुभकामनाएँ भेजें' : 'Happy Birthday ' . $escapeHtml($name) . ' 🎉 | Send Your Wishes!' ?>">
+<meta name="twitter:description" content="<?= $escapeHtml($isHindi && $metaDescription === "Celebrate {$name}'s special day. Share a personal wish and a favourite memory." ? 'आज वैभव के जन्मदिन की खुशियों में शामिल हों। अपनी प्यारी-सी विश और यादें शेयर करें।' : $metaDescription); ?>">
 <meta name="twitter:image" content="<?= $escapeHtml($shareImage); ?>">
 
 
@@ -1631,7 +1631,7 @@ body.birthday-public .birthday-sound-control {
     if(root.nodeType===1){
       const attrs=['placeholder','aria-label','title','data-wish-suggestion'];
       if(!root.closest('#wishBoard, script, style, noscript'))attrs.forEach(attr=>{const value=root.getAttribute(attr);if(value&&dictionary[value])root.setAttribute(attr,dictionary[value]);});
-      if(root.querySelectorAll)root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(el=>{
+      if(root.querySelectorAll)root.querySelectorAll('[placeholder],[aria-label],[title],[data-wish-suggestion]').forEach(el=>{
         if(el.closest('#wishBoard, script, style, noscript'))return;
         attrs.forEach(attr=>{const value=el.getAttribute(attr);if(value&&dictionary[value])el.setAttribute(attr,dictionary[value]);});
       });
@@ -1644,9 +1644,6 @@ body.birthday-public .birthday-sound-control {
   }));
   observer.observe(document.body,{subtree:true,childList:true,characterData:true});
   const message=document.getElementById('wishMessage');
-  if(message&&message.value==='Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️'){
-    message.value='जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️';
-  }
   if(message&&message.value==='Happy Birthday Vaibhav! Hamesha haste-khelte raho. Dher saara pyaar! 🎂❤️'){
     message.value='जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️';
   }
