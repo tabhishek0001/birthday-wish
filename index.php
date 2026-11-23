@@ -469,7 +469,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     <div class="birthday-hero__top"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> &nbsp; Aaj ka din hai hamare Kittu ke naam! &nbsp; <i class="fa-solid fa-cake-candles" aria-hidden="true"></i></div>
     <div class="birthday-hero__toys" aria-hidden="true"><i class="fa-solid fa-child" aria-hidden="true"></i> <i class="fa-solid fa-paw" aria-hidden="true"></i> <i class="fa-solid fa-car" aria-hidden="true"></i> <i class="fa-solid fa-star" aria-hidden="true"></i></div>
     <h1><?= $escapeHtml($heroTitle); ?></h1><p><?= $escapeHtml($heroSubtitle); ?></p>
-    <div class="birthday-age"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> <?= $escapeHtml($birthdayLabel); ?> <i class="fa-solid fa-party-horn" aria-hidden="true"></i></div>
+    <div class="birthday-age"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> <?= $escapeHtml($birthdayLabel); ?> <i class="fa-solid fa-gift" aria-hidden="true"></i></div>
     <a class="birthday-hero__button" href="#wishSection"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Vaibhav ko wish bhejein</a>
     <div class="birthday-hero__bottom" aria-hidden="true"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-gift"></i> <i class="fa-solid fa-face-grin-stars"></i> <i class="fa-solid fa-gift"></i> <i class="fa-solid fa-star"></i></div>
   </header>
@@ -712,7 +712,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
 <div class="birthday-control-dock" id="birthdayControlDock">
   <button type="button" class="birthday-dock-launcher" id="celebrationDockToggle" aria-expanded="false" aria-controls="celebrationControlPanel" aria-label="Open celebration controls">
-    <span class="dock-launcher-icon"><i class="fa-solid fa-party-horn" aria-hidden="true"></i></span><span class="dock-launcher-label">Fun controls</span><span class="dock-launcher-pulse"></span>
+    <span class="dock-launcher-icon"><i class="fa-solid fa-gift" aria-hidden="true"></i></span><span class="dock-launcher-label">Fun controls</span><span class="dock-launcher-pulse"></span>
   </button>
   <div class="birthday-control-panel" id="celebrationControlPanel" hidden role="group" aria-label="Celebration controls">
     <div class="dock-panel-heading"><span><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Celebration corner</span><button type="button" id="celebrationDockClose" aria-label="Close controls">×</button></div>
@@ -731,7 +731,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
 <footer class="bg-pink-50 text-center py-6 mt-10 border-t border-pink-100 text-sm text-gray-600">
   <p class="mb-2">Made with <i class="fa-solid fa-heart" aria-hidden="true"></i> to celebrate <strong><?= $escapeHtml($name); ?>'s Birthday</strong></p>
-  <p>Thanks for being part of the joy! <i class="fa-solid fa-party-horn" aria-hidden="true"></i></p>
+  <p>Thanks for being part of the joy! <i class="fa-solid fa-gift" aria-hidden="true"></i></p>
   <p class="mt-2 text-xs text-gray-400">© <?= date('Y') ?> <a href="/">DocSansar.com</a> • All wishes stored safely for a lifetime <i class="fa-solid fa-gift" aria-hidden="true"></i></p>
 </footer>
 
@@ -925,7 +925,7 @@ function loadWishes() {
     });
     wishForm.on("submit",function(e){e.preventDefault();if(!wishName.value.trim()||wishName.value.trim().toLowerCase()==="aapka naam"){wishFeedback.textContent="Kripya ‘Aapka naam’ ki jagah apna naam likhein.";wishName.focus();return;}if(!wishMessage.value.trim()){wishFeedback.textContent="Ek chhoti si wish chuniye ya likh dijiye.";wishMessage.focus();return;}if(wishAttachments.files.length>3||Array.from(wishAttachments.files).some(file=>file.size>10*1024*1024)){wishFeedback.textContent="Maximum 3 attachments aur 10 MB per file allowed hai.";return;}
       wishSubmit.disabled=true;wishSubmit.innerHTML='<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Wish bheji ja rahi hai...';wishFeedback.textContent="Bas ek pal...";const formData=new FormData(wishForm[0]);
-      $.ajax({url:"submit_wish.php",method:"POST",data:formData,dataType:"json",processData:false,contentType:false}).done(function(res){if(res.success){try{localStorage.setItem("vaibhavWishSenderName",wishName.value.trim());}catch(e){}wishMessage.value=defaultWish;wishAttachments.value="";wishAttachmentList.innerHTML="";wishRelation.value="";document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>{item.classList.remove("selected");if(item.hasAttribute("data-relation"))item.setAttribute("aria-pressed","false");});wishFeedback.innerHTML='<i class="fa-solid fa-party-horn" aria-hidden="true"></i> Aapki wish Vaibhav tak pahunch gayi! Shukriya <i class="fa-solid fa-heart" aria-hidden="true"></i>';loadWishes();if(typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});}else{wishFeedback.textContent=res.error||"Wish send nahi ho paayi. Dobara try kijiye.";}}).fail(function(xhr){wishFeedback.textContent=xhr.responseJSON&&xhr.responseJSON.error?xhr.responseJSON.error:"Internet ya server mein dikkat hai. Ek baar phir try kijiye.";}).always(function(){wishSubmit.disabled=false;wishSubmit.innerHTML='<i class="fa-solid fa-envelope" aria-hidden="true"></i> <?= $escapeHtml($submitLabel); ?>';});
+      $.ajax({url:"submit_wish.php",method:"POST",data:formData,dataType:"json",processData:false,contentType:false}).done(function(res){if(res.success){try{localStorage.setItem("vaibhavWishSenderName",wishName.value.trim());}catch(e){}wishMessage.value=defaultWish;wishAttachments.value="";wishAttachmentList.innerHTML="";wishRelation.value="";document.querySelectorAll("[data-relation], [data-wish-suggestion]").forEach(item=>{item.classList.remove("selected");if(item.hasAttribute("data-relation"))item.setAttribute("aria-pressed","false");});wishFeedback.innerHTML='<i class="fa-solid fa-gift" aria-hidden="true"></i> Aapki wish Vaibhav tak pahunch gayi! Shukriya <i class="fa-solid fa-heart" aria-hidden="true"></i>';loadWishes();if(typeof confettiInstance==="function")confettiInstance({particleCount:120,spread:160});}else{wishFeedback.textContent=res.error||"Wish send nahi ho paayi. Dobara try kijiye.";}}).fail(function(xhr){wishFeedback.textContent=xhr.responseJSON&&xhr.responseJSON.error?xhr.responseJSON.error:"Internet ya server mein dikkat hai. Ek baar phir try kijiye.";}).always(function(){wishSubmit.disabled=false;wishSubmit.innerHTML='<i class="fa-solid fa-envelope" aria-hidden="true"></i> <?= $escapeHtml($submitLabel); ?>';});
     });
     loadWishes();
   const revealLetter = document.getElementById('revealLetter');
