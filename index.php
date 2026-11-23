@@ -624,50 +624,7 @@ body.birthday-public .birthday-dock-launcher{background:linear-gradient(120deg,#
     </nav>
     <div class="birthday-hero__top"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> &nbsp; Aaj ka din hai hamare Kittu ke naam! &nbsp; <i class="fa-solid fa-cake-candles" aria-hidden="true"></i></div>
     <div class="birthday-hero__toys" aria-hidden="true"><i class="fa-solid fa-child" aria-hidden="true"></i> <i class="fa-solid fa-paw" aria-hidden="true"></i> <i class="fa-solid fa-car" aria-hidden="true"></i> <i class="fa-solid fa-star" aria-hidden="true"></i></div>
-        <section class="birthday-gallery" id="birthdayMemories" aria-label="Vaibhav ki yaadein">
-      <div class="birthday-section-heading"><span><i class="fa-solid fa-images" aria-hidden="true"></i></span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
-      <?php
-      $allMemoriesUrl = 'https://www.docsansar.com/events?event=vaibhav';
-      $allMemoriesImage = '';
-      foreach ($birthdayMedia as $memoryPreview) {
-          if (!is_array($memoryPreview) || ($memoryPreview['type'] ?? '') !== 'image') continue;
-          $candidate = basename((string)($memoryPreview['file'] ?? ''));
-          if (preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif)$/i', $candidate) && is_file(__DIR__ . '/birthday-media/' . $candidate)) {
-              $allMemoriesImage = 'birthday-media/' . rawurlencode($candidate);
-              break;
-          }
-      }
-      if ($allMemoriesImage === '' && !empty($featuredImages[0]) && is_file(__DIR__ . '/' . $featuredImages[0])) {
-          $allMemoriesImage = $featuredImages[0];
-      }
-      ?>
-      <div class="birthday-all-memories-wrap">
-        <a class="birthday-all-memories-card" href="<?= $escapeHtml($allMemoriesUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="Doc Sansar par Vaibhav ki saari yaadein dekhein">
-          <?php if ($allMemoriesImage !== ''): ?><img src="<?= $escapeHtml($allMemoriesImage) ?>" alt="Vaibhav ki ek pyari yaad" loading="lazy" decoding="async"><?php else: ?><span class="birthday-all-memories-card__placeholder" aria-hidden="true"><i class="fa-solid fa-images"></i></span><?php endif; ?>
-          <span class="birthday-all-memories-card__shade"></span>
-          <span class="birthday-all-memories-card__content"><strong>Saari Photos dekhein</strong><small>Vaibhav ke aur bhi pyare pal</small></span>
-          <span class="birthday-all-memories-card__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-        </a>
-      </div>
-      <?php if ($featuredImages || $birthdayMedia): ?>
-      <div class="birthday-gallery__stage"><div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
-        <?php $featuredImageIndex = 0; foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="eager" fetchpriority="<?= $featuredImageIndex++ === 0 ? 'high' : 'auto' ?>" decoding="async"></a></div><?php endforeach; ?>
-        <?php $memoryImagePriority = !$featuredImages; $memoryAudioIndex = 0; foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); if (!preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|flac)$/i', $mediaFile)) continue; $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); $memoryType = (string)($memory['type'] ?? 'image'); $memoryCaption = trim((string)($memory['caption'] ?? '')); ?>
-          <div class="swiper-slide">
-            <?php if ($memoryType === 'video'): ?>
-              <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="video" aria-label="Video memory ko full screen mein dekhein"><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" muted playsinline preload="none" tabindex="-1"></video><span class="memory-media-play" aria-hidden="true"><i class="fa-solid fa-circle-play"></i></span></a>
-            <?php elseif ($memoryType === 'audio'): $memoryAudioIndex++; $audioId = 'birthday-memory-audio-' . $memoryAudioIndex; ?>
-              <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="#<?= $escapeHtml($audioId) ?>" data-type="inline" data-gallery="vaibhav-memories" aria-label="Audio memory sunne ke liye kholein"><span class="memory-media-icon" aria-hidden="true"><i class="fa-solid fa-music"></i></span><strong>Audio memory</strong><span class="memory-media-open-hint">Tap to listen</span></a>
-              <div id="<?= $escapeHtml($audioId) ?>" class="lightbox-inline-media"><div class="lightbox-inline-card"><span class="memory-media-icon"><i class="fa-solid fa-music"></i></span><strong><?= $escapeHtml($memoryCaption ?: 'Birthday audio memory') ?></strong><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="none"></audio></div></div>
-            <?php else: $imageLoading = 'eager'; $imageFetchPriority = $memoryImagePriority ? 'high' : 'auto'; $memoryImagePriority = false; ?>
-              <a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memoryCaption ?: 'Vaibhav ki yaad') ?>" loading="<?= $imageLoading ?>" fetchpriority="<?= $imageFetchPriority ?>" decoding="async"></a>
-            <?php endif; ?>
-          </div>
-        <?php endforeach; ?>
-      </div><div class="swiper-pagination"></div></div></div>
-      <?php else: ?><div class="birthday-gallery__empty"><span><i class="fa-solid fa-images"></i></span><strong>Vaibhav ki photos jald hi yahan aayengi!</strong><small>Birthday Studio se photos, videos aur audio memories add kar sakte hain.</small></div><?php endif; ?>
-    </section>
-        <h1><?= $escapeHtml($heroTitle); ?></h1><p><?= $escapeHtml($heroSubtitle); ?></p>
+        <h1><?= $escapeHtml($heroTitle); ?><h1><?= $escapeHtml($heroTitle); ?></h1><p><?= $escapeHtml($heroSubtitle); ?></p>
     <div class="birthday-age"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> <?= $escapeHtml($birthdayLabel); ?> <i class="fa-solid fa-gift" aria-hidden="true"></i></div>
 
     <a class="birthday-hero__button" href="#wishSection"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Vaibhav ko wish bhejein</a>
@@ -723,6 +680,52 @@ body.birthday-public .birthday-dock-launcher{background:linear-gradient(120deg,#
       <p id="wishFeedback" class="wish-feedback" role="status" aria-live="polite"></p>
     </form>  </div>
 </section>
+
+
+  <!-- Memories follow the wish form as the first post-form section. -->
+  <section class="birthday-gallery birthday-gallery--after-wish" id="birthdayMemories" aria-label="Vaibhav ki yaadein">
+      <div class="birthday-section-heading"><span><i class="fa-solid fa-images" aria-hidden="true"></i></span><h2>Vaibhav ki pyari yaadein</h2><p>Chhote-chhote pal, dher saari khushiyan!</p></div>
+      <?php
+      $allMemoriesUrl = 'https://www.docsansar.com/events?event=vaibhav';
+      $allMemoriesImage = '';
+      foreach ($birthdayMedia as $memoryPreview) {
+          if (!is_array($memoryPreview) || ($memoryPreview['type'] ?? '') !== 'image') continue;
+          $candidate = basename((string)($memoryPreview['file'] ?? ''));
+          if (preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif)$/i', $candidate) && is_file(__DIR__ . '/birthday-media/' . $candidate)) {
+              $allMemoriesImage = 'birthday-media/' . rawurlencode($candidate);
+              break;
+          }
+      }
+      if ($allMemoriesImage === '' && !empty($featuredImages[0]) && is_file(__DIR__ . '/' . $featuredImages[0])) {
+          $allMemoriesImage = $featuredImages[0];
+      }
+      ?>
+      <div class="birthday-all-memories-wrap">
+        <a class="birthday-all-memories-card" href="<?= $escapeHtml($allMemoriesUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="Doc Sansar par Vaibhav ki saari yaadein dekhein">
+          <?php if ($allMemoriesImage !== ''): ?><img src="<?= $escapeHtml($allMemoriesImage) ?>" alt="Vaibhav ki ek pyari yaad" loading="lazy" decoding="async"><?php else: ?><span class="birthday-all-memories-card__placeholder" aria-hidden="true"><i class="fa-solid fa-images"></i></span><?php endif; ?>
+          <span class="birthday-all-memories-card__shade"></span>
+          <span class="birthday-all-memories-card__content"><strong>Saari Photos dekhein</strong><small>Vaibhav ke aur bhi pyare pal</small></span>
+          <span class="birthday-all-memories-card__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+        </a>
+      </div>
+      <?php if ($featuredImages || $birthdayMedia): ?>
+      <div class="birthday-gallery__stage"><div class="swiper featured-swiper birthday-gallery__frame"><div class="swiper-wrapper">
+        <?php $featuredImageIndex = 0; foreach ($featuredImages as $img): ?><div class="swiper-slide"><a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($img) ?>?v0.5" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($img) ?>?v0.5" class="w-full h-full object-cover" alt="Vaibhav ki yaad" loading="eager" fetchpriority="<?= $featuredImageIndex++ === 0 ? 'high' : 'auto' ?>" decoding="async"></a></div><?php endforeach; ?>
+        <?php $memoryImagePriority = !$featuredImages; $memoryAudioIndex = 0; foreach ($birthdayMedia as $memory): if (!is_array($memory) || empty($memory['file'])) continue; $mediaFile = basename((string)$memory['file']); if (!preg_match('/^[a-f0-9]{32}\\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|flac)$/i', $mediaFile)) continue; $mediaUrl = 'birthday-media/' . rawurlencode($mediaFile); $memoryType = (string)($memory['type'] ?? 'image'); $memoryCaption = trim((string)($memory['caption'] ?? '')); ?>
+          <div class="swiper-slide">
+            <?php if ($memoryType === 'video'): ?>
+              <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="video" aria-label="Video memory ko full screen mein dekhein"><video src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" muted playsinline preload="none" tabindex="-1"></video><span class="memory-media-play" aria-hidden="true"><i class="fa-solid fa-circle-play"></i></span></a>
+            <?php elseif ($memoryType === 'audio'): $memoryAudioIndex++; $audioId = 'birthday-memory-audio-' . $memoryAudioIndex; ?>
+              <a class="glightbox birthday-lightbox memory-lightbox-link memory-media-trigger" href="#<?= $escapeHtml($audioId) ?>" data-type="inline" data-gallery="vaibhav-memories" aria-label="Audio memory sunne ke liye kholein"><span class="memory-media-icon" aria-hidden="true"><i class="fa-solid fa-music"></i></span><strong>Audio memory</strong><span class="memory-media-open-hint">Tap to listen</span></a>
+              <div id="<?= $escapeHtml($audioId) ?>" class="lightbox-inline-media"><div class="lightbox-inline-card"><span class="memory-media-icon"><i class="fa-solid fa-music"></i></span><strong><?= $escapeHtml($memoryCaption ?: 'Birthday audio memory') ?></strong><audio src="<?= $escapeHtml($mediaUrl) ?>" controls preload="none"></audio></div></div>
+            <?php else: $imageLoading = 'eager'; $imageFetchPriority = $memoryImagePriority ? 'high' : 'auto'; $memoryImagePriority = false; ?>
+              <a class="glightbox birthday-lightbox memory-lightbox-link" href="<?= $escapeHtml($mediaUrl) ?>" data-gallery="vaibhav-memories" data-type="image" aria-label="Photo ko full screen mein dekhein"><img src="<?= $escapeHtml($mediaUrl) ?>" class="w-full h-full object-cover" alt="<?= $escapeHtml($memoryCaption ?: 'Vaibhav ki yaad') ?>" loading="<?= $imageLoading ?>" fetchpriority="<?= $imageFetchPriority ?>" decoding="async"></a>
+            <?php endif; ?>
+          </div>
+        <?php endforeach; ?>
+      </div><div class="swiper-pagination"></div></div></div>
+      <?php else: ?><div class="birthday-gallery__empty"><span><i class="fa-solid fa-images"></i></span><strong>Vaibhav ki photos jald hi yahan aayengi!</strong><small>Birthday Studio se photos, videos aur audio memories add kar sakte hain.</small></div><?php endif; ?>
+    </section>
 
   <?php if ($celebrationTrailEnabled): ?>
   <nav class="celebration-trail" aria-label="Celebration journey">
@@ -2027,5 +2030,24 @@ body.birthday-public{
 })();
 </script>
 
+
+<style id="birthday-gallery-after-wish-layout">
+  .birthday-gallery--after-wish{position:relative;isolation:isolate;width:min(100%,1120px);margin:0 auto;padding:clamp(42px,7vw,76px) 16px!important;text-align:center;background:transparent!important}
+  .birthday-gallery--after-wish .birthday-section-heading{margin:0 auto 22px!important}
+  .birthday-gallery--after-wish .birthday-section-heading>span{display:inline-grid!important;place-items:center;width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#ffe8bd,#f9dce9);font-size:22px}
+  .birthday-gallery--after-wish .birthday-section-heading h2{font-size:clamp(25px,4vw,38px)!important;margin:10px 0 6px!important;color:#80516e!important}
+  .birthday-gallery--after-wish .birthday-section-heading p{display:block!important;font-size:14px!important;color:#8b776c!important}
+  .birthday-gallery--after-wish .birthday-all-memories-wrap{max-width:560px;margin:0 auto 22px}
+  .birthday-gallery--after-wish .birthday-gallery__stage{position:relative;width:min(100%,460px);height:470px;margin:0 auto;overflow:visible!important;contain:none!important;isolation:isolate}
+  .birthday-gallery--after-wish .birthday-gallery__frame{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:min(58vw,250px)!important;height:min(81.2vw,350px)!important;aspect-ratio:5/7!important;min-height:0!important;max-width:none!important;margin:0!important;border:0!important;border-radius:23px!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}
+  .birthday-gallery--after-wish .birthday-gallery__frame .swiper-wrapper{align-items:stretch;overflow:visible!important}
+  .birthday-gallery--after-wish .birthday-gallery__frame .swiper-slide{width:100%!important;height:100%!important;overflow:hidden;border:7px solid #fffdf8;border-radius:23px;background:#fffdf8;box-shadow:0 16px 36px rgba(74,51,28,.18);box-sizing:border-box}
+  .birthday-gallery--after-wish .birthday-gallery__frame .swiper-slide>a.memory-lightbox-link{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0!important;border-radius:15px;background:#f4eadb;box-sizing:border-box}
+  .birthday-gallery--after-wish .birthday-gallery__frame .swiper-slide img,.birthday-gallery--after-wish .birthday-gallery__frame .swiper-slide video{display:block;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:cover!important;object-position:center;border-radius:15px!important}
+  .birthday-gallery--after-wish .birthday-gallery__frame .swiper-pagination{bottom:-30px!important;top:auto!important}
+  .birthday-gallery--after-wish .birthday-gallery__empty{width:min(100%,520px);margin:0 auto}
+  @media(max-width:640px){.birthday-gallery--after-wish{padding:34px 12px 48px!important}.birthday-gallery--after-wish .birthday-gallery__stage{width:min(100%,360px);height:420px}.birthday-gallery--after-wish .birthday-gallery__frame{width:min(64vw,220px)!important;height:min(89.6vw,308px)!important}.birthday-gallery--after-wish .birthday-gallery__frame .swiper-slide{border-width:6px;border-radius:20px}.birthday-gallery--after-wish .birthday-gallery__frame .swiper-slide>a.memory-lightbox-link{border-radius:13px}}
+  @media(prefers-reduced-motion:reduce){.birthday-gallery--after-wish .birthday-gallery__frame .swiper-slide{transition:none!important}}
+</style>
 </body>
 </html>
