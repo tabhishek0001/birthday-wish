@@ -152,3 +152,86 @@ body.birthday-public {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* Corrected card deck layout: clip the page, not the transformed card stack. */
+html:has(body.birthday-public),
+body.birthday-public {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip !important;
+}
+body.birthday-public .birthday-hero,
+body.birthday-public .birthday-gallery {
+  max-width: 100%;
+  min-width: 0;
+}
+body.birthday-public .birthday-gallery__stage {
+  width: min(100%, 460px) !important;
+  max-width: 100%;
+  margin-inline: auto;
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+  contain: layout;
+}
+body.birthday-public .birthday-gallery__frame.featured-swiper {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: min(64vw, 220px) !important;
+  max-width: calc(100% - 48px) !important;
+  height: min(89.6vw, 308px) !important;
+  max-height: calc(100% - 48px) !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  contain: none !important;
+  clip-path: none !important;
+  isolation: isolate;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: contain;
+  transform: translate(-50%, -50%) !important;
+}
+body.birthday-public .birthday-gallery__frame.featured-swiper .swiper-wrapper {
+  overflow: visible !important;
+  align-items: stretch;
+  will-change: transform;
+}
+body.birthday-public .birthday-gallery__frame.featured-swiper .swiper-slide {
+  max-width: 100%;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+body.birthday-public .birthday-gallery__frame.featured-swiper .swiper-slide-shadow,
+body.birthday-public .birthday-gallery__frame.featured-swiper .swiper-slide-shadow-cards {
+  pointer-events: none;
+}
+.birthday-public .birthday-control-dock {
+  box-sizing: border-box;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  width: max-content;
+  max-width: calc(100vw - 24px) !important;
+}
+.birthday-public .birthday-control-panel {
+  box-sizing: border-box;
+  width: min(310px, calc(100vw - 24px)) !important;
+  max-width: 100%;
+}
+.birthday-public .birthday-dock-launcher,
+.birthday-public .dock-action,
+.birthday-public .birthday-sound-control {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+}
+@media (max-width: 640px) {
+  body.birthday-public .birthday-gallery__stage {
+    width: min(100%, 360px) !important;
+    height: 420px !important;
+  }
+  body.birthday-public .birthday-gallery__frame.featured-swiper {
+    width: min(64vw, 220px) !important;
+    height: min(89.6vw, 308px) !important;
+  }
+}
