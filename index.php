@@ -1061,6 +1061,15 @@ function loadWishes() {
       const name = wish.name?.trim() || "Anonymous";
       const message = wish.message?.trim() || "Sent you best wishes!";
       const pahchan = wish.pahchan?.trim();
+      const pahchanDisplay = pahchan
+        ? ({
+            "Dada-Dadi": "Dada/Dadi",
+            "Nana-Nani": "Nana/Nani",
+            "Mama-Mami": "Mama/Mami",
+            "Chacha-Chachi": "Chacha/Chachi",
+            "Bua-Fufa": "Bua/Fufa"
+          }[pahchan] || pahchan)
+        : "";
       const timestamp = parseInt(wish.timestamp);
       let time = "Unknown time";
 
@@ -1078,8 +1087,8 @@ function loadWishes() {
       const $card = $("<article>").addClass("bg-white p-6 rounded-2xl shadow-xl transition transform duration-300").attr("data-aos", "fade-up");
       const $wishText = $("<p>").addClass("text-gray-800 text-lg font-semibold whitespace-pre-line").text("“" + message + "”");
       const $byline = $("<p>").addClass("mt-2 text-sm text-pink-600 font-bold").text("– " + name);
-      if (pahchan) {
-        $("<span>").addClass("text-gray-500 font-medium").text(" (" + pahchan + ")").appendTo($byline);
+      if (pahchanDisplay) {
+        $("<span>").addClass("text-gray-500 font-medium").text(" (" + pahchanDisplay + ")").appendTo($byline);
       }
       const $date = $("<p>").addClass("text-xs text-gray-400 mt-1").text(time);$card.append($wishText,$byline,$date);
       if(Array.isArray(wish.media)&&wish.media.length){
@@ -1714,11 +1723,11 @@ body.birthday-public .birthday-sound-control {
     "Audio memory sunne ke liye kholein":"ऑडियो सुनने के लिए खोलें",
     "Mummy":"मम्मी",
     "Papa":"पापा",
-    "Dada-Dadi":"दादा/दादी",
-    "Nana-Nani":"नाना/नानी",
-    "Mama-Mami":"मामा/मामी",
-    "Chacha-Chachi":"चाचा/चाची",
-    "Bua-Fufa":"बुआ/फूफा",
+    "Dada/Dadi":"दादा/दादी",
+    "Nana/Nani":"नाना/नानी",
+    "Mama/Mami":"मामा/मामी",
+    "Chacha/Chachi":"चाचा/चाची",
+    "Bua/Fufa":"बुआ/फूफा",
     "Friend":"दोस्त",
     "Aapka rishta":"आपका रिश्ता",
     "जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️":"जन्मदिन मुबारक हो वैभव! हमेशा हँसते-खेलते रहो। ढेर सारा प्यार! 🎂❤️",
