@@ -1431,8 +1431,8 @@ body.birthday-public .birthday-sound-control {
 /* Keep the birthday introduction visually compact without shrinking its content. */
 .birthday-public .birthday-hero{
   min-height:0!important;
-  padding:clamp(34px,5vw,58px) 18px 42px!important;
-  border-radius:0 0 38px 38px!important;
+  padding:clamp(26px,4vw,44px) 18px 30px!important;
+  border-radius:0 0 34px 34px!important;
 }
 .birthday-public .birthday-hero__toys{margin:12px 0 6px!important}
 .birthday-public .birthday-hero h1{margin:8px auto 10px!important}
@@ -1449,15 +1449,15 @@ body.birthday-public .birthday-sound-control {
 }
 @media(max-width:520px){
   .birthday-public .birthday-hero{
-    padding:26px 15px 32px!important;
-    border-radius:0 0 28px 28px!important;
+    padding:20px 15px 24px!important;
+    border-radius:0 0 26px 26px!important;
   }
-  .birthday-public .birthday-hero__toys{font-size:clamp(27px,8vw,38px)!important;margin:8px 0 4px!important}
-  .birthday-public .birthday-hero h1{font-size:clamp(38px,10vw,56px)!important;line-height:1.04!important;margin:7px auto 9px!important}
+  .birthday-public .birthday-hero__toys{font-size:clamp(25px,7.5vw,35px)!important;margin:6px 0 3px!important}
+  .birthday-public .birthday-hero h1{font-size:clamp(36px,9.5vw,52px)!important;line-height:1.02!important;margin:5px auto 7px!important}
   .birthday-public .birthday-hero p{font-size:15px!important;line-height:1.5!important}
   .birthday-public .birthday-age{margin-top:9px!important;padding:8px 14px!important}
-  .birthday-public .birthday-hero__button{margin-top:12px!important;padding:12px 20px!important}
-  .birthday-public .birthday-hero__bottom{margin-top:10px!important;font-size:18px!important}
+  .birthday-public .birthday-hero__button{margin-top:9px!important;padding:11px 18px!important;min-height:44px!important}
+  .birthday-public .birthday-hero__bottom{margin-top:8px!important;font-size:17px!important}
   .birthday-public .wish-message-input{min-height:170px!important;height:170px!important}
 }
 </style>
