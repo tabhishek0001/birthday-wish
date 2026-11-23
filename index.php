@@ -1329,6 +1329,16 @@ function loadWishes() {
       }
       syncSoundControl();
     });
+    // Stop background audio whenever this tab or browser window loses focus.
+    // Playback deliberately does not auto-resume: the visitor can resume it explicitly.
+    const pauseForFocusLoss = () => {
+      if (!music.paused) music.pause();
+      syncSoundControl();
+    };
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) pauseForFocusLoss();
+    });
+    window.addEventListener("blur", pauseForFocusLoss);
     music.addEventListener("play", syncSoundControl);
     music.addEventListener("pause", syncSoundControl);
     syncSoundControl();
@@ -1337,6 +1347,77 @@ function loadWishes() {
 
 
 
+<script id="vaibhav-restored-ambient-interactions">
+(function(){
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse=window.matchMedia&&window.matchMedia('(pointer: coarse)').matches;
+  const body=document.body;
+  if(!reduce&&!coarse){
+    const ring=document.createElement('span'),dot=document.createElement('span');
+    ring.className='lux-cursor';dot.className='lux-cursor-dot';
+    ring.setAttribute('aria-hidden','true');dot.setAttribute('aria-hidden','true');
+    body.append(ring,dot);
+    let x=-100,y=-100,rx=-100,ry=-100,raf=0;
+    const move=e=>{
+      x=e.clientX;y=e.clientY;
+      ring.classList.add('is-visible');dot.classList.add('is-visible');
+      if(!raf)raf=requestAnimationFrame(function draw(){
+        rx+=(x-rx)*.22;ry+=(y-ry)*.22;
+        ring.style.transform='translate3d('+rx+'px,'+ry+'px,0) translate(-50%,-50%)';
+        dot.style.transform='translate3d('+x+'px,'+y+'px,0) translate(-50%,-50%)';
+        if(Math.abs(x-rx)+Math.abs(y-ry)>.4)raf=requestAnimationFrame(draw);else raf=0;
+      });
+    };
+    document.addEventListener('pointermove',move,{passive:true});
+    document.addEventListener('pointerover',e=>{
+      if(e.target.closest('a,button,[role="button"],input,textarea,select,.swiper-pagination-bullet'))ring.classList.add('is-hover');
+      else ring.classList.remove('is-hover');
+    },{passive:true});
+    document.addEventListener('pointerout',e=>{if(!e.relatedTarget){ring.classList.remove('is-visible','is-hover');dot.classList.remove('is-visible');}},{passive:true});
+    document.addEventListener('pointerdown',e=>{
+      const ripple=document.createElement('span');ripple.className='lux-touch-ripple';
+      ripple.style.left=e.clientX+'px';ripple.style.top=e.clientY+'px';body.appendChild(ripple);
+      ripple.addEventListener('animationend',()=>ripple.remove(),{once:true});
+    },{passive:true});
+  }
+  const decorEnabled=body.dataset.decorEnabled!=='false';
+  if(!reduce&&decorEnabled){
+    const symbols=['✦','✧','✺','·'];
+    const layer=document.createElement('div');layer.className='birthday-ambient-sparkles';layer.setAttribute('aria-hidden','true');
+    for(let i=0;i<13;i++){
+      const item=document.createElement('span');item.className='lux-sparkle';
+      item.textContent=symbols[i%symbols.length];
+      item.style.left=(4+Math.random()*92)+'%';
+      item.style.top=(7+Math.random()*86)+'%';
+      item.style.fontSize=(10+Math.random()*13)+'px';
+      item.style.animationDelay=(-Math.random()*8)+'s';
+      item.style.animationDuration=(7+Math.random()*7)+'s';
+      layer.appendChild(item);
+    }
+    body.appendChild(layer);
+  }
+})();
+</script>
+<style id="birthday-header-and-motion-restoration">
+.birthday-ambient-sparkles{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.birthday-ambient-sparkles .lux-sparkle{position:absolute;display:block;z-index:1;pointer-events:none;color:#c99763;text-shadow:0 1px 12px rgba(255,255,255,.9);opacity:.58;animation:luxDrift 8s ease-in-out infinite}
+.birthday-public .birthday-hero{position:relative;isolation:isolate;overflow:hidden}
+.birthday-public .birthday-hero:before{content:"";position:absolute;inset:-35% -15%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 18% 28%,rgba(255,255,255,.8),transparent 32%),radial-gradient(ellipse at 82% 20%,rgba(255,255,255,.72),transparent 28%),radial-gradient(ellipse at 52% 100%,rgba(215,178,151,.18),transparent 40%);animation:birthdayHeaderGlow 12s ease-in-out infinite alternate}
+.birthday-public .birthday-hero__toys{position:relative;z-index:2;filter:drop-shadow(0 5px 8px rgba(130,91,63,.13));animation:luxBob 5s ease-in-out infinite}
+.birthday-public .birthday-hero h1{position:relative;z-index:2;animation:luxRise .85s both}
+.birthday-public .birthday-hero p,.birthday-public .birthday-age,.birthday-public .birthday-hero__button,.birthday-public .birthday-hero__bottom{position:relative;z-index:2}
+.birthday-public .birthday-hero__top{display:inline-flex;align-items:center;gap:9px;padding:8px 15px;border:1px solid rgba(255,255,255,.72);border-radius:999px;background:rgba(255,255,255,.42);backdrop-filter:blur(8px);box-shadow:0 6px 18px rgba(117,83,52,.06)}
+.birthday-public .birthday-hero__top:before,.birthday-public .birthday-hero__top:after{content:"✦";font-size:11px;color:#bd9367;animation:luxTwinkle 3s ease-in-out infinite}
+.birthday-public .birthday-hero__button{position:relative;overflow:hidden}
+.birthday-public .birthday-hero__button:after{content:"";position:absolute;top:-35%;left:-55%;width:35%;height:170%;transform:skewX(-22deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);animation:luxShine 5.5s ease-in-out infinite}
+.birthday-public .birthday-section-heading>span{display:inline-block;filter:drop-shadow(0 5px 8px rgba(130,91,63,.12));animation:luxBob 5.5s ease-in-out infinite}
+.birthday-public .birthday-section-heading h2{position:relative}
+.birthday-public .birthday-section-heading h2:after{content:"";display:block;width:54px;height:2px;margin:10px auto 0;border-radius:2px;background:linear-gradient(90deg,#d6a58a,#d5bb82,#a9bda7)}
+@keyframes birthdayHeaderGlow{from{transform:translate3d(-1%,0,0) scale(.98)}to{transform:translate3d(1%,2%,0) scale(1.04)}}
+@media(max-width:640px){.birthday-public .birthday-hero__top{font-size:11px;letter-spacing:.1em}.birthday-public .birthday-hero h1{animation:none}}
+@media(pointer:coarse){.birthday-ambient-sparkles .lux-sparkle{opacity:.42}}
+@media(prefers-reduced-motion:reduce){.birthday-ambient-sparkles,.lux-cursor,.lux-cursor-dot,.lux-touch-ripple{display:none!important}.birthday-public .birthday-hero:before,.birthday-public .birthday-hero__toys,.birthday-public .birthday-hero h1,.birthday-public .birthday-hero__button:after{animation:none!important}}
+</style>
 <script id="vaibhav-premium-interactions">
 (function(){
   const progress=document.createElement('div');
