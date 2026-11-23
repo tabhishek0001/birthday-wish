@@ -374,6 +374,91 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 @media(prefers-reduced-motion:reduce){.wish-relationship-choices .wish-choice,.wish-upload-trigger{transition:none!important}}
 </style>
 
+
+<style id="vaibhav-all-memories-pill-square-photo">
+/* Keep the memories CTA pill-shaped while presenting its photo in a true square crop. */
+.birthday-all-memories-card{
+  min-height:0!important;
+  height:auto;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:10px 14px 10px 10px;
+  border-radius:999px;
+  background:linear-gradient(110deg,#fff0d6,#ffe4c2 58%,#fcebd5);
+  color:#80543f!important;
+}
+.birthday-all-memories-card>img,
+.birthday-all-memories-card__placeholder{
+  position:relative;
+  inset:auto;
+  z-index:0;
+  flex:0 0 104px;
+  width:104px;
+  height:104px;
+  aspect-ratio:1/1;
+  border-radius:50%;
+  object-fit:cover;
+  object-position:center;
+  overflow:hidden;
+  border:3px solid #fffaf0;
+  box-shadow:0 3px 12px #76533325;
+}
+.birthday-all-memories-card__placeholder{
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,#f8dfb8,#ffeecf);
+  font-size:42px;
+}
+.birthday-all-memories-card__shade{
+  display:none;
+}
+.birthday-all-memories-card__content{
+  position:relative;
+  z-index:1;
+  flex:1 1 auto;
+  min-width:0;
+  display:grid;
+  gap:4px;
+  padding:8px 42px 8px 0;
+  text-shadow:none;
+}
+.birthday-all-memories-card__content strong{
+  color:#80543f;
+  font-size:clamp(15px,3.5vw,19px);
+  line-height:1.2;
+}
+.birthday-all-memories-card__content small{
+  color:#96745b;
+  font-size:12px;
+  line-height:1.35;
+}
+.birthday-all-memories-card__arrow{
+  top:50%;
+  right:12px;
+  transform:translateY(-50%);
+  background:#fffaf0;
+  color:#85542d;
+}
+.birthday-all-memories-card:hover .birthday-all-memories-card__arrow,
+.birthday-all-memories-card:focus-visible .birthday-all-memories-card__arrow{
+  background:#fff;
+}
+@media(max-width:380px){
+  .birthday-all-memories-card{gap:10px;padding:8px 10px 8px 8px}
+  .birthday-all-memories-card>img,
+  .birthday-all-memories-card__placeholder{
+    flex-basis:84px;width:84px;height:84px
+  }
+  .birthday-all-memories-card__content{padding-right:34px}
+  .birthday-all-memories-card__content small{font-size:11px}
+  .birthday-all-memories-card__arrow{right:8px;width:30px;height:30px}
+}
+@media(prefers-reduced-motion:reduce){
+  .birthday-all-memories-card{transition:none}
+}
+</style>
+
 </head>
 <body class="birthday-public text-gray-800" data-birthday-theme="<?= $escapeHtml($themePreset) ?>" data-decor-enabled="<?= $floatingDecorEnabled ? 'true' : 'false' ?>" style="--birthday-accent:<?= $escapeHtml($themeAccent) ?>">
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
