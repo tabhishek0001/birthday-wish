@@ -630,8 +630,13 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
   <a href="https://www.facebook.com/sharer/sharer.php?u=<?= rawurlencode($shareUrl) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-primary">📘 Facebook</a>
   <a href="https://t.me/share/url?url=<?= rawurlencode($shareUrl) ?>&text=<?= rawurlencode($shareMessage) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">💬 Telegram</a>
   <button onclick="copyBirthdayLink()" class="btn btn-dark" type="button">🔗 Copy Link</button>
-  <button onclick="shareGeneral()" class="btn btn-warning text-dark" type="button">📤 Share</button>
+  
 </div>
+
+<!-- Persistent side share action -->
+<button type="button" class="birthday-side-share" id="birthdaySideShare" onclick="shareGeneral()" aria-label="Share Vaibhav's birthday page">
+  <span aria-hidden="true">↗</span><span>Share</span>
+</button>
 
 <!-- Scripts -->
 <script>
@@ -665,6 +670,12 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 
 <!-- Basic Button Styles (adjust as per Bootstrap or your custom CSS) -->
 <style>
+  .birthday-side-share{position:fixed;right:12px;top:46%;transform:translateY(-50%);z-index:75;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:54px;min-height:76px;padding:11px 9px;border:1px solid #f4a84c;border-radius:999px;background:linear-gradient(160deg,#ffd36f,#ff986d);color:#633d20;font:800 12px/1.1 system-ui,-apple-system,'Segoe UI',sans-serif;box-shadow:0 7px 22px #8b552b38;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
+  .birthday-side-share span:first-child{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#fff8e8;color:#9b572d;font-size:22px;line-height:1}
+  .birthday-side-share:hover,.birthday-side-share:focus-visible{transform:translateY(-50%) scale(1.06);box-shadow:0 10px 26px #8b552b50;outline:3px solid #ffb84d66;outline-offset:3px}
+  .birthday-side-share:active{transform:translateY(-50%) scale(.96)}
+  @media(max-width:520px){.birthday-side-share{right:7px;top:43%;min-width:46px;min-height:66px;padding:8px 7px;font-size:11px}.birthday-side-share span:first-child{width:27px;height:27px;font-size:20px}}
+  @media(prefers-reduced-motion:reduce){.birthday-side-share{transition:none}}
   .btn {
     display: inline-block;
     padding: 0.5rem 1.2rem;
