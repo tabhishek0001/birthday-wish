@@ -871,12 +871,11 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
     const memoryCarouselElement = document.querySelector(".featured-swiper");
     let memoryCarouselInteracted = false;
     const memorySwiper = memoryCarouselElement ? new Swiper(memoryCarouselElement, {
-      // Restore the original playing-card deck transition.
-      effect: "cards",
-      cardsEffect: { slideShadows: false, rotate: true, perSlideOffset: 6, perSlideRotate: 1.2 },
+      // Original image-by-image carousel: one image at a time with a seamless loop.
+      effect: "slide",
       grabCursor: true, centeredSlides: true, slidesPerView: 1, loop: true,
-      speed: 420, preventInteractionOnTransition: true, resistanceRatio: 0.75,
-      autoplay: { delay: 4200, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true },
+      speed: 500, preventInteractionOnTransition: true, resistanceRatio: 0.85,
+      autoplay: { delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true },
       pagination: { el: ".swiper-pagination", clickable: true },
       on: {
         touchStart(swiper) { primeMemoryCardSound(); memoryCarouselInteracted = true; if (swiper.autoplay) swiper.autoplay.stop(); },
@@ -1427,66 +1426,7 @@ body.birthday-public .birthday-sound-control {
 </style>
 
 
-<style id="birthday-hero-content-flow-fix">
-/* Reserve real layout space for the card deck so it cannot collide with hero text. */
-body.birthday-public .birthday-hero{
-  display:flow-root!important;
-  overflow:visible!important;
-}
-body.birthday-public .birthday-hero .birthday-gallery{
-  display:block!important;
-  position:relative!important;
-  width:min(100%,480px)!important;
-  margin:0 auto 28px!important;
-  padding:0!important;
-  overflow:visible!important;
-  clear:both;
-}
-body.birthday-public .birthday-hero .birthday-gallery__stage{
-  display:block!important;
-  position:relative!important;
-  width:min(100%,360px)!important;
-  height:440px!important;
-  margin:0 auto!important;
-  overflow:visible!important;
-  contain:none!important;
-}
-body.birthday-public .birthday-hero .birthday-gallery__frame.featured-swiper{
-  position:absolute!important;
-  left:50%!important;
-  top:50%!important;
-  width:min(220px,calc(100vw - 88px))!important;
-  height:auto!important;
-  aspect-ratio:5/7!important;
-  max-height:308px!important;
-  margin:0!important;
-  transform:translate(-50%,-50%)!important;
-  overflow:visible!important;
-}
-body.birthday-public .birthday-hero .birthday-gallery__frame .swiper-wrapper{
-  overflow:visible!important;
-}
-body.birthday-public .birthday-hero h1,
-body.birthday-public .birthday-hero>p,
-body.birthday-public .birthday-hero .birthday-age,
-body.birthday-public .birthday-hero .birthday-hero__button,
-body.birthday-public .birthday-hero .birthday-hero__bottom{
-  position:relative!important;
-  z-index:1;
-  clear:both;
-}
-@media(max-width:520px){
-  body.birthday-public .birthday-hero .birthday-gallery{margin-bottom:24px!important}
-  body.birthday-public .birthday-hero .birthday-gallery__stage{
-    width:min(100%,340px)!important;
-    height:420px!important;
-  }
-  body.birthday-public .birthday-hero .birthday-gallery__frame.featured-swiper{
-    width:min(205px,calc(100vw - 88px))!important;
-    max-height:287px!important;
-  }
-}
-</style>
+
 
 <style id="birthday-header-form-size-adjustment">
 /* Keep the birthday introduction visually compact without shrinking its content. */
