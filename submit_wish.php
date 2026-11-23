@@ -272,22 +272,95 @@ $to = trim((string)($notifications['to'] ?? ''));
 $fromEmail = trim((string)($notifications['fromEmail'] ?? ''));
 $fromName = trim((string)($notifications['fromName'] ?? 'Birthday Bot')) ?: 'Birthday Bot';
 if ($to !== '' && filter_var($to, FILTER_VALIDATE_EMAIL)) {
-    $safeName = htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-    $safeMessage = nl2br(htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
-    $safePahchan = $pahchan !== '' ? htmlspecialchars($pahchan, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') : 'Not shared';
-    $subjectName = preg_replace('/[\r\n]+/', ' ', $name);
-    $subject = "New Birthday Wish from {$subjectName}!";
+    $escapeEmailHtml = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeName = $escapeEmailHtml($name);
+    $safeMessage = nl2br($escapeEmailHtml($message), false);
+    $relationLabels = [
+        'Dada-Dadi' => 'Dada/Dadi',
+        'Nana-Nani' => 'Nana/Nani',
+        'Mama-Mami' => 'Mama/Mami',
+        'Chacha-Chachi' => 'Chacha/Chachi',
+        'Bua-Fufa' => 'Bua/Fufa'
+    ];
+    $displayPahchan = $relationLabels[$pahchan] ?? $pahchan;
+    $safePahchan = $displayPahchan !== '' ? $escapeEmailHtml($displayPahchan) : 'Not shared';
+    $subjectName = trim(preg_replace('/[\r\n]+/', ' ', $name));
+    $subjectText = "New Birthday Wish from {$subjectName}!";
+    $subject = function_exists('mb_encode_mimeheader')
+        ? mb_encode_mimeheader($subjectText, 'UTF-8', 'B', "\r\n")
+        : '=?UTF-8?B?' . base64_encode($subjectText) . '?=';
+
+    $shareUrl = trim((string)($config['experience']['shareUrl'] ?? ''));
+    if ($shareUrl === '' || !filter_var($shareUrl, FILTER_VALIDATE_URL)) {
+        $shareUrl = 'https://www.docsansar.com/birthday-wish/';
+    }
+    $shareParts = parse_url($shareUrl);
+    $shareScheme = strtolower((string)($shareParts['scheme'] ?? ''));
+    $shareHost = (string)($shareParts['host'] ?? '');
+    $sharePath = (string)($shareParts['path'] ?? '/');
+    $mediaBaseUrl = '';
+    if (in_array($shareScheme, ['http', 'https'], true) && $shareHost !== '') {
+        $basePath = rtrim(str_replace('\\', '/', dirname($sharePath)), '/.');
+        $mediaBaseUrl = $shareScheme . '://' . $shareHost . ($basePath !== '' ? $basePath : '') . '/wish-media/';
+    }
+
+    $mediaHtml = '';
+    $mediaTextLines = [];
+    $mediaItems = is_array($wish['media'] ?? null) ? array_slice($wish['media'], 0, 3) : [];
+    $mediaCount = 0;
+    foreach ($mediaItems as $item) {
+        if (!is_array($item)) continue;
+        $file = basename((string)($item['file'] ?? ''));
+        if (!preg_match('/^[a-f0-9]{32}\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|weba|aac|pdf)$/i', $file)) continue;
+        $extension = strtolower((string)pathinfo($file, PATHINFO_EXTENSION));
+        $kind = (string)($item['type'] ?? '');
+        if ($kind === '') {
+            $kind = in_array($extension, ['jpg','jpeg','png','webp','gif'], true) ? 'image'
+                : (in_array($extension, ['mp4','webm','mov'], true) ? 'video'
+                : (in_array($extension, ['mp3','m4a','wav','ogg','weba','aac'], true) ? 'audio' : 'document'));
+        }
+        $labels = ['image' => 'Photo', 'video' => 'Video', 'audio' => 'Audio', 'document' => 'PDF document'];
+        $label = $labels[$kind] ?? 'Attachment';
+        $sizeBytes = max(0, (int)($item['size'] ?? 0));
+        $sizeLabel = $sizeBytes > 0 ? ($sizeBytes >= 1048576 ? number_format($sizeBytes / 1048576, 1) . ' MB' : number_format($sizeBytes / 1024, 0) . ' KB') : '';
+        $mediaUrl = $mediaBaseUrl !== '' ? $mediaBaseUrl . rawurlencode($file) : '';
+        if ($mediaUrl === '') continue;
+        $safeMediaUrl = $escapeEmailHtml($mediaUrl);
+        $mediaCount++;
+        $mediaTextLines[] = $label . ': ' . $mediaUrl;
+
+        if ($kind === 'image') {
+            $mediaHtml .= '<tr><td style="padding:0 0 14px;"><a href="' . $safeMediaUrl . '" target="_blank" style="text-decoration:none;"><img src="' . $safeMediaUrl . '" alt="Birthday wish photo" width="500" style="display:block;width:100%;max-width:500px;height:auto;border:0;border-radius:12px;background:#fff0f4;"></a><div style="padding-top:6px;font-size:11px;color:#9b8992;">Photo ' . $mediaCount . ($sizeLabel !== '' ? ' · ' . $escapeEmailHtml($sizeLabel) : '') . '</div></td></tr>';
+        } else {
+            $symbol = $kind === 'video' ? '▶' : ($kind === 'audio' ? '♫' : 'PDF');
+            $description = $kind === 'video' ? 'Open video in your browser' : ($kind === 'audio' ? 'Listen to the audio in your browser' : 'View or download the PDF');
+            $mediaHtml .= '<tr><td style="padding:0 0 10px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff8fb;border:1px solid #f2dce5;border-radius:12px;"><tr><td width="54" align="center" style="padding:13px 5px;font-size:22px;color:#c45e83;font-weight:bold;">' . $symbol . '</td><td style="padding:12px 10px 12px 4px;"><div style="font-size:14px;font-weight:bold;color:#68475a;">' . $label . ($sizeLabel !== '' ? ' · ' . $escapeEmailHtml($sizeLabel) : '') . '</div><div style="font-size:12px;color:#8e7884;padding-top:4px;">' . $description . '</div><a href="' . $safeMediaUrl . '" target="_blank" style="display:inline-block;margin-top:7px;color:#b64e76;font-size:12px;font-weight:bold;">Open attachment →</a></td></tr></table></td></tr>';
+        }
+    }
+    if ($mediaCount > 0) {
+        $mediaHtml = '<div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#a06b7f;font-weight:bold;margin-bottom:12px;">Attached memories (' . $mediaCount . ')</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">' . $mediaHtml . '</table>';
+    } else {
+        $mediaHtml = '<div style="font-size:12px;color:#9b8992;">No media was attached to this wish.</div>';
+    }
+
     $templatePath = __DIR__ . '/email-template.html';
     $template = is_file($templatePath) ? @file_get_contents($templatePath) : false;
     if ($template !== false) {
-        $shareUrl = trim((string)($config['experience']['shareUrl'] ?? ''));
-        if ($shareUrl === '') $shareUrl = 'https://www.docsansar.com/birthday';
+        $timestampLabel = date('d M Y, h:i A', $now) . ' IST';
+        $preheader = $name . ' has sent a birthday wish.';
         $template = str_replace(
-            ['{{NAME}}', '{{MESSAGE}}', '{{TIMESTAMP}}', '{{PAHCHAN}}', '{{SHARE_URL}}'],
-            [$safeName, $safeMessage, date('d M Y, h:i A', $now), $safePahchan, htmlspecialchars($shareUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')],
+            ['{{NAME}}', '{{MESSAGE}}', '{{TIMESTAMP}}', '{{PAHCHAN}}', '{{SHARE_URL}}', '{{MEDIA_SECTION}}', '{{PREHEADER}}', '{{YEAR}}'],
+            [$safeName, $safeMessage, $escapeEmailHtml($timestampLabel), $safePahchan, $escapeEmailHtml($shareUrl), $mediaHtml, $escapeEmailHtml($preheader), date('Y')],
             $template
         );
-        $headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=UTF-8\r\n";
+
+        $plainMessage = "A new birthday wish has arrived!\n\nFrom: {$name}\nRelationship: " . ($displayPahchan !== '' ? $displayPahchan : 'Not shared') . "\n\n{$message}\n\nReceived: {$timestampLabel}\n";
+        if ($mediaTextLines) $plainMessage .= "\nAttachments:\n- " . implode("\n- ", $mediaTextLines) . "\n";
+        else $plainMessage .= "\nNo media was attached.\n";
+        $plainMessage .= "\nOpen birthday experience: {$shareUrl}\n";
+        $boundary = '=_BirthdayWish_' . bin2hex(random_bytes(12));
+        $headers = "MIME-Version: 1.0\r\n";
+        $headers .= 'Content-Type: multipart/alternative; boundary="' . $boundary . '"' . "\r\n";
         $senderAddress = filter_var($fromEmail, FILTER_VALIDATE_EMAIL) ? $fromEmail : $to;
         $headers .= 'From: ' . preg_replace('/[\r\n]+/', ' ', $fromName) . " <{$senderAddress}>\r\n";
         foreach (['cc', 'bcc'] as $type) {
@@ -297,6 +370,13 @@ if ($to !== '' && filter_var($to, FILTER_VALIDATE_EMAIL)) {
                 if ($valid) $headers .= strtoupper($type) . ': ' . implode(', ', $valid) . "\r\n";
             }
         }
-        @mail($to, $subject, $template, $headers);
+        $body = '--' . $boundary . "\r\n";
+        $body .= "Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n";
+        $body .= chunk_split(base64_encode($plainMessage)) . "\r\n";
+        $body .= '--' . $boundary . "\r\n";
+        $body .= "Content-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n";
+        $body .= chunk_split(base64_encode($template)) . "\r\n";
+        $body .= '--' . $boundary . "--\r\n";
+        @mail($to, $subject, $body, $headers);
     }
 }
