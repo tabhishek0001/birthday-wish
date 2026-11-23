@@ -71,7 +71,7 @@ $shareMessage = "🎈 Vaibhav ka 2nd Birthday! 🎂\n\nHamare chhote Kittu ko bi
 $escapeHtml = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi-Latn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
