@@ -515,7 +515,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 .birthday-hero .birthday-gallery{width:min(100%,390px)!important;margin:0 auto 22px!important;padding:0!important;overflow:visible!important}
 .birthday-hero .birthday-section-heading{margin:0 auto 9px!important}
 .birthday-hero .birthday-section-heading h2{font-size:clamp(14px,2vw,17px)!important;letter-spacing:.02em!important}
-.birthday-hero .birthday-gallery__frame{position:relative!important;width:min(58vw,270px)!important;aspect-ratio:5 / 7!important;height:auto!important;min-height:0!important;max-height:none!important;margin:0 auto!important;overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;isolation:isolate}
+.birthday-hero .birthday-gallery__frame{position:relative!important;width:min(58vw,250px)!important;height:min(81.2vw,350px)!important;aspect-ratio:5 / 7!important;min-height:0!important;max-height:none!important;margin:0 auto!important;overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;isolation:isolate;flex:none!important}
 .birthday-hero .birthday-gallery__frame:before,.birthday-hero .birthday-gallery__frame:after{content:"";position:absolute;inset:9px -8px -6px;z-index:-2;border-radius:24px;background:linear-gradient(145deg,#fffdf7,#f4e6d2);border:1px solid rgba(145,105,66,.2);box-shadow:0 9px 20px rgba(74,51,28,.12);transform:rotate(5deg)}
 .birthday-hero .birthday-gallery__frame:after{inset:4px -4px -3px;z-index:-1;transform:rotate(-3deg);background:linear-gradient(145deg,#fff,#f8efdf)}
 .birthday-hero .birthday-gallery__frame .swiper-wrapper{align-items:stretch}
@@ -530,7 +530,7 @@ body[data-decor-enabled="false"] .lux-sparkle{display:none!important}
 .birthday-hero .birthday-gallery__empty{width:min(100%,270px)!important}
 @media(max-width:640px){
  .birthday-hero .birthday-gallery{margin-bottom:21px!important}
- .birthday-hero .birthday-gallery__frame{width:min(64vw,225px)!important;aspect-ratio:5 / 7!important;height:auto!important;min-height:0!important}
+ .birthday-hero .birthday-gallery__frame{width:min(64vw,220px)!important;height:min(89.6vw,308px)!important;aspect-ratio:5 / 7!important;min-height:0!important;flex:none!important}
  .birthday-hero .birthday-gallery__frame .swiper-slide{border-width:6px;border-radius:20px}
  .birthday-hero .birthday-gallery__frame .swiper-slide>a.memory-lightbox-link{border-radius:13px;padding:5px}
  .birthday-hero .birthday-gallery__frame:before{border-radius:21px}
